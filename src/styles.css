@@ -467,3 +467,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .logo--lg { width: 52px; height: 52px; }
 .hero__logo { position: absolute; right: 18px; top: 18px; opacity: 0.9; }
+
+/* ---------- Vers-Auswahl ---------- */
+.verse-sheet {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.14);
+  padding: 14px 18px 16px;
+  z-index: 25;
+}

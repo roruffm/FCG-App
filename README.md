@@ -70,11 +70,53 @@ Die Seite `/datenschutz` erklärt das für Nutzer in verständlicher Sprache.
 
 ---
 
+## Bibelteil - uebernommen aus `roruffm/bible-study`
+
+Der komplette Bibelteil stammt aus dem Schwesterprojekt **„Entgegen - Bibel lesen
+und verstehen"**. Uebernommen wurden Datensaetze und Logik, nicht die Oberflaeche:
+Die Bedienung ist neu gebaut und folgt dem Design der FCG.
+
+| Uebernommen | Woher | Wo in dieser App |
+|---|---|---|
+| Bibeltext, 66 Buecher | `public/bibel/luther1912/` | `public/bibel/luther1912/`, je Buch nachgeladen |
+| Referenz-Parser („Roem 8,38-39") | `src/lib/reference.ts` | `src/lib/reference.ts`, unveraendert bis auf Importpfade |
+| 723 Kontextartikel | `src/content/commentary.ts` (4,9 MB TypeScript) | nach Buch aufgeteilt in `public/kontext/*.json` |
+| 50 kuratierte Tagesverse | `src/content/verseOfDay.ts` | `src/data/dailyVerses.ts` |
+| 17 Lesepläne | `src/content/readingPlans.ts` | `src/data/readingPlans.ts` |
+
+**Neu in dieser App:**
+
+- **Tab „Bibel"** mit Buchuebersicht, Stellen-Eingabe und Volltextsuche
+- **Leseansicht** mit anklickbaren Versen: speichern, teilen, Kontext oeffnen;
+  ein Punkt am Vers zeigt an, wo ein Artikel beginnt
+- **Kontext & Auslegung** je Kapitel - historische Einordnung, Deutungen mit
+  Angabe der Tradition, Querverweise, Woerter des Urtextes
+- **Lesepläne** mit Fortschritt pro Geraet
+- **Bibelimpuls** zieht jetzt den echten Verstext; „5 Minuten" und „Vertiefung"
+  blenden den Kontextartikel ein, wo einer vorliegt
+- **Bibelstellen sind ueberall verlinkt** - Predigt-Kernvers, Themenpfade, Querverweise
+
+**Textgrundlage:** Lutherbibel 1912, gemeinfrei (Rohdaten: wldeh/bible-api). Moderne
+Uebersetzungen wie *Hoffnung fuer Alle* sind urheberrechtlich geschuetzt und
+brauchen eine Lizenz von Biblica/Fontis oder eine Anbindung ueber API.Bible; der
+Datensatz laesst sich dann unter `public/bibel/<id>/` ergaenzen, ohne die
+Oberflaeche zu aendern. Elberfelder 1905 und KJV liegen im Schwesterprojekt
+ebenfalls gemeinfrei vor und koennen als Vergleichstexte nachgezogen werden.
+
+**Noch nicht uebernommen** (im Schwesterprojekt vorhanden): Lexikon mit
+Personen und Orten, Karten, Zeitleiste, Evangelien-Synopse, Konkordanz,
+Auswendiglern-Bereich und der Verse-Chat mit eigenem Server.
+
+---
+
 ## Aufbau
 
 ```
 src/
   data/          Demo-Inhalte (Predigten inkl. Transkript, Impulse, Events, Gruppen, Gebete)
+                 sowie Tagesverse und Lesepläne aus dem Schwesterprojekt
+  lib/bible.ts   Bibeltext laden, Kontextartikel, Volltextsuche
+  lib/reference.ts  Stellenangaben erkennen ("Roem 8,38-39")
   lib/search.ts  "Frag die Predigten" - Ranking, Zitate, Krisen-Erkennung
   lib/storage.ts localStorage-Persistenz
   state.tsx      App-Zustand: Favoriten, Notizen, Fortschritt, Anmeldungen, Profil

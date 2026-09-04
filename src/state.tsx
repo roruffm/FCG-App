@@ -8,6 +8,19 @@ import type { PrayerRequest } from './data/types'
 
 export type Depth = 'kurz' | 'mittel' | 'tief'
 
+/** Ein gespeicherter Bibelvers - mit Text, damit die Liste ohne Nachladen lesbar ist. */
+export type SavedVerse = {
+  book: string
+  chapter: number
+  verse: number
+  abbr: string
+  bookName: string
+  text: string
+  savedAt: string
+}
+
+export const verseKey = (book: string, chapter: number, verse: number) => `${book}.${chapter}.${verse}`
+
 export type Profile = {
   name: string
   isNewHere: boolean
@@ -28,7 +41,11 @@ type AppState = {
   favorites: ReturnType<typeof useToggleSet>
   listenLater: ReturnType<typeof useToggleSet>
   registrations: ReturnType<typeof useToggleSet>
-  savedVerses: ReturnType<typeof useToggleSet>
+  savedVerses: Record<string, SavedVerse>
+  toggleVerse: (verse: Omit<SavedVerse, 'savedAt'>) => void
+  isVerseSaved: (book: string, chapter: number, verse: number) => boolean
+  planProgress: Record<string, number[]>
+  togglePlanDay: (planId: string, day: number) => void
   doneDevotions: ReturnType<typeof useToggleSet>
   prayedFor: ReturnType<typeof useToggleSet>
   notes: Record<string, string>
@@ -54,7 +71,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const favorites = useToggleSet('favorites')
   const listenLater = useToggleSet('listen-later')
   const registrations = useToggleSet('registrations')
-  const savedVerses = useToggleSet('saved-verses')
   const doneDevotions = useToggleSet('done-devotions')
   const prayedFor = useToggleSet('prayed-for')
 
@@ -63,10 +79,39 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [depth, setDepth] = usePersistentState<Depth>('depth', 'kurz')
   const [profile, setProfile] = usePersistentState<Profile>('profile', defaultProfile)
   const [prayers, setPrayers] = usePersistentState<PrayerRequest[]>('prayers', seedPrayers)
+  const [savedVerses, setSavedVerses] = usePersistentState<Record<string, SavedVerse>>('saved-verses-v2', {})
+  const [planProgress, setPlanProgress] = usePersistentState<Record<string, number[]>>('plan-progress', {})
   const [streakDays, setStreakDays] = usePersistentState<string[]>('streak-days', [])
   const [brand, setBrand] = usePersistentState<Brand>('brand', defaultBrand)
 
   useEffect(() => applyBrand(brand), [brand])
+
+  const toggleVerse = useCallback<AppState['toggleVerse']>(
+    (verse) =>
+      setSavedVerses((prev) => {
+        const key = verseKey(verse.book, verse.chapter, verse.verse)
+        if (prev[key]) {
+          const { [key]: _removed, ...rest } = prev
+          return rest
+        }
+        return { ...prev, [key]: { ...verse, savedAt: new Date().toISOString() } }
+      }),
+    [setSavedVerses]
+  )
+
+  const isVerseSaved = useCallback<AppState['isVerseSaved']>(
+    (book, chapter, verse) => Boolean(savedVerses[verseKey(book, chapter, verse)]),
+    [savedVerses]
+  )
+
+  const togglePlanDay = useCallback<AppState['togglePlanDay']>(
+    (planId, day) =>
+      setPlanProgress((prev) => {
+        const done = prev[planId] ?? []
+        return { ...prev, [planId]: done.includes(day) ? done.filter((d) => d !== day) : [...done, day] }
+      }),
+    [setPlanProgress]
+  )
 
   const setNote = useCallback(
     (sermonId: string, text: string) => setNotes((prev) => ({ ...prev, [sermonId]: text })),
@@ -128,6 +173,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     listenLater,
     registrations,
     savedVerses,
+    toggleVerse,
+    isVerseSaved,
+    planProgress,
+    togglePlanDay,
     doneDevotions,
     prayedFor,
     notes,

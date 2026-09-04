@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { TopBar } from '../components/TopBar'
 import { sermons, topics } from '../data/sermons'
-import { devotions } from '../data/devotions'
 import { events } from '../data/events'
 import { useApp } from '../state'
 import { SermonCard } from '../components/SermonCard'
 import { formatDate } from '../lib/format'
+import { biblePath } from '../lib/bible'
 
 const pushOptions = ['Gottesdienst', 'Jugend', 'Kurse', 'Gebet', 'Freizeiten', 'Mitarbeit']
 
@@ -25,7 +25,7 @@ export function Profile() {
   const favoriteSermons = sermons.filter((s) => favorites.has(s.id))
   const laterSermons = sermons.filter((s) => listenLater.has(s.id))
   const myEvents = events.filter((e) => registrations.has(e.id)).sort((a, b) => a.start.localeCompare(b.start))
-  const verses = devotions.filter((d) => savedVerses.has(d.id))
+  const verses = Object.values(savedVerses).sort((a, b) => b.savedAt.localeCompare(a.savedAt))
   const noteCount = Object.values(notes).filter((n) => n.trim()).length
 
   return (
@@ -95,12 +95,18 @@ export function Profile() {
             <h2>Gespeicherte Verse</h2>
             <div className="card">
               {verses.map((v) => (
-                <div key={v.id} className="list-item" style={{ cursor: 'default' }}>
-                  <div>
-                    <b className="small">{v.reference}</b>
-                    <div className="tiny muted">„{v.verse}“</div>
+                <Link
+                  key={`${v.book}.${v.chapter}.${v.verse}`}
+                  className="list-item"
+                  to={biblePath(v.book, v.chapter, v.verse)}
+                >
+                  <div style={{ minWidth: 0 }}>
+                    <b className="small">
+                      {v.bookName} {v.chapter},{v.verse}
+                    </b>
+                    <div className="tiny muted">„{v.text}“</div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </section>

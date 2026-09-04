@@ -1,36 +1,58 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { TopBar } from '../components/TopBar'
-import { devotionOfDay, devotions, themePaths } from '../data/devotions'
+import { ContextArticle } from '../components/ContextArticle'
+import { BibleRef } from '../components/BibleRef'
+import { devotions, themePaths } from '../data/devotions'
+import { dailyVerse } from '../data/dailyVerses'
+import { TRANSLATION_LABEL, biblePath, contextFor } from '../lib/bible'
+import { useContext_, useVerse } from '../lib/useBible'
 import type { Depth } from '../state'
 import { useApp } from '../state'
 import { IconBookmark, IconChevron } from '../components/Icons'
 
-const depths: { key: Depth; label: string; hint: string }[] = [
-  { key: 'kurz', label: '1 Minute', hint: 'Vers + ein Gedanke' },
-  { key: 'mittel', label: '5 Minuten', hint: 'Vers, Auslegung, Frage' },
-  { key: 'tief', label: 'Vertiefung', hint: 'Alles + Gebet und Notiz' },
+const depths: { key: Depth; label: string }[] = [
+  { key: 'kurz', label: '1 Minute' },
+  { key: 'mittel', label: '5 Minuten' },
+  { key: 'tief', label: 'Vertiefung' },
 ]
 
 export function DevotionPage() {
-  const { depth, setDepth, savedVerses, doneDevotions, markDevotionDone, streak } = useApp()
+  const { depth, setDepth, toggleVerse, isVerseSaved, doneDevotions, markDevotionDone, streak } = useApp()
   const [openPath, setOpenPath] = useState<string | null>(null)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
 
-  const devotion = selectedId ? devotions.find((d) => d.id === selectedId)! : devotionOfDay()
-  const done = doneDevotions.has(devotion.id)
+  const today = dailyVerse()
+  const verse = useVerse(today.ref)
+  const articles = useContext_(today.ref.book)
+  const matching = contextFor(articles, today.ref.chapter, today.ref.verse)
+
+  const dayId = `tv-${today.ref.book}.${today.ref.chapter}.${today.ref.verse}`
+  const done = doneDevotions.has(dayId)
+  const saved = isVerseSaved(today.ref.book, today.ref.chapter, today.ref.verse)
 
   return (
     <>
       <TopBar
         title="Bibelimpuls"
-        subtitle={streak > 0 ? `${streak} Tage in Folge` : 'Täglich ein Vers'}
+        subtitle={streak > 0 ? `${streak} Tage in Folge` : TRANSLATION_LABEL}
         back
         action={
           <button
             className="icon-btn"
-            aria-pressed={savedVerses.has(devotion.id)}
+            aria-pressed={saved}
             aria-label="Vers speichern"
-            onClick={() => savedVerses.toggle(devotion.id)}
+            disabled={!verse}
+            onClick={() =>
+              verse &&
+              toggleVerse({
+                book: today.ref.book,
+                chapter: today.ref.chapter,
+                verse: today.ref.verse,
+                abbr: verse.abbr,
+                bookName: verse.bookName,
+                text: verse.text,
+              })
+            }
           >
             <IconBookmark />
           </button>
@@ -46,36 +68,45 @@ export function DevotionPage() {
         </div>
 
         <article className="card">
-          <span className="badge badge--accent">{devotion.theme}</span>
-          <h1 style={{ margin: '10px 0 6px' }}>{devotion.reference}</h1>
-          <p style={{ fontSize: '1.05rem' }}>„{devotion.verse}“</p>
+          <span className="tagbox tiny">Vers des Tages</span>
+          <h1 style={{ margin: '12px 0 8px' }}>
+            <Link
+              to={biblePath(today.ref.book, today.ref.chapter, today.ref.verse)}
+              style={{ color: 'inherit' }}
+            >
+              {verse?.label ?? '…'}
+            </Link>
+          </h1>
+          <p style={{ fontSize: '1.05rem' }}>{verse ? `„${verse.text}“` : 'Bibeltext wird geladen …'}</p>
+          <p className="small muted">{today.impulse}</p>
 
-          <p className="small">{devotion.short}</p>
-
-          {depth !== 'kurz' && (
+          {depth !== 'kurz' && matching.length > 0 && (
             <>
               <hr className="divider" />
-              <p className="small">{devotion.deep}</p>
-              <div className="notice small">
-                <b>Zum Nachdenken:</b> {devotion.question}
+              <span className="badge">Kontext & Auslegung</span>
+              <div style={{ marginTop: 12 }}>
+                <ContextArticle entry={matching[0]} deep={depth === 'tief'} />
               </div>
             </>
           )}
 
-          {depth === 'tief' && (
-            <>
-              <p className="quote small" style={{ marginTop: 12 }}>{devotion.prayer}</p>
-            </>
+          {depth !== 'kurz' && matching.length === 0 && (
+            <p className="tiny muted">
+              Zu dieser Stelle liegt noch kein Kontextartikel vor. Der Bestand wächst schrittweise.
+            </p>
           )}
 
           <button
             className={`btn btn--block ${done ? 'btn--ghost' : 'btn--gold'}`}
             style={{ marginTop: 14 }}
-            onClick={() => markDevotionDone(devotion.id)}
+            onClick={() => markDevotionDone(dayId)}
             disabled={done}
           >
             {done ? 'Für heute erledigt ✓' : 'Gelesen'}
           </button>
+          <p className="tiny muted" style={{ margin: '10px 0 0' }}>
+            Text: {TRANSLATION_LABEL} (gemeinfrei)
+          </p>
         </article>
 
         <section className="section">
@@ -111,21 +142,25 @@ export function DevotionPage() {
                   <div style={{ marginTop: 10 }}>
                     {path.devotionIds.map((id, i) => {
                       const d = devotions.find((x) => x.id === id)!
+                      const read = doneDevotions.has(id)
                       return (
-                        <button
-                          key={id}
-                          className="list-item"
-                          onClick={() => {
-                            setSelectedId(id)
-                            window.scrollTo({ top: 0, behavior: 'smooth' })
-                          }}
-                        >
-                          <div>
+                        <div key={id} className="list-item" style={{ alignItems: 'flex-start' }}>
+                          <div style={{ minWidth: 0 }}>
                             <div className="tiny muted">Tag {i + 1}</div>
-                            <b className="small">{d.reference}</b>
+                            <BibleRef reference={d.reference} className="small" />
+                            <p className="tiny muted" style={{ margin: '4px 0 0' }}>{d.short}</p>
+                            <p className="tiny" style={{ margin: '6px 0 0' }}>
+                              <b>Frage:</b> {d.question}
+                            </p>
                           </div>
-                          <span className="tiny muted">{doneDevotions.has(id) ? '✓' : ''}</span>
-                        </button>
+                          <button
+                            className={`btn btn--sm ${read ? 'btn--ghost' : 'btn--primary'}`}
+                            onClick={() => markDevotionDone(id)}
+                            disabled={read}
+                          >
+                            {read ? '✓' : 'Gelesen'}
+                          </button>
+                        </div>
                       )
                     })}
                   </div>
@@ -134,6 +169,13 @@ export function DevotionPage() {
             )
           })}
         </section>
+
+        <Link to="/bibel" className="card card--tap">
+          <b>Ganze Bibel lesen</b>
+          <p className="small muted" style={{ margin: '4px 0 0' }}>
+            {TRANSLATION_LABEL} mit Suche, Leseplänen und Kontextartikeln.
+          </p>
+        </Link>
       </div>
     </>
   )

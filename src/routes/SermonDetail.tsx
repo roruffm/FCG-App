@@ -4,6 +4,7 @@ import { SermonPlayer } from '../components/SermonPlayer'
 import { sermons } from '../data/sermons'
 import { formatDate } from '../lib/format'
 import { IconBookmark, IconHeart } from '../components/Icons'
+import { BibleRef } from '../components/BibleRef'
 import { useApp } from '../state'
 
 export function SermonDetail() {
@@ -56,7 +57,7 @@ export function SermonDetail() {
         <section className="section">
           <h1>{sermon.title}</h1>
           <div className="small muted">
-            {sermon.speaker} · {sermon.durationMin} Min · {sermon.keyVerse}
+            {sermon.speaker} · {sermon.durationMin} Min · <BibleRef reference={sermon.keyVerse} />
           </div>
           <div className="chips">
             {sermon.topics.map((t) => (
@@ -116,6 +117,21 @@ export function SermonDetail() {
         <section className="card">
           <h2 style={{ marginBottom: 8 }}>Aus dem Transkript</h2>
           <p className="quote small">{sermon.transcript}</p>
+        </section>
+
+        <section className="card">
+          <h2 style={{ marginBottom: 8 }}>Bibelstellen zur Predigt</h2>
+          <div className="chips">
+            <BibleRef reference={sermon.keyVerse} className="chip" />
+            {sermon.bibleBooks
+              .filter((b) => !sermon.keyVerse.startsWith(b))
+              .map((b) => (
+                <BibleRef key={b} reference={`${b} 1`} className="chip" />
+              ))}
+          </div>
+          <p className="tiny muted" style={{ margin: '10px 0 0' }}>
+            Öffnet den Bibeltext in der App - mit historischem Kontext, wo ein Artikel vorliegt.
+          </p>
         </section>
       </div>
     </>

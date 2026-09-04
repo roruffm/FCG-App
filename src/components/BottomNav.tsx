@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom'
-import { IconBook, IconCalendar, IconHome, IconSparkle, IconUser } from './Icons'
+import { IconBook, IconCalendar, IconHome, IconNote, IconUser } from './Icons'
 
 const items = [
   { to: '/', label: 'Start', Icon: IconHome, end: true },
+  { to: '/bibel', label: 'Bibel', Icon: IconNote, end: false },
   { to: '/predigten', label: 'Predigten', Icon: IconBook, end: false },
-  { to: '/frag', label: 'Fragen', Icon: IconSparkle, end: false },
   { to: '/events', label: 'Events', Icon: IconCalendar, end: false },
   { to: '/profil', label: 'Ich', Icon: IconUser, end: false },
 ]

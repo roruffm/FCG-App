@@ -3,7 +3,8 @@ import { TopBar } from '../components/TopBar'
 import { SermonCard } from '../components/SermonCard'
 import { sermons } from '../data/sermons'
 import { events } from '../data/events'
-import { devotionOfDay } from '../data/devotions'
+import { dailyVerse } from '../data/dailyVerses'
+import { useVerse } from '../lib/useBible'
 import { formatTime, relativeDay } from '../lib/format'
 import { IconChevron, IconSparkle, IconUsers, IconPray, IconShield } from '../components/Icons'
 import { useApp } from '../state'
@@ -18,7 +19,8 @@ function greeting(): string {
 
 export function Home() {
   const { profile, progress, streak } = useApp()
-  const devotion = devotionOfDay()
+  const today = dailyVerse()
+  const verse = useVerse(today.ref)
 
   const latest = [...sermons].sort((a, b) => b.date.localeCompare(a.date))
   const continueListening = latest.find((s) => {
@@ -37,13 +39,13 @@ export function Home() {
       <div className="page">
         <Link to="/impuls" className="hero">
           <span className="tagbox tiny">Bibelimpuls des Tages</span>
-          <h2 style={{ marginTop: 12 }}>{devotion.reference}</h2>
-          <p style={{ margin: '8px 0 12px' }}>„{devotion.verse}“</p>
+          <h2 style={{ marginTop: 12 }}>{verse?.label ?? 'Vers des Tages'}</h2>
+          <p style={{ margin: '8px 0 12px' }}>{verse ? `„${verse.text}“` : ''}</p>
           <div className="spread">
-            <span className="small muted">{devotion.short}</span>
+            <span className="small muted">{today.impulse}</span>
           </div>
           <div className="row" style={{ marginTop: 14 }}>
-            <span className="badge badge--accent">Thema: {devotion.theme}</span>
+            <span className="badge badge--accent">Lutherbibel 1912</span>
             {streak > 0 && <span className="badge">{streak} Tage in Folge</span>}
           </div>
         </Link>
@@ -114,10 +116,10 @@ export function Home() {
               <b style={{ display: 'block', marginTop: 8 }}>Gebetswand</b>
               <span className="tiny muted">Anliegen teilen und mitbeten</span>
             </Link>
-            <Link to="/predigten" className="card card--tap card--flat">
+            <Link to="/bibel/plaene" className="card card--tap card--flat">
               <IconSparkle />
-              <b style={{ display: 'block', marginTop: 8 }}>Themenpfade</b>
-              <span className="tiny muted">Identität, Gebet, Vertrauen</span>
+              <b style={{ display: 'block', marginTop: 8 }}>Lesepläne</b>
+              <span className="tiny muted">Themenpläne und Durchlese-Pläne</span>
             </Link>
           </div>
         </section>

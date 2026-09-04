@@ -8,6 +8,10 @@ import { Sermons } from './routes/Sermons'
 import { SermonDetail } from './routes/SermonDetail'
 import { Ask } from './routes/Ask'
 import { DevotionPage } from './routes/DevotionPage'
+import { Bible } from './routes/Bible'
+import { BibleReader } from './routes/BibleReader'
+import { ReadingPlans } from './routes/ReadingPlans'
+import { ReadingPlan } from './routes/ReadingPlan'
 import { Events } from './routes/Events'
 import { EventDetail } from './routes/EventDetail'
 import { Groups } from './routes/Groups'
@@ -50,6 +54,10 @@ function Shell() {
         <Route path="/predigten/:id" element={<SermonDetail />} />
         <Route path="/frag" element={<Ask />} />
         <Route path="/impuls" element={<DevotionPage />} />
+        <Route path="/bibel" element={<Bible />} />
+        <Route path="/bibel/plaene" element={<ReadingPlans />} />
+        <Route path="/bibel/plan/:id" element={<ReadingPlan />} />
+        <Route path="/bibel/:book/:chapter" element={<BibleReader />} />
         <Route path="/events" element={<Events />} />
         <Route path="/events/:id" element={<EventDetail />} />
         <Route path="/gruppen" element={<Groups />} />
