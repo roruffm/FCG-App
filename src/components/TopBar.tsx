@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { IconArrowLeft } from './Icons'
+import { fcgLogo } from '../data/logo'
 
-type Props = { title: string; subtitle?: string; back?: boolean; action?: ReactNode }
+type Props = { title: string; subtitle?: string; back?: boolean; logo?: boolean; action?: ReactNode }
 
-export function TopBar({ title, subtitle, back = false, action }: Props) {
+export function TopBar({ title, subtitle, back = false, logo = false, action }: Props) {
   const navigate = useNavigate()
 
   return (
@@ -14,6 +15,7 @@ export function TopBar({ title, subtitle, back = false, action }: Props) {
           <IconArrowLeft />
         </button>
       )}
+      {logo && <img className="logo" src={fcgLogo} alt="FCG Frankfurt" />}
       <div className="topbar__title">
         {title}
         {subtitle && <span>{subtitle}</span>}

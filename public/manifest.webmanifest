@@ -7,10 +7,10 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f6f4f0",
-  "theme_color": "#1b2a4a",
+  "background_color": "#f3f6f6",
+  "theme_color": "#006269",
   "icons": [
-    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./fcg-logo.png", "sizes": "596x595", "type": "image/png", "purpose": "any" },
     { "src": "./icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
   ]
 }

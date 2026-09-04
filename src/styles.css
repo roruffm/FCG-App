@@ -1,20 +1,21 @@
 :root {
-  /* Markenebene - zur Laufzeit ueber den Branding-Dialog ueberschreibbar. */
-  --primary: #16233d;
-  --primary-dark: #0f1b31;
-  --primary-light: #24406f;
-  --accent-strong: #a9701a;
-  --accent-mid: #c98a1e;
-  --accent-light: #f3b64c;
+  /* Markenebene FCG Frankfurt - zur Laufzeit ueber den Design-Dialog aenderbar. */
+  --primary: #006269;
+  --primary-dark: #00444b;
+  --primary-light: #0a848c;
+  --accent-strong: #00565c;
+  --accent-mid: #006269;
+  --accent-light: #9fd4d8;
+  --ink: #000000;
 
-  --bg: #f7f5f1;
+  --bg: #f3f6f6;
   --surface: #ffffff;
-  --surface-2: #f0ece5;
-  --text: #1a2233;
-  --text-muted: #5d6577;
-  --border: #e3ddd3;
+  --surface-2: #e6eded;
+  --text: #0d1516;
+  --text-muted: #55686a;
+  --border: #d9e3e3;
   --accent: var(--accent-strong);
-  --accent-soft: #fbf2df;
+  --accent-soft: color-mix(in srgb, var(--accent-mid) 15%, #ffffff);
   --brand: var(--primary);
   --shadow: 0 1px 2px rgba(15, 27, 49, 0.06), 0 8px 24px rgba(15, 27, 49, 0.06);
   --radius: 16px;
@@ -30,29 +31,29 @@
  */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0e1524;
-    --surface: #16203a;
-    --surface-2: #1d294a;
-    --text: #eef1f7;
-    --text-muted: #a2adc4;
-    --border: #26314f;
+    --bg: #07120f;
+    --surface: #0f1f20;
+    --surface-2: #16302f;
+    --text: #e9f2f1;
+    --text-muted: #9db3b4;
+    --border: #1f3a3a;
     --accent: var(--accent-light);
-    --accent-soft: #2a2412;
-    --brand: #0b1220;
+    --accent-soft: color-mix(in srgb, var(--accent-mid) 30%, #07120f);
+    --brand: #04100e;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
   }
 }
 
 :root[data-theme='dark'] {
-    --bg: #0e1524;
-    --surface: #16203a;
-    --surface-2: #1d294a;
-    --text: #eef1f7;
-    --text-muted: #a2adc4;
-    --border: #26314f;
+    --bg: #07120f;
+    --surface: #0f1f20;
+    --surface-2: #16302f;
+    --text: #e9f2f1;
+    --text-muted: #9db3b4;
+    --border: #1f3a3a;
     --accent: var(--accent-light);
-    --accent-soft: #2a2412;
-    --brand: #0b1220;
+    --accent-soft: color-mix(in srgb, var(--accent-mid) 30%, #07120f);
+    --brand: #04100e;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
@@ -67,14 +68,21 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  font-family: CMGSans, Karla, 'Segoe UI', system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
 }
 
-h1, h2, h3, h4 { margin: 0; line-height: 1.25; font-weight: 700; letter-spacing: -0.01em; }
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: CMGSansBold, Archivo, CMGSans, 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
 h1 { font-size: 1.55rem; }
 h2 { font-size: 1.15rem; }
 h3 { font-size: 1rem; }
@@ -214,7 +222,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* ---------- Buttons ---------- */
 .btn {
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 999px;
   padding: 12px 16px;
   font-weight: 600;
   cursor: pointer;
@@ -230,7 +238,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn--ghost { background: transparent; border-color: var(--border); }
 .btn--block { width: 100%; }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-.btn--sm { padding: 8px 12px; font-size: 0.85rem; border-radius: 10px; }
+.btn--sm { padding: 8px 14px; font-size: 0.85rem; }
 
 .icon-btn {
   border: 1px solid var(--border);
@@ -436,3 +444,26 @@ button, input, select, textarea { font: inherit; color: inherit; }
   width: 44px; height: 36px; padding: 0; border: 1px solid var(--border);
   border-radius: 9px; background: none; cursor: pointer;
 }
+
+/* ---------- Markenelemente ---------- */
+.tagbox {
+  display: inline-block;
+  background: var(--ink);
+  color: #fff;
+  font-family: CMGSansBold, Archivo, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--ink);
+}
+.logo--lg { width: 52px; height: 52px; }
+.hero__logo { position: absolute; right: 18px; top: 18px; opacity: 0.9; }

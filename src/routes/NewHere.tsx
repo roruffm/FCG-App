@@ -41,8 +41,8 @@ export function NewHere() {
       <TopBar title="Neu hier?" subtitle="Alles, was beim ersten Mal hilft" back />
       <div className="page">
         <div className="hero">
-          <div className="hero__eyebrow">Willkommen</div>
-          <h2>Schön, dass du da bist.</h2>
+          <span className="tagbox tiny">Willkommen</span>
+          <h2 style={{ marginTop: 12 }}>Schön, dass du da bist.</h2>
           <p className="muted small" style={{ marginBottom: 0 }}>
             Kirche im Herzen der Stadt: Eckenheimer Landstr. 180, sonntags 10:00 und 12:00 Uhr.
             Du musst nichts mitbringen, nichts unterschreiben und dich nirgends vorstellen.

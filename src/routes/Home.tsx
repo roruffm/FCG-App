@@ -32,11 +32,12 @@ export function Home() {
       <TopBar
         title={`${greeting()}${profile.name ? `, ${profile.name}` : ''}`}
         subtitle="FCG Frankfurt · Kirche im Herzen der Stadt"
+        logo
       />
       <div className="page">
         <Link to="/impuls" className="hero">
-          <div className="hero__eyebrow">Bibelimpuls des Tages</div>
-          <h2>{devotion.reference}</h2>
+          <span className="tagbox tiny">Bibelimpuls des Tages</span>
+          <h2 style={{ marginTop: 12 }}>{devotion.reference}</h2>
           <p style={{ margin: '8px 0 12px' }}>„{devotion.verse}“</p>
           <div className="spread">
             <span className="small muted">{devotion.short}</span>

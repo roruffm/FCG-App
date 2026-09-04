@@ -124,12 +124,24 @@ Eltern-Kind-Raum mit Live-Uebertragung), Livestream und Uebersetzung, der Begrif
 
 ## Corporate Design
 
-Die Oberflaeche liest alle Farben aus CSS-Variablen (`--primary`, `--accent-*`).
-Ueber den Button **Design** im Prototyp-Band laesst sich das Farbschema live
-umstellen - fuenf Vorlagen oder frei gewaehlte Hex-Werte, gespeichert pro Geraet.
+Uebernommen aus dem Stylesheet von fcg-frankfurt.de (als MHTML-Archiv geliefert):
 
-Die verbindlichen Markenwerte der FCG Frankfurt konnten in dieser Umgebung nicht
-ausgelesen werden: `fcg-frankfurt.de` ist durch den Netzwerk-Filter gesperrt
-(`EGRESS_BLOCKED`). Sobald Hex-Codes, Hausschrift und Logo (am besten als SVG)
-vorliegen, werden sie in `src/lib/branding.ts` als Standard hinterlegt und das
-Logo ersetzt das Platzhalter-Icon in `public/`.
+| Rolle | Wert | Verwendung in der App |
+|---|---|---|
+| Petrol | `#006269` | Hausfarbe: Hero, Buttons, aktive Navigation |
+| Dunkelpetrol | `#00444B` | Prototyp-Band, dunkle Flaechen, Verlaeufe |
+| Mint | `#D8E3E4` | heller Begleitton (als `--accent-soft` aus der Hausfarbe gemischt) |
+| Schwarz | `#000000` | Bildmarke und der Kasten-Stil der Website (`.tagbox`) |
+
+Uebernommen sind ausserdem die **Bildmarke** (`public/fcg-logo.png`, zusaetzlich als
+Data-URI in `src/data/logo.ts` fuer die Einzeldatei-Demo), die **Pillenform** der
+Buttons und das Website-Element *weisse Versalschrift auf schwarzem Kasten*.
+
+**Schrift:** Die Website nutzt `CMGSans` / `CMGSansBold`. Die Schriftdateien waren im
+Archiv nicht enthalten (nur relative Verweise auf `./fonts/CMGSans-*.ttf`). Die App
+stellt sie deshalb im Stack voran und faellt auf **Archivo** (Ueberschriften) und
+**Karla** (Fliesstext) zurueck. Sobald die TTF-Dateien vorliegen, genuegt ein
+`@font-face`-Block - die Stacks stimmen bereits.
+
+Das Farbschema laesst sich weiterhin ueber den Button **Design** im Prototyp-Band
+umstellen (FCG Frankfurt als Standard, dazu Varianten und freie Hex-Werte).
