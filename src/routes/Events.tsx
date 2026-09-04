@@ -5,6 +5,8 @@ import { events } from '../data/events'
 import { formatTime, relativeDay } from '../lib/format'
 import { IconChevron } from '../components/Icons'
 import { useApp } from '../state'
+import { ExternalLink } from '../components/ExternalLink'
+import { church } from '../data/church'
 
 const categories = ['Alle', 'Gottesdienst', 'Kurs', 'Jugend', 'Gebet', 'Freizeit', 'Gemeinde'] as const
 
@@ -30,6 +32,16 @@ export function Events() {
               {c}
             </button>
           ))}
+        </div>
+
+        <div className="card">
+          <ExternalLink href={church.web.events} hint="Verbindliche Termine der Gemeinde">
+            <b className="small">Eventkalender auf fcg-frankfurt.de</b>
+          </ExternalLink>
+          <p className="tiny muted" style={{ margin: '10px 0 0' }}>
+            Die Termine hier sind an das Gemeindeleben angelehnt, aber frei gesetzt. Verbindlich ist
+            der Kalender auf der Website.
+          </p>
         </div>
 
         <div className="stack">

@@ -94,6 +94,11 @@ export function Sermons() {
           ))}
         </div>
 
+        <p className="tiny muted" style={{ margin: 0 }}>
+          Die zehn Predigten hier sind Beispiele, an denen sich Suche, Player und Kurzfassung zeigen
+          lassen. Das echte Archiv liegt auf der Website, bei YouTube und im Podcast.
+        </p>
+
         <Link to="/frag" className="card card--tap">
           <div className="row" style={{ gap: 8, flexWrap: 'nowrap' }}>
             <IconSparkle />

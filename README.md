@@ -14,6 +14,16 @@ npm run build    # Produktionsbuild nach dist/
 npm run preview  # Build lokal ansehen
 ```
 
+## Wo die App lebt
+
+Die veröffentlichte Seite ist der maßgebliche Stand:
+
+> **https://roruffm.github.io/FCG-App/**
+
+Jede Änderung geht über den Standard-Branch dorthin. Geprüft wird vor dem Push
+gegen denselben Produktionsbuild (`npm run build` + `npm run preview`), weil die
+Seite aus genau dieser Ausgabe entsteht.
+
 ## Die App aufrufen
 
 Bei jedem Push auf den Standard-Branch baut

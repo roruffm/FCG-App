@@ -62,6 +62,7 @@ export function SermonDetail() {
             {sermon.speaker} · {sermon.durationMin} Min · <BibleRef reference={sermon.keyVerse} />
           </div>
           <div className="chips">
+            <span className="badge badge--accent">Beispielpredigt</span>
             {sermon.topics.map((t) => (
               <span key={t} className="badge">{t}</span>
             ))}
