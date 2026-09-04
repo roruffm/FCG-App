@@ -161,7 +161,7 @@ export const themePaths: ThemePath[] = [
   {
     id: 'tp-identitaet',
     title: 'Identität',
-    claim: 'Sieben Tage über die Frage: Wer bin ich, wenn ich nichts leisten muss?',
+    claim: 'Vier Tage über die Frage: Wer bin ich, wenn ich nichts leisten muss?',
     days: 4,
     devotionIds: ['d-1', 'd-2', 'd-12', 'd-14'],
   },

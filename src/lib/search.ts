@@ -35,12 +35,22 @@ function stem(token: string): string {
   return token.replace(/(en|ern|est|et|te|ten|st|es|er|em|e|s|n)$/u, '')
 }
 
+/**
+ * Themen, bei denen die App bewusst nicht antwortet, sondern an Menschen uebergibt.
+ * Die Muster sind absichtlich weit gefasst: Ein Fehlalarm kostet einen Hinweis auf
+ * das Seelsorgeteam, ein uebersehener Fall kostet deutlich mehr.
+ */
 const CRISIS_PATTERNS = [
-  /suizid|selbstmord|umbringen|nicht mehr leben|lebensmüde/i,
-  /missbrauch|vergewaltig|belästig/i,
-  /gewalt (in|zu hause)|schlägt mich|schlägt uns/i,
-  /kindeswohl|mein kind wird/i,
-  /selbstverletz|ritzen/i,
+  /suizid|selbstmord|freitod/i,
+  /um(zu)?bringen|umgebracht/i,
+  /(nicht|nie) mehr leben|nicht mehr weiterleben|lebensm(ü|ue)de|sterben (will|möchte|moechte)/i,
+  /(mein|das) leben (be)?enden|schluss machen mit dem leben/i,
+  /selbstverletz|selbst verletz|ritz(e|en|t)\b/i,
+  /missbrauch|vergewaltig|bel(ä|ae)stig|übergriff|uebergriff/i,
+  /(schl(ä|ae)gt|schlagen) (mich|uns|mein kind)|gewalt (in der familie|zu hause|gegen)|misshandl/i,
+  /kindeswohl|meinem kind (passiert|tut jemand)|kind (wird|ist) (geschlagen|missbraucht)/i,
+  /magersucht|essst(ö|oe)rung|bulimie/i,
+  /(will|möchte|moechte) mir (etwas|was) antun/i,
 ]
 
 export type Citation = {
