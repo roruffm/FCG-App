@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { groups } from '../data/groups'
 import type { Group } from '../data/types'
+import { ExternalLink } from '../components/ExternalLink'
+import { church, mailTo } from '../data/church'
 
 const phases: (Group['phase'] | 'Alle Phasen')[] = [
   'Alle Phasen',
@@ -72,21 +74,39 @@ export function Groups() {
               <p className="small">{g.description}</p>
               <div className="spread">
                 <span className="tiny muted">Leitung: {g.hosts}</span>
-                <button
+                <a
                   className={`btn btn--sm ${contacted.includes(g.id) ? 'btn--ghost' : 'btn--primary'}`}
+                  href={mailTo(
+                    `Connectgruppe: ${g.name}`,
+                    `Hallo Connect-Team,\n\nich interessiere mich für die Gruppe "${g.name}" (${g.weekday}, ${g.district}).\n\nName:\nErreichbar unter:\n\nViele Grüße\n`,
+                    'connect@fcg-frankfurt.de'
+                  )}
                   onClick={() => setContacted((prev) => (prev.includes(g.id) ? prev : [...prev, g.id]))}
-                  disabled={contacted.includes(g.id)}
                 >
-                  {contacted.includes(g.id) ? 'Anfrage gesendet' : 'Anfragen'}
-                </button>
+                  {contacted.includes(g.id) ? 'Anfrage geöffnet' : 'Anfragen'}
+                </a>
               </div>
               {contacted.includes(g.id) && (
                 <p className="tiny muted" style={{ margin: '10px 0 0' }}>
-                  Die Gruppenleitung meldet sich. Bis dahin sehen nur sie deine Anfrage.
+                  Die E-Mail an das Connect-Team ist vorbereitet - abschicken genügt. Bis dahin sieht
+                  niemand deine Anfrage.
                 </p>
               )}
             </div>
           ))}
+          <div className="card">
+            <ExternalLink href={church.web.connectgruppen} hint="Alle Gruppen der Gemeinde">
+              <b className="small">Connectgruppen auf fcg-frankfurt.de</b>
+            </ExternalLink>
+            <ExternalLink href={church.web.gemeinschaften} hint="Frauen, Männer, Generationen, International">
+              <b className="small">Unsere Gemeinschaften</b>
+            </ExternalLink>
+            <a className="list-item" href={mailTo('Frage zu Connectgruppen', 'Hallo Connect-Team,\n\n', 'connect@fcg-frankfurt.de')}>
+              <span><b className="small">Ich weiß nicht, was passt - bitte meldet euch</b></span>
+              <span className="tiny muted">E-Mail</span>
+            </a>
+          </div>
+
           {results.length === 0 && (
             <div className="empty">
               <p>Keine passende Gruppe gefunden.</p>

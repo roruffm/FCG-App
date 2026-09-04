@@ -6,6 +6,8 @@ import { useApp } from '../state'
 import { SermonCard } from '../components/SermonCard'
 import { formatDate } from '../lib/format'
 import { biblePath } from '../lib/bible'
+import { ExternalLink } from '../components/ExternalLink'
+import { church } from '../data/church'
 
 const pushOptions = ['Gottesdienst', 'Jugend', 'Kurse', 'Gebet', 'Freizeiten', 'Mitarbeit']
 
@@ -188,11 +190,24 @@ export function Profile() {
 
         <section className="section">
           <Link to="/datenschutz" className="card card--tap">
-            <b>Datenschutz & rote Linien</b>
+            <b>Datenschutz & rote Linien in der App</b>
             <p className="small muted" style={{ margin: '4px 0 0' }}>
               Was gespeichert wird, was die KI darf - und was ausdrücklich nicht.
             </p>
           </Link>
+          <div className="card">
+            <Link to="/kontakt" className="list-item">
+              <span><b className="small">Kontakt & Anfahrt</b></span>
+              <span className="tiny muted">ansehen</span>
+            </Link>
+            <ExternalLink href={church.web.impressum}>
+              <b className="small">Impressum der FCG Frankfurt</b>
+            </ExternalLink>
+            <ExternalLink href={church.web.datenschutz}>
+              <b className="small">Datenschutzerklärung der FCG Frankfurt</b>
+            </ExternalLink>
+          </div>
+
           <button
             className="btn btn--ghost btn--block"
             onClick={() => {

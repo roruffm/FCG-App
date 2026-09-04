@@ -1,4 +1,6 @@
 import { TopBar } from '../components/TopBar'
+import { ExternalLink } from '../components/ExternalLink'
+import { church } from '../data/church'
 
 const redLines = [
   {
@@ -80,6 +82,23 @@ export function Privacy() {
               immer ihre Quelle.
             </p>
           </div>
+        </section>
+
+        <section className="section">
+          <h2>Verbindliche Texte</h2>
+          <div className="card">
+            <ExternalLink href={church.web.datenschutz} hint="Gilt für die Gemeinde und ihre Angebote">
+              <b className="small">Datenschutzerklärung der FCG Frankfurt</b>
+            </ExternalLink>
+            <ExternalLink href={church.web.impressum}>
+              <b className="small">Impressum</b>
+            </ExternalLink>
+          </div>
+          <p className="tiny muted">
+            Diese Seite beschreibt, wie der App-Prototyp mit Daten umgeht. Für den Betrieb kommen ein
+            Verzeichnis der Verarbeitungstätigkeiten, Einwilligungen, ein Löschkonzept und Verträge zur
+            Auftragsverarbeitung dazu.
+          </p>
         </section>
       </div>
     </>

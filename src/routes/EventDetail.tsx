@@ -3,6 +3,8 @@ import { TopBar } from '../components/TopBar'
 import { events } from '../data/events'
 import { formatDate, formatTime } from '../lib/format'
 import { useApp } from '../state'
+import { church, mailTo } from '../data/church'
+import { ExternalLink } from '../components/ExternalLink'
 
 export function EventDetail() {
   const { id } = useParams()
@@ -56,9 +58,23 @@ export function EventDetail() {
               {registered ? 'Anmeldung zurückziehen' : 'Verbindlich anmelden'}
             </button>
             {registered && (
-              <p className="tiny muted" style={{ margin: '10px 0 0' }}>
-                Du bist angemeldet. Eine Erinnerung kommt zwei Tage vorher - nur wenn du Push erlaubt hast.
-              </p>
+              <>
+                <a
+                  className="btn btn--gold btn--block"
+                  style={{ marginTop: 10 }}
+                  href={mailTo(
+                    `Anmeldung: ${event.title} am ${formatDate(event.start)}`,
+                    `Hallo FCG-Team,\n\nich melde mich für "${event.title}" am ${formatDate(event.start)} an.\n\nName:\nAnzahl Personen:\n\nViele Grüße\n`,
+                    event.contact
+                  )}
+                >
+                  Anmeldung abschicken
+                </a>
+                <p className="tiny muted" style={{ margin: '10px 0 0' }}>
+                  Die Vormerkung liegt auf deinem Gerät. Solange die App kein eigenes Backend hat, geht die
+                  verbindliche Anmeldung per E-Mail an das zuständige Team - der Text ist vorbereitet.
+                </p>
+              </>
             )}
           </div>
         ) : (
@@ -66,12 +82,18 @@ export function EventDetail() {
         )}
 
         <div className="card">
-          <div className="spread">
+          <div className="spread" style={{ marginBottom: 8 }}>
             <span className="small muted">Fragen?</span>
             <a className="btn btn--ghost btn--sm" href={`mailto:${event.contact}`}>
               {event.contact}
             </a>
           </div>
+          <ExternalLink href={church.web.events} hint="Alle Termine der Gemeinde">
+            <b className="small">Eventkalender auf fcg-frankfurt.de</b>
+          </ExternalLink>
+          <ExternalLink href={church.address.mapsUrl} hint={`${church.address.street}, ${church.address.zip} ${church.address.city}`}>
+            <b className="small">Anfahrt</b>
+          </ExternalLink>
         </div>
       </div>
     </>

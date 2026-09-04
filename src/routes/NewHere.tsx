@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { TopBar } from '../components/TopBar'
 import { events } from '../data/events'
 import { formatTime, relativeDay } from '../lib/format'
+import { ExternalLink } from '../components/ExternalLink'
+import { church, mailTo } from '../data/church'
 
 const faq = [
   {
@@ -93,12 +95,37 @@ export function NewHere() {
                 Kleine Gruppen nach Lebensphase, Stadtteil und Wochentag.
               </p>
             </Link>
-            <a className="card card--tap" href="mailto:kontakt@fcg-frankfurt.de">
+            <Link to="/kontakt" className="card card--tap">
+              <b>Anfahrt, Zeiten und Kanäle</b>
+              <p className="small muted" style={{ margin: '4px 0 0' }}>
+                {church.address.street}, {church.address.zip} {church.address.city} - mit Route,
+                Telefonnummer und Livestream.
+              </p>
+            </Link>
+            <a className="card card--tap" href={mailTo('Ich bin neu - eine Frage', 'Hallo FCG-Team,\n\n')}>
               <b>Einfach jemanden fragen</b>
               <p className="small muted" style={{ margin: '4px 0 0' }}>
                 Das Willkommensteam antwortet meist am selben Tag.
               </p>
             </a>
+          </div>
+        </section>
+
+        <section className="section">
+          <h2>Direkt auf fcg-frankfurt.de</h2>
+          <div className="card">
+            <ExternalLink href={church.web.neuHier} hint="Der Einstieg der Gemeinde für neue Gäste">
+              <b className="small">Neu hier?</b>
+            </ExternalLink>
+            <ExternalLink href={church.web.besucheUns} hint="Ablauf, Ort und was dich erwartet">
+              <b className="small">Besuche uns</b>
+            </ExternalLink>
+            <ExternalLink href={church.web.ueberUns} hint="Wer wir sind und was wir glauben">
+              <b className="small">Über uns</b>
+            </ExternalLink>
+            <ExternalLink href={church.social.youtube} hint="Reinschauen, bevor du kommst">
+              <b className="small">Gottesdienst im Livestream</b>
+            </ExternalLink>
           </div>
         </section>
       </div>

@@ -19,6 +19,7 @@ import { NewHere } from './routes/NewHere'
 import { Prayer } from './routes/Prayer'
 import { Profile } from './routes/Profile'
 import { Privacy } from './routes/Privacy'
+import { Contact } from './routes/Contact'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -65,6 +66,7 @@ function Shell() {
         <Route path="/gebet" element={<Prayer />} />
         <Route path="/profil" element={<Profile />} />
         <Route path="/datenschutz" element={<Privacy />} />
+        <Route path="/kontakt" element={<Contact />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />

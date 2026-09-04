@@ -5,6 +5,8 @@ import { sermons } from '../data/sermons'
 import { formatDate } from '../lib/format'
 import { IconBookmark, IconHeart } from '../components/Icons'
 import { BibleRef } from '../components/BibleRef'
+import { ExternalLink } from '../components/ExternalLink'
+import { church } from '../data/church'
 import { useApp } from '../state'
 
 export function SermonDetail() {
@@ -67,6 +69,24 @@ export function SermonDetail() {
         </section>
 
         <SermonPlayer sermon={sermon} />
+
+        <section className="card">
+          <h2 style={{ marginBottom: 8 }}>Ganze Predigt hören und sehen</h2>
+          <ExternalLink href={church.social.youtube} hint="Gottesdienste und Predigten im Video">
+            <b className="small">YouTube-Kanal der FCG</b>
+          </ExternalLink>
+          <ExternalLink href={church.social.spotify} hint="Predigten der FCG Frankfurt">
+            <b className="small">Podcast bei Spotify</b>
+          </ExternalLink>
+          <ExternalLink href={church.social.applePodcasts} hint="Predigten der FCG Frankfurt">
+            <b className="small">Podcast bei Apple</b>
+          </ExternalLink>
+          <p className="tiny muted" style={{ margin: '10px 0 0' }}>
+            Der Player oben zeigt die Bedienung mit Kapitelmarken und Hörfortschritt. Die Medien liegen
+            heute auf YouTube und im Podcast; im Betrieb kämen sie aus dem Redaktionssystem und würden
+            direkt hier abgespielt.
+          </p>
+        </section>
 
         <section className="card">
           <div className="spread" style={{ marginBottom: 8 }}>

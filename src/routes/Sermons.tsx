@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { SermonCard } from '../components/SermonCard'
 import { bibleBooks, sermons, series, speakers, topics } from '../data/sermons'
-import { IconSearch } from '../components/Icons'
+import { Link } from 'react-router-dom'
+import { IconSearch, IconSparkle } from '../components/Icons'
+import { ExternalLink } from '../components/ExternalLink'
+import { church } from '../data/church'
 
 type FilterKey = 'topic' | 'speaker' | 'series' | 'book'
 
@@ -91,10 +94,34 @@ export function Sermons() {
           ))}
         </div>
 
+        <Link to="/frag" className="card card--tap">
+          <div className="row" style={{ gap: 8, flexWrap: 'nowrap' }}>
+            <IconSparkle />
+            <div style={{ minWidth: 0 }}>
+              <b>Frag die Predigten</b>
+              <p className="tiny muted" style={{ margin: '4px 0 0' }}>
+                Frage in normaler Sprache stellen - Antwort mit Quellenangabe.
+              </p>
+            </div>
+          </div>
+        </Link>
+
         <div className="stack">
           {results.map((s) => (
             <SermonCard key={s.id} sermon={s} />
           ))}
+          <div className="card">
+            <ExternalLink href={church.web.predigten} hint="Das vollständige Archiv der Gemeinde">
+              <b className="small">Predigten auf fcg-frankfurt.de</b>
+            </ExternalLink>
+            <ExternalLink href={church.social.youtube} hint="Gottesdienste im Video">
+              <b className="small">YouTube-Kanal</b>
+            </ExternalLink>
+            <ExternalLink href={church.social.spotify} hint="Predigten als Podcast">
+              <b className="small">Spotify</b>
+            </ExternalLink>
+          </div>
+
           {results.length === 0 && (
             <div className="empty">
               <p>Keine Predigt gefunden.</p>

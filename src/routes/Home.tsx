@@ -8,6 +8,8 @@ import { useVerse } from '../lib/useBible'
 import { formatTime, relativeDay } from '../lib/format'
 import { IconChevron, IconSparkle, IconUsers, IconPray, IconShield } from '../components/Icons'
 import { useApp } from '../state'
+import { ExternalLink } from '../components/ExternalLink'
+import { church } from '../data/church'
 
 function greeting(): string {
   const h = new Date().getHours()
@@ -121,6 +123,36 @@ export function Home() {
               <b style={{ display: 'block', marginTop: 8 }}>Lesepläne</b>
               <span className="tiny muted">Themenpläne und Durchlese-Pläne</span>
             </Link>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section__head">
+            <h2>Die FCG im Alltag</h2>
+            <Link to="/kontakt">Kontakt</Link>
+          </div>
+          <div className="card">
+            <Link to="/kontakt" className="list-item">
+              <span>
+                <b className="small">Gottesdienste, Adresse, Anfahrt</b>
+                <span className="tiny muted" style={{ display: 'block' }}>
+                  Sonntags {church.services[0].time} und {church.services[1].time}
+                </span>
+              </span>
+              <span className="tiny muted">ansehen</span>
+            </Link>
+            <ExternalLink href={church.social.youtube} hint="Gottesdienste und Predigten">
+              <b className="small">YouTube</b>
+            </ExternalLink>
+            <ExternalLink href={church.social.spotify} hint="Predigten als Podcast">
+              <b className="small">Podcast</b>
+            </ExternalLink>
+            <ExternalLink href={church.web.events} hint="Alle Termine der Gemeinde">
+              <b className="small">Eventkalender</b>
+            </ExternalLink>
+            <ExternalLink href={church.web.spende} hint="Die Arbeit der Gemeinde unterstützen">
+              <b className="small">Spenden</b>
+            </ExternalLink>
           </div>
         </section>
       </div>
