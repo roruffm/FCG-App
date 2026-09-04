@@ -14,6 +14,35 @@ npm run build    # Produktionsbuild nach dist/
 npm run preview  # Build lokal ansehen
 ```
 
+## Die App aufrufen
+
+Bei jedem Push auf den Standard-Branch baut
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) die App und
+stellt sie über **GitHub Pages** bereit:
+
+> **https://roruffm.github.io/FCG-App/**
+
+### Einmalig: Pages einschalten
+
+GitHub Pages muss **einmal von Hand** aktiviert werden - das Token eines
+Workflows darf eine Pages-Seite nicht selbst anlegen und scheitert sonst mit
+`Resource not accessible by integration`:
+
+> **Settings -> Pages -> Build and deployment -> Source: „GitHub Actions"**
+
+Danach genügt ein beliebiger Push (oder *Actions -> Webseite veröffentlichen ->
+Run workflow*), und die Seite ist nach ein bis zwei Minuten online.
+
+Ist das Repository privat, braucht Pages einen bezahlten Tarif; andernfalls
+das Repository auf öffentlich stellen.
+
+### Ohne Basispfad-Gefummel
+
+Vite baut mit `base: './'`, alle Verweise sind relativ, und der Router arbeitet
+mit Hash-Routen (`/#/bibel/roem/8`). Die Seite läuft dadurch unverändert unter
+`/FCG-App/`, unter einer eigenen Domain und auch direkt vom Dateisystem.
+Für eine eigene Domain genügt eine Datei `public/CNAME` mit der Domain darin.
+
 Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android)
 öffnen - die Oberfläche ist mobil gedacht.
 
