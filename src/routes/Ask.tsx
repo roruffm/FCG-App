@@ -77,7 +77,7 @@ export function Ask() {
               <a className="btn btn--primary btn--block" href="tel:+498001110111">
                 Telefonseelsorge: 0800 111 0 111
               </a>
-              <a className="btn btn--ghost btn--block" href="mailto:seelsorge@fcg-beispiel.de">
+              <a className="btn btn--ghost btn--block" href="mailto:seelsorge@fcg-frankfurt.de">
                 Seelsorgeteam der FCG kontaktieren
               </a>
               <p className="tiny muted" style={{ margin: 0 }}>

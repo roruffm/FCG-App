@@ -1,7 +1,9 @@
-import { createContext, useCallback, useContext, useMemo } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { usePersistentState, useToggleSet } from './lib/storage'
 import { seedPrayers } from './data/prayers'
+import { applyBrand, defaultBrand } from './lib/branding'
+import type { Brand } from './lib/branding'
 import type { PrayerRequest } from './data/types'
 
 export type Depth = 'kurz' | 'mittel' | 'tief'
@@ -42,6 +44,8 @@ type AppState = {
   prayFor: (id: string) => void
   streak: number
   markDevotionDone: (id: string) => void
+  brand: Brand
+  setBrand: (b: Brand) => void
 }
 
 const Ctx = createContext<AppState | null>(null)
@@ -60,6 +64,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = usePersistentState<Profile>('profile', defaultProfile)
   const [prayers, setPrayers] = usePersistentState<PrayerRequest[]>('prayers', seedPrayers)
   const [streakDays, setStreakDays] = usePersistentState<string[]>('streak-days', [])
+  const [brand, setBrand] = usePersistentState<Brand>('brand', defaultBrand)
+
+  useEffect(() => applyBrand(brand), [brand])
 
   const setNote = useCallback(
     (sermonId: string, text: string) => setNotes((prev) => ({ ...prev, [sermonId]: text })),
@@ -136,6 +143,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     prayFor,
     streak,
     markDevotionDone,
+    brand,
+    setBrand,
   }
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

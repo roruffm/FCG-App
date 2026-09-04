@@ -1,20 +1,21 @@
 :root {
-  --navy-900: #0f1b31;
-  --navy-800: #16233d;
-  --navy-700: #24406f;
-  --gold-600: #a9701a;
-  --gold-500: #c98a1e;
-  --gold-400: #f3b64c;
+  /* Markenebene - zur Laufzeit ueber den Branding-Dialog ueberschreibbar. */
+  --primary: #16233d;
+  --primary-dark: #0f1b31;
+  --primary-light: #24406f;
+  --accent-strong: #a9701a;
+  --accent-mid: #c98a1e;
+  --accent-light: #f3b64c;
 
   --bg: #f7f5f1;
   --surface: #ffffff;
   --surface-2: #f0ece5;
-  --text: #16233d;
+  --text: #1a2233;
   --text-muted: #5d6577;
   --border: #e3ddd3;
-  --accent: var(--gold-600);
+  --accent: var(--accent-strong);
   --accent-soft: #fbf2df;
-  --brand: var(--navy-800);
+  --brand: var(--primary);
   --shadow: 0 1px 2px rgba(15, 27, 49, 0.06), 0 8px 24px rgba(15, 27, 49, 0.06);
   --radius: 16px;
   --radius-sm: 10px;
@@ -23,19 +24,36 @@
   color-scheme: light dark;
 }
 
+/*
+ * Drei Zustaende: ohne Stempel entscheidet die Systemeinstellung, eine bewusste
+ * Wahl des Nutzers stempelt data-theme und gewinnt in beide Richtungen.
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #0e1524;
     --surface: #16203a;
     --surface-2: #1d294a;
     --text: #eef1f7;
     --text-muted: #a2adc4;
     --border: #26314f;
-    --accent: var(--gold-400);
+    --accent: var(--accent-light);
     --accent-soft: #2a2412;
     --brand: #0b1220;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
   }
+}
+
+:root[data-theme='dark'] {
+    --bg: #0e1524;
+    --surface: #16203a;
+    --surface-2: #1d294a;
+    --text: #eef1f7;
+    --text-muted: #a2adc4;
+    --border: #26314f;
+    --accent: var(--accent-light);
+    --accent-soft: #2a2412;
+    --brand: #0b1220;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 * { box-sizing: border-box; }
@@ -75,8 +93,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .topbar {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 20;
   display: flex;
   align-items: center;
@@ -132,7 +149,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .card--tap:active { transform: scale(0.985); }
 
 .hero {
-  background: linear-gradient(150deg, var(--navy-800), var(--navy-700));
+  background: linear-gradient(150deg, var(--primary), var(--primary-light));
   color: #f4f6fb;
   border-radius: 20px;
   padding: 20px;
@@ -145,7 +162,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   right: -50px; top: -60px;
   width: 190px; height: 190px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(243, 182, 76, 0.36), transparent 68%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-light) 40%, transparent), transparent 68%);
 }
 .hero h2 { font-size: 1.3rem; margin-bottom: 6px; }
 .hero .muted { color: #c3cde1; }
@@ -153,7 +170,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  color: var(--gold-400);
+  color: var(--accent-light);
   font-weight: 700;
   margin-bottom: 8px;
 }
@@ -208,8 +225,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   justify-content: center;
   gap: 8px;
 }
-.btn--primary { background: var(--navy-800); color: #fff; }
-.btn--gold { background: var(--gold-500); color: #26210f; }
+.btn--primary { background: var(--primary); color: #fff; }
+.btn--gold { background: var(--accent-mid); color: #201a08; }
 .btn--ghost { background: transparent; border-color: var(--border); }
 .btn--block { width: 100%; }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; }
@@ -246,8 +263,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   flex: none;
   width: 62px; height: 62px;
   border-radius: 14px;
-  background: linear-gradient(150deg, var(--navy-700), var(--navy-900));
-  color: var(--gold-400);
+  background: linear-gradient(150deg, var(--primary-light), var(--primary-dark));
+  color: var(--accent-light);
   display: grid; place-items: center;
   font-size: 0.78rem;
   font-weight: 700;
@@ -267,13 +284,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
   width: 62px; height: 62px;
   border-radius: 50%;
   border: none;
-  background: var(--navy-800);
+  background: var(--primary);
   color: #fff;
   font-size: 1.4rem;
   cursor: pointer;
   display: grid; place-items: center;
 }
-.player__scrub { width: 100%; accent-color: var(--gold-500); }
+.player__scrub { width: 100%; accent-color: var(--accent-mid); }
 .chapter {
   display: flex; justify-content: space-between; gap: 12px;
   padding: 9px 0;
@@ -355,4 +372,67 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
+}
+
+/* ---------- Demo-Kennzeichnung ---------- */
+.demobar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 14px;
+  background: var(--primary-dark);
+  color: #f2f4f9;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+.demobar b { color: var(--accent-light); letter-spacing: 0.06em; }
+.demobar button {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: inherit;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  flex: none;
+}
+
+/* ---------- Branding-Dialog ---------- */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(10, 14, 24, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.sheet__panel {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 18px calc(24px + env(safe-area-inset-bottom, 0px));
+  max-height: 88vh;
+  overflow-y: auto;
+}
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.swatch {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  background: var(--surface);
+  text-align: left;
+}
+.swatch[aria-pressed='true'] { border-color: var(--accent); }
+.swatch__bar { height: 26px; border-radius: 7px; margin-bottom: 7px; }
+.color-row { display: flex; align-items: center; gap: 10px; }
+.color-row input[type='color'] {
+  width: 44px; height: 36px; padding: 0; border: 1px solid var(--border);
+  border-radius: 9px; background: none; cursor: pointer;
 }

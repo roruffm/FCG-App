@@ -1,4 +1,4 @@
-# FCG App
+# FCG Frankfurt App (Prototyp)
 
 **Gemeinde verbinden. Glauben vertiefen. Alltag erreichen.**
 
@@ -110,8 +110,26 @@ danach, wenn Nutzung und Feedback zeigen, was wirklich gebraucht wird.
 
 ---
 
-## Demo-Inhalte
+## Demo-Inhalte und Kennzeichnung
 
-Alle Predigten, Namen, Termine und Gebetsanliegen sind erfunden und dienen nur der
-Veranschaulichung. E-Mail-Adressen zeigen auf `fcg-beispiel.de`. Vor einer echten
-Nutzung müssen `src/data/` und die Kontaktdaten ersetzt werden.
+Die App traegt durchgehend ein sichtbares Band **„PROTOTYP · Beispielinhalte, keine
+offizielle App der FCG Frankfurt"**. Predigten, Prediger, Gebetsanliegen und die
+meisten Termine sind erfunden.
+
+An oeffentlich zugaenglichen Angaben der FCG Frankfurt orientiert sind: Gottesdienstzeiten
+(sonntags 10:00 und 12:00 Uhr), Adresse (Eckenheimer Landstr. 180, 60318 Frankfurt),
+Kinder- und Jugendangebote (Kinderkirche 3-11 mit Forscher/Abenteurer, Evidence 12-15,
+Eltern-Kind-Raum mit Live-Uebertragung), Livestream und Uebersetzung, der Begriff
+*Connectgruppen* sowie zwei Gruppentermine (Dienstag Sachsenhausen, Donnerstag Bad Vilbel).
+
+## Corporate Design
+
+Die Oberflaeche liest alle Farben aus CSS-Variablen (`--primary`, `--accent-*`).
+Ueber den Button **Design** im Prototyp-Band laesst sich das Farbschema live
+umstellen - fuenf Vorlagen oder frei gewaehlte Hex-Werte, gespeichert pro Geraet.
+
+Die verbindlichen Markenwerte der FCG Frankfurt konnten in dieser Umgebung nicht
+ausgelesen werden: `fcg-frankfurt.de` ist durch den Netzwerk-Filter gesperrt
+(`EGRESS_BLOCKED`). Sobald Hex-Codes, Hausschrift und Logo (am besten als SVG)
+vorliegen, werden sie in `src/lib/branding.ts` als Standard hinterlegt und das
+Logo ersetzt das Platzhalter-Icon in `public/`.

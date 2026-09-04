@@ -5,34 +5,34 @@ import { formatTime, relativeDay } from '../lib/format'
 
 const faq = [
   {
-    q: 'Wie läuft ein Gottesdienst ab?',
-    a: 'Etwa 90 Minuten: Musik, Begrüßung, Predigt, Gebet. Danach Café im Foyer. Man kann jederzeit kommen und gehen.',
+    q: 'Wann und wo finden die Gottesdienste statt?',
+    a: 'Sonntags um 10:00 und 12:00 Uhr in der Eckenheimer Landstr. 180, 60318 Frankfurt. Der 10-Uhr-Gottesdienst ist familiär geprägt, um 12:00 Uhr geht es musikalisch kräftiger zu. Wer nicht kommen kann, schaut den Livestream.',
+  },
+  {
+    q: 'Was ist mit meinen Kindern?',
+    a: 'Um 10:00 Uhr gibt es die Kinderkirche für 3-11 Jahre (Forscher 3-5, Abenteurer ab Schuleintritt) und Evidence für 12-15 Jahre. Um 12:00 Uhr läuft die Kinderbetreuung für 3-11 Jahre. Für Eltern mit ganz kleinen Kindern gibt es einen Eltern-Kind-Raum mit Live-Übertragung.',
+  },
+  {
+    q: 'Wie komme ich hin und wo parke ich?',
+    a: 'Die Eckenheimer Landstraße liegt im Nordend und ist mit Bus und U-Bahn gut erreichbar. Sonntags findet sich in den Seitenstraßen meist ein Parkplatz. Wenn du sichergehen willst, frag kurz das Willkommensteam.',
+  },
+  {
+    q: 'Verstehe ich alles, wenn Deutsch nicht meine Muttersprache ist?',
+    a: 'Im Gottesdienst gibt es Übersetzung. Sag am Eingang einfach Bescheid, dann bekommst du Kopfhörer.',
   },
   {
     q: 'Was ziehe ich an?',
     a: 'Was du magst. Vom Kapuzenpulli bis zum Hemd ist alles da.',
   },
   {
-    q: 'Wo parke ich?',
-    a: 'Kostenlos auf dem Gemeindeparkplatz (Einfahrt Lindenstraße) und ab 10 Uhr auf dem Parkplatz des Baumarkts nebenan.',
-  },
-  {
-    q: 'Was ist mit meinen Kindern?',
-    a: 'Kinderprogramm parallel für 3-12 Jahre, Stillraum mit Übertragung, Wickelmöglichkeit im Foyer. Alle Mitarbeitenden haben ein erweitertes Führungszeugnis und ein Schutzkonzept-Training.',
-  },
-  {
-    q: 'Muss ich etwas geben?',
-    a: 'Nein. Die Kollekte ist freiwillig und wird nicht herumgereicht - es gibt eine Box am Ausgang.',
-  },
-  {
-    q: 'Werde ich vorne vorgestellt?',
-    a: 'Nein. Du kannst so anonym bleiben, wie du möchtest.',
+    q: 'Muss ich etwas geben oder mich anmelden?',
+    a: 'Nein. Die Kollekte ist freiwillig, und du kannst so anonym bleiben, wie du möchtest. Niemand wird vorne vorgestellt.',
   },
 ]
 
 export function NewHere() {
   const next = [...events]
-    .filter((e) => e.category === 'Gottesdienst' || e.id === 'e-nextsteps' || e.id === 'e-alpha')
+    .filter((e) => e.category === 'Gottesdienst' || e.id === 'e-connect-start')
     .sort((a, b) => a.start.localeCompare(b.start))
     .slice(0, 3)
 
@@ -44,8 +44,8 @@ export function NewHere() {
           <div className="hero__eyebrow">Willkommen</div>
           <h2>Schön, dass du da bist.</h2>
           <p className="muted small" style={{ marginBottom: 0 }}>
-            Du musst nichts mitbringen, nichts unterschreiben und dich nirgends vorstellen. Hier steht,
-            was dich erwartet.
+            Kirche im Herzen der Stadt: Eckenheimer Landstr. 180, sonntags 10:00 und 12:00 Uhr.
+            Du musst nichts mitbringen, nichts unterschreiben und dich nirgends vorstellen.
           </p>
         </div>
 
@@ -81,10 +81,10 @@ export function NewHere() {
         <section className="section">
           <h2>Deine nächsten Schritte</h2>
           <div className="stack">
-            <Link to="/events/e-nextsteps" className="card card--tap">
-              <b>Next Steps besuchen</b>
+            <Link to="/events/e-connect-start" className="card card--tap">
+              <b>Startpunkt-Abend besuchen</b>
               <p className="small muted" style={{ margin: '4px 0 0' }}>
-                Zwei Stunden Gemeinde kennenlernen, mit Brunch.
+                Connectgruppen kennenlernen und Leitungen treffen.
               </p>
             </Link>
             <Link to="/gruppen" className="card card--tap">
@@ -93,7 +93,7 @@ export function NewHere() {
                 Kleine Gruppen nach Lebensphase, Stadtteil und Wochentag.
               </p>
             </Link>
-            <a className="card card--tap" href="mailto:willkommen@fcg-beispiel.de">
+            <a className="card card--tap" href="mailto:kontakt@fcg-frankfurt.de">
               <b>Einfach jemanden fragen</b>
               <p className="small muted" style={{ margin: '4px 0 0' }}>
                 Das Willkommensteam antwortet meist am selben Tag.

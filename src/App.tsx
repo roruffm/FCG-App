@@ -1,6 +1,7 @@
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
-import { AppProvider } from './state'
+import { useEffect, useState } from 'react'
+import { AppProvider, useApp } from './state'
+import { BrandSheet } from './components/BrandSheet'
 import { BottomNav } from './components/BottomNav'
 import { Home } from './routes/Home'
 import { Sermons } from './routes/Sermons'
@@ -21,29 +22,55 @@ function ScrollToTop() {
   return null
 }
 
+/**
+ * Dauerhafte Kennzeichnung: Diese Demo ist kein offizielles Angebot der Gemeinde,
+ * alle Inhalte sind Beispiele.
+ */
+function DemoBar({ onOpenBrand }: { onOpenBrand: () => void }) {
+  return (
+    <div className="demobar">
+      <span>
+        <b>PROTOTYP</b> · Beispielinhalte · keine offizielle App der FCG Frankfurt
+      </span>
+      <button onClick={onOpenBrand}>Design</button>
+    </div>
+  )
+}
+
+function Shell() {
+  const { brand, setBrand } = useApp()
+  const [brandOpen, setBrandOpen] = useState(false)
+
+  return (
+    <div className="app">
+      <DemoBar onOpenBrand={() => setBrandOpen(true)} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/predigten" element={<Sermons />} />
+        <Route path="/predigten/:id" element={<SermonDetail />} />
+        <Route path="/frag" element={<Ask />} />
+        <Route path="/impuls" element={<DevotionPage />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/events/:id" element={<EventDetail />} />
+        <Route path="/gruppen" element={<Groups />} />
+        <Route path="/neu-hier" element={<NewHere />} />
+        <Route path="/gebet" element={<Prayer />} />
+        <Route path="/profil" element={<Profile />} />
+        <Route path="/datenschutz" element={<Privacy />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <BottomNav />
+      {brandOpen && <BrandSheet brand={brand} setBrand={setBrand} onClose={() => setBrandOpen(false)} />}
+    </div>
+  )
+}
+
 export default function App() {
   return (
     <AppProvider>
       <HashRouter>
         <ScrollToTop />
-        <div className="app">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/predigten" element={<Sermons />} />
-            <Route path="/predigten/:id" element={<SermonDetail />} />
-            <Route path="/frag" element={<Ask />} />
-            <Route path="/impuls" element={<DevotionPage />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/events/:id" element={<EventDetail />} />
-            <Route path="/gruppen" element={<Groups />} />
-            <Route path="/neu-hier" element={<NewHere />} />
-            <Route path="/gebet" element={<Prayer />} />
-            <Route path="/profil" element={<Profile />} />
-            <Route path="/datenschutz" element={<Privacy />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-          <BottomNav />
-        </div>
+        <Shell />
       </HashRouter>
     </AppProvider>
   )

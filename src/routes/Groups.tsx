@@ -90,7 +90,7 @@ export function Groups() {
           {results.length === 0 && (
             <div className="empty">
               <p>Keine passende Gruppe gefunden.</p>
-              <a className="btn btn--ghost btn--sm" href="mailto:connect@fcg-beispiel.de">
+              <a className="btn btn--ghost btn--sm" href="mailto:connect@fcg-frankfurt.de">
                 Team Connect fragen
               </a>
             </div>

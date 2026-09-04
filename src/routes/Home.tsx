@@ -31,7 +31,7 @@ export function Home() {
     <>
       <TopBar
         title={`${greeting()}${profile.name ? `, ${profile.name}` : ''}`}
-        subtitle="FCG - Gemeinde verbinden"
+        subtitle="FCG Frankfurt · Kirche im Herzen der Stadt"
       />
       <div className="page">
         <Link to="/impuls" className="hero">

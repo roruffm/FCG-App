@@ -1,6 +1,17 @@
 import type { ChurchEvent } from './types'
 
-/** Termine relativ zum heutigen Tag, damit die Demo immer aktuell wirkt. */
+/**
+ * Termine relativ zum heutigen Tag, damit die Demo immer aktuell wirkt.
+ * Gottesdienstzeiten, Ort und Kinderangebote entsprechen den oeffentlichen
+ * Angaben der FCG Frankfurt; alle uebrigen Termine sind Beispiele.
+ */
+function nextSunday(hour: number, minute = 0, weeksAhead = 0): string {
+  const d = new Date()
+  d.setDate(d.getDate() + ((7 - d.getDay()) % 7) + weeksAhead * 7)
+  d.setHours(hour, minute, 0, 0)
+  return d.toISOString()
+}
+
 function inDays(days: number, hour: number, minute = 0): string {
   const d = new Date()
   d.setDate(d.getDate() + days)
@@ -8,84 +19,98 @@ function inDays(days: number, hour: number, minute = 0): string {
   return d.toISOString()
 }
 
+const HAUS = 'Eckenheimer Landstr. 180'
+
 export const events: ChurchEvent[] = [
   {
-    id: 'e-gottesdienst',
-    title: 'Gottesdienst',
+    id: 'e-gd-10',
+    title: 'Gottesdienst 10:00 Uhr',
     category: 'Gottesdienst',
-    start: inDays(2, 10, 30),
-    end: inDays(2, 12, 0),
-    location: 'FCG Hauptsaal',
+    start: nextSunday(10),
+    end: nextSunday(11, 30),
+    location: HAUS,
     description:
-      'Gottesdienst mit Lobpreis, Predigt und Gebet. Kinderprogramm parallel ab 10:45 Uhr, Café ab 10:00 Uhr geöffnet.',
+      'Gottesdienst in familiärer Atmosphäre. Parallel Kinderkirche für 3-11 Jahre und Evidence für 12-15 Jahre. Eltern-Kind-Raum mit Live-Übertragung, Übersetzung und Livestream verfügbar.',
     registration: false,
-    contact: 'buero@fcg-beispiel.de',
+    contact: 'kontakt@fcg-frankfurt.de',
   },
   {
-    id: 'e-alpha',
-    title: 'Alpha-Kurs - Auftaktabend',
-    category: 'Kurs',
-    start: inDays(5, 19, 0),
-    end: inDays(5, 21, 30),
-    location: 'Gemeindezentrum, Raum 1',
+    id: 'e-gd-12',
+    title: 'Gottesdienst 12:00 Uhr',
+    category: 'Gottesdienst',
+    start: nextSunday(12),
+    end: nextSunday(13, 30),
+    location: HAUS,
     description:
-      'Zehn Abende über die Grundfragen des Glaubens. Essen, Impuls, Gespräch in Kleingruppen. Keine Frage ist zu kritisch, keine Vorkenntnisse nötig. Kostenlos.',
+      'Gottesdienst mit kraftvollem Lobpreis - gut geeignet, um Freunde mitzubringen. Kinderbetreuung für 3-11 Jahre parallel.',
+    registration: false,
+    contact: 'kontakt@fcg-frankfurt.de',
+  },
+  {
+    id: 'e-connect-start',
+    title: 'Startpunkt: Connectgruppen-Abend',
+    category: 'Kurs',
+    start: inDays(5, 19, 30),
+    end: inDays(5, 21, 30),
+    location: HAUS,
+    description:
+      'Beispieltermin: Abend für alle, die eine Connectgruppe suchen. Kurze Vorstellung der Gruppen, danach Gespräch mit den Leitungen - und im besten Fall gehst du mit einer Einladung nach Hause.',
     registration: true,
     seats: 40,
-    taken: 27,
-    contact: 'alpha@fcg-beispiel.de',
+    taken: 23,
+    contact: 'kontakt@fcg-frankfurt.de',
   },
   {
-    id: 'e-real',
-    title: 'REAL - Jugendabend',
+    id: 'e-evidence',
+    title: 'Evidence - Jugendabend',
     category: 'Jugend',
-    start: inDays(4, 19, 30),
-    end: inDays(4, 22, 0),
-    location: 'Jugendkeller',
+    start: inDays(4, 19, 0),
+    end: inDays(4, 21, 30),
+    location: 'Jugendraum, ' + HAUS,
     description:
-      'Jugendabend für alle ab 13 Jahren: Musik, Input, Kleingruppen und danach Kicker. Freunde ausdrücklich willkommen.',
+      'Beispieltermin: Jugendabend für 12-15 Jahre mit Musik, Impuls und Kleingruppen. Freunde ausdrücklich willkommen.',
     registration: false,
-    contact: 'real@fcg-beispiel.de',
+    contact: 'kontakt@fcg-frankfurt.de',
   },
   {
-    id: 'e-gebetsnacht',
+    id: 'e-gebet',
     title: 'Gebetsabend für die Stadt',
     category: 'Gebet',
     start: inDays(9, 19, 30),
     end: inDays(9, 21, 0),
-    location: 'Kapelle',
+    location: HAUS,
     description:
-      'Offene Gebetszeit in Stationen. Kommen und gehen jederzeit möglich. Auch für Menschen geeignet, die laut beten unangenehm finden.',
+      'Beispieltermin: offene Gebetszeit in Stationen. Kommen und gehen jederzeit möglich - auch für Menschen geeignet, denen lautes Beten unangenehm ist.',
     registration: false,
-    contact: 'gebet@fcg-beispiel.de',
+    contact: 'kontakt@fcg-frankfurt.de',
   },
   {
     id: 'e-taufe',
     title: 'Taufgottesdienst',
     category: 'Gottesdienst',
-    start: inDays(16, 10, 30),
-    end: inDays(16, 12, 30),
-    location: 'FCG Hauptsaal',
+    start: nextSunday(10, 0, 2),
+    end: nextSunday(12, 30, 2),
+    location: HAUS,
     description:
-      'Taufgottesdienst mit anschließendem Gemeindeessen. Wer sich taufen lassen möchte, meldet sich bitte bis zwei Wochen vorher im Taufkurs an.',
+      'Beispieltermin: Taufgottesdienst mit anschließendem Gemeindeessen. Wer sich taufen lassen möchte, meldet sich vorher im Taufkurs an.',
     registration: true,
     seats: 250,
     taken: 118,
-    contact: 'taufe@fcg-beispiel.de',
+    contact: 'kontakt@fcg-frankfurt.de',
   },
   {
-    id: 'e-nextsteps',
-    title: 'Next Steps - Gemeinde kennenlernen',
-    category: 'Kurs',
-    start: inDays(12, 11, 0),
-    end: inDays(12, 13, 30),
-    location: 'Raum 3 + Brunch',
+    id: 'e-koenigskinder',
+    title: 'Königskinder - Familiennachmittag',
+    category: 'Gemeinde',
+    start: inDays(12, 15, 0),
+    end: inDays(12, 18, 0),
+    location: HAUS,
     description:
-      'Zwei Stunden: Wer wir sind, was wir glauben, wie man mitmachen kann. Danach gemeinsamer Brunch und Möglichkeit, Ansprechpartner zu treffen.',
+      'Beispieltermin: Nachmittag für Familien mit Kindern von 3-11 Jahren - Spiele, Basteln, biblische Geschichte und Kaffee für die Eltern.',
     registration: true,
-    seats: 30,
-    taken: 12,
-    contact: 'nextsteps@fcg-beispiel.de',
+    seats: 60,
+    taken: 31,
+    contact: 'kontakt@fcg-frankfurt.de',
   },
   {
     id: 'e-freizeit',
@@ -93,13 +118,13 @@ export const events: ChurchEvent[] = [
     category: 'Freizeit',
     start: inDays(38, 16, 0),
     end: inDays(41, 14, 0),
-    location: 'Freizeitheim Waldblick',
+    location: 'Freizeitheim (Beispiel)',
     description:
-      'Drei Tage Gemeinde pur: Seminare, Spiele, Lagerfeuer, Kinderprogramm. Familienpreise und Ermäßigungen auf Anfrage - niemand soll aus finanziellen Gründen fehlen.',
+      'Beispieltermin: drei Tage Gemeinde pur mit Seminaren, Spielen und Kinderprogramm. Ermäßigungen auf Anfrage - niemand soll aus finanziellen Gründen fehlen.',
     registration: true,
     seats: 90,
     taken: 71,
-    contact: 'freizeit@fcg-beispiel.de',
+    contact: 'kontakt@fcg-frankfurt.de',
   },
   {
     id: 'e-mitarbeiterdanke',
@@ -107,12 +132,12 @@ export const events: ChurchEvent[] = [
     category: 'Gemeinde',
     start: inDays(23, 18, 30),
     end: inDays(23, 21, 30),
-    location: 'Foyer',
+    location: HAUS,
     description:
-      'Abend für alle Ehrenamtlichen: Essen, Rückblick, Ausblick auf das kommende Halbjahr und Zeit zum Austausch zwischen den Teams.',
+      'Beispieltermin: Abend für alle Ehrenamtlichen mit Essen, Rückblick und Ausblick auf das kommende Halbjahr.',
     registration: true,
     seats: 120,
     taken: 64,
-    contact: 'teams@fcg-beispiel.de',
+    contact: 'kontakt@fcg-frankfurt.de',
   },
 ]
