@@ -22,6 +22,7 @@ export function Profile() {
     doneDevotions,
     streak,
     notes,
+    myTeams,
   } = useApp()
 
   const favoriteSermons = sermons.filter((s) => favorites.has(s.id))
@@ -196,6 +197,15 @@ export function Profile() {
             </p>
           </Link>
           <div className="card">
+            <Link to="/mitmachen" className="list-item">
+              <span>
+                <b className="small">Mitmachen</b>
+                <span className="tiny muted" style={{ display: 'block' }}>
+                  {myTeams.ids.length > 0 ? `${myTeams.ids.length} Teams angefragt` : 'Dienstteams und Dienstplan'}
+                </span>
+              </span>
+              <span className="tiny muted">ansehen</span>
+            </Link>
             <Link to="/kontakt" className="list-item">
               <span><b className="small">Kontakt & Anfahrt</b></span>
               <span className="tiny muted">ansehen</span>

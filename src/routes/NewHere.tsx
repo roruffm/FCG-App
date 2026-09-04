@@ -89,6 +89,12 @@ export function NewHere() {
                 Connectgruppen kennenlernen und Leitungen treffen.
               </p>
             </Link>
+            <Link to="/mitmachen" className="card card--tap">
+              <b>Mitmachen</b>
+              <p className="small muted" style={{ margin: '4px 0 0' }}>
+                Dienstteams, die gerade Verstärkung suchen - vom Café bis zur Technik.
+              </p>
+            </Link>
             <Link to="/gruppen" className="card card--tap">
               <b>Connectgruppe finden</b>
               <p className="small muted" style={{ margin: '4px 0 0' }}>

@@ -44,6 +44,8 @@ type AppState = {
   savedVerses: Record<string, SavedVerse>
   toggleVerse: (verse: Omit<SavedVerse, 'savedAt'>) => void
   isVerseSaved: (book: string, chapter: number, verse: number) => boolean
+  myTeams: ReturnType<typeof useToggleSet>
+  onboardingDone: ReturnType<typeof useToggleSet>
   planProgress: Record<string, number[]>
   togglePlanDay: (planId: string, day: number) => void
   doneDevotions: ReturnType<typeof useToggleSet>
@@ -73,6 +75,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const registrations = useToggleSet('registrations')
   const doneDevotions = useToggleSet('done-devotions')
   const prayedFor = useToggleSet('prayed-for')
+  const myTeams = useToggleSet('my-teams')
+  const onboardingDone = useToggleSet('onboarding-done')
 
   const [notes, setNotes] = usePersistentState<Record<string, string>>('notes', {})
   const [progress, setProgressMap] = usePersistentState<Record<string, number>>('progress', {})
@@ -175,6 +179,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     savedVerses,
     toggleVerse,
     isVerseSaved,
+    myTeams,
+    onboardingDone,
     planProgress,
     togglePlanDay,
     doneDevotions,

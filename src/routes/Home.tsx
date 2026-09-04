@@ -118,6 +118,11 @@ export function Home() {
               <b style={{ display: 'block', marginTop: 8 }}>Gebetswand</b>
               <span className="tiny muted">Anliegen teilen und mitbeten</span>
             </Link>
+            <Link to="/mitmachen" className="card card--tap card--flat">
+              <IconUsers />
+              <b style={{ display: 'block', marginTop: 8 }}>Mitmachen</b>
+              <span className="tiny muted">Dienstteams, Dienstplan, Einarbeitung</span>
+            </Link>
             <Link to="/bibel/plaene" className="card card--tap card--flat">
               <IconSparkle />
               <b style={{ display: 'block', marginTop: 8 }}>Lesepläne</b>
