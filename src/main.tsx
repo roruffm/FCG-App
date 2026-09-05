@@ -32,7 +32,22 @@ loadFonts()
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    // Fehlt der Service Worker (z. B. bei der Einzeldatei-Demo), laeuft die App normal weiter.
-    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {})
+    // `updateViaCache: 'none'` holt die Datei am Browser-Cache vorbei. Sonst
+    // bliebe eine neue Veroeffentlichung bis zu zehn Minuten unbemerkt.
+    navigator.serviceWorker
+      .register(`${import.meta.env.BASE_URL}sw.js`, { updateViaCache: 'none' })
+      .then((registration) => registration.update())
+      .catch(() => {})
+
+    // Uebernimmt eine neue Fassung, wird einmal neu geladen - sonst liefe die
+    // Seite mit halb altem, halb neuem Stand weiter. Beim allerersten Besuch
+    // gab es noch keinen Vorgaenger; dann waere das Neuladen nur laestig.
+    const hatteVorgaenger = Boolean(navigator.serviceWorker.controller)
+    let reloading = false
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hatteVorgaenger || reloading) return
+      reloading = true
+      window.location.reload()
+    })
   })
 }
