@@ -464,7 +464,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .logo {
   width: 34px;
   height: 34px;
-  border-radius: 50%;
+  border-radius: 9px;
   flex: none;
   background: var(--ink);
 }
