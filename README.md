@@ -73,6 +73,35 @@ Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android
 | **Favoriten & später hören** | Persönlicher Bereich mit Anmeldungen, Notizen, gespeicherten Versen |
 | **Push-Einstellungen** | Themenauswahl statt Gießkanne (Oberfläche; Versand braucht Backend) |
 
+### Teambereiche (Version 2 der Roadmap)
+
+Jedes Dienstteam hat unter `/teams/<id>` einen eigenen Bereich mit drei Reitern:
+
+- **Chat** - Nachrichten mit Absender und Zeit, eigene loeschbar
+- **Dokumente** - Dateien hinzufuegen, speichern, teilen (ueber die
+  Teilen-Funktion des Geraets) und entfernen
+- **Team-Info** - Aufgabe, gesuchte Verstaerkung, naechste Dienste,
+  Einarbeitungs-Checkliste, Draht zur Teamleitung
+
+**Wo die Daten liegen:** Nachrichten im `localStorage`, Dateien in `IndexedDB` -
+beides ausschliesslich auf dem Geraet des Nutzers. **Andere im Team sehen davon
+nichts.** Das steht auch in der App an jeder Stelle, an der es zaehlt.
+
+Fuer echten Austausch braucht es einen Server. Was dann dazukommt:
+
+| Baustein | Warum |
+|---|---|
+| Anmeldung und Rollen | ohne sie sieht jeder jeden Teambereich |
+| Speicher fuer Dateien | Ablage mit Rechten, Versionen und Loeschfristen |
+| Echtzeit-Nachrichten | Zustellung, Lesestand, Push |
+| Moderation und Meldefunktion | Voraussetzung fuer Chat mit Jugendlichen |
+| Aufbewahrung und Loeschkonzept | Chatverlaeufe sind personenbezogene Daten |
+
+Die App ist darauf vorbereitet: `src/lib/teamspace.ts` und `src/lib/idb.ts`
+kapseln den gesamten Zugriff. Ein Server wird dort eingehaengt, die Oberflaeche
+bleibt unveraendert. Naheliegend waere eine Anbindung an die
+Gemeindeverwaltung, die Gruppen, Rechte und Dateien schon kennt.
+
 ### Aus Version 2 bereits angelegt
 - **Connectgruppen-Finder** mit Filter nach Lebensphase, Stadtteil, Wochentag, Sprache und freien Plätzen
 - **Gebetswand** mit wählbarer Sichtbarkeit (Gemeinde / Gruppe / nur Gebetsteam), anonymem Posten und „Ich bete dafür“

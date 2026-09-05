@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { TopBar } from '../components/TopBar'
 import { ExternalLink } from '../components/ExternalLink'
 import { church, mailTo } from '../data/church'
@@ -154,6 +155,9 @@ export function Serve() {
                   >
                     {isMine ? 'Anfrage geöffnet' : 'Ich will mitmachen'}
                   </a>
+                  <Link className="btn btn--ghost btn--sm" to={`/teams/${team.id}`}>
+                    Teambereich
+                  </Link>
                   <button
                     className="btn btn--ghost btn--sm"
                     onClick={() => setOpen(expanded ? null : team.id)}

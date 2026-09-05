@@ -21,6 +21,8 @@ import { Profile } from './routes/Profile'
 import { Privacy } from './routes/Privacy'
 import { Contact } from './routes/Contact'
 import { Serve } from './routes/Serve'
+import { Teams } from './routes/Teams'
+import { TeamSpace } from './routes/TeamSpace'
 
 // Karte und Lexikon bringen viel Datenmasse mit - sie werden erst beim
 // Aufruf geladen, damit der erste Seitenaufbau klein bleibt.
@@ -90,6 +92,8 @@ function Shell() {
         <Route path="/datenschutz" element={<Privacy />} />
         <Route path="/kontakt" element={<Contact />} />
         <Route path="/mitmachen" element={<Serve />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/teams/:id" element={<TeamSpace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />

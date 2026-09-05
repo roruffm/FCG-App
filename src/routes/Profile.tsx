@@ -197,6 +197,13 @@ export function Profile() {
             </p>
           </Link>
           <div className="card">
+            <Link to="/teams" className="list-item">
+              <span>
+                <b className="small">Teambereiche</b>
+                <span className="tiny muted" style={{ display: 'block' }}>Chat, Dokumente, Dienste</span>
+              </span>
+              <span className="tiny muted">ansehen</span>
+            </Link>
             <Link to="/mitmachen" className="list-item">
               <span>
                 <b className="small">Mitmachen</b>

@@ -6,7 +6,7 @@ import { events } from '../data/events'
 import { dailyVerse } from '../data/dailyVerses'
 import { useVerse } from '../lib/useBible'
 import { formatTime, relativeDay } from '../lib/format'
-import { IconChevron, IconSparkle, IconUsers, IconPray, IconShield } from '../components/Icons'
+import { IconChevron, IconNote, IconSparkle, IconUsers, IconPray, IconShield } from '../components/Icons'
 import { useApp } from '../state'
 import { ExternalLink } from '../components/ExternalLink'
 import { church } from '../data/church'
@@ -122,6 +122,11 @@ export function Home() {
               <IconUsers />
               <b style={{ display: 'block', marginTop: 8 }}>Mitmachen</b>
               <span className="tiny muted">Dienstteams, Dienstplan, Einarbeitung</span>
+            </Link>
+            <Link to="/teams" className="card card--tap card--flat">
+              <IconNote />
+              <b style={{ display: 'block', marginTop: 8 }}>Teams</b>
+              <span className="tiny muted">Chat und Dokumente je Team</span>
             </Link>
             <Link to="/bibel/plaene" className="card card--tap card--flat">
               <IconSparkle />
