@@ -19,9 +19,10 @@ export function BibleReader() {
 
   const selected = Number(params.get('v')) || null
   const [showContext, setShowContext] = useState(false)
+  const [lexHits, setLexHits] = useState<{ id: string; term: string }[]>([])
 
   const meta = index && bookId ? bookMeta(index, bookId) : undefined
-  const verses = book?.chapters[chapter - 1] ?? []
+  const verses = useMemo(() => book?.chapters[chapter - 1] ?? [], [book, chapter])
   const chapterArticles = useMemo(() => contextFor(articles, chapter), [articles, chapter])
 
   /** Beginnt bei diesem Vers ein Kontextartikel? Nur dort steht die Markierung. */
@@ -37,6 +38,24 @@ export function BibleReader() {
   }, [selected, verses.length])
 
   const selectedArticle = selected ? contextFor(articles, chapter, selected)[0] : undefined
+
+  const selectedText = selected ? verses[selected - 1] : undefined
+
+  /** Lexikonstichwoerter im ausgewaehlten Vers - erst bei Bedarf nachgeladen. */
+  useEffect(() => {
+    const text = selectedText
+    if (!text) {
+      setLexHits([])
+      return
+    }
+    let alive = true
+    void import('../lib/lexiconText').then(({ lexiconInVerse }) => {
+      if (alive) setLexHits(lexiconInVerse(text).map((e) => ({ id: e.id, term: e.term })))
+    })
+    return () => {
+      alive = false
+    }
+  }, [selectedText])
 
   if (error) {
     return (
@@ -199,6 +218,15 @@ export function BibleReader() {
             >
               Teilen
             </button>
+            {lexHits.length > 0 && (
+              <>
+                {lexHits.slice(0, 4).map((hit) => (
+                  <Link key={hit.id} className="btn btn--ghost btn--sm" to={`/bibel/lexikon?id=${hit.id}`}>
+                    {hit.term}
+                  </Link>
+                ))}
+              </>
+            )}
             {selectedArticle && (
               <button
                 className="btn btn--ghost btn--sm"

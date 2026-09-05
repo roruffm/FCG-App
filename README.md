@@ -142,9 +142,28 @@ Datensatz laesst sich dann unter `public/bibel/<id>/` ergaenzen, ohne die
 Oberflaeche zu aendern. Elberfelder 1905 und KJV liegen im Schwesterprojekt
 ebenfalls gemeinfrei vor und koennen als Vergleichstexte nachgezogen werden.
 
-**Noch nicht uebernommen** (im Schwesterprojekt vorhanden): Lexikon mit
-Personen und Orten, Karten, Zeitleiste, Evangelien-Synopse, Konkordanz,
-Auswendiglern-Bereich und der Verse-Chat mit eigenem Server.
+### Karte und Lexikon
+
+| Uebernommen | Woher | Wo in dieser App |
+|---|---|---|
+| 124 Lexikoneintraege | `src/content/lexicon.ts`, `realia.ts` | `src/data/lexicon.ts`, Seite `/bibel/lexikon` |
+| Ortsdatenbank mit Koordinaten | `src/content/places.ts` | `src/data/places.ts` |
+| Reisewege (Abraham, Auszug, Missionsreisen …) | `src/content/journeys.ts` | `src/data/journeys.ts` |
+| Kartengrundlage (Natural Earth, gemeinfrei) | `public/karten/regionen.json` | unveraendert |
+| Beschriftungs-Algorithmus | `src/lib/mapLabels.ts` | unveraendert |
+
+Die Kartendarstellung ist neu und fuers Telefon gebaut: ein Ausschnitt zur Zeit,
+Zoom und Verschieben, Beschriftung nur dort, wo Platz ist - wobei Orte vom Rang
+eines Jerusalem ihren Namen immer bekommen. Jeder Punkt fuehrt zu den Stellen,
+an denen der Ort vorkommt, und weiter ins Lexikon. Im Leseansicht-Blatt zeigt
+jeder ausgewaehlte Vers, was sich darin nachschlagen laesst.
+
+Karte und Lexikon werden als eigene Buendel nachgeladen (`React.lazy`), damit
+der erste Seitenaufbau klein bleibt.
+
+**Noch nicht uebernommen** (im Schwesterprojekt vorhanden): Zeitleiste,
+Evangelien-Synopse, Konkordanz, Auswendiglern-Bereich und der Verse-Chat mit
+eigenem Server.
 
 ---
 

@@ -1,5 +1,5 @@
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { AppProvider, useApp } from './state'
 import { BrandSheet } from './components/BrandSheet'
 import { BottomNav } from './components/BottomNav'
@@ -21,6 +21,11 @@ import { Profile } from './routes/Profile'
 import { Privacy } from './routes/Privacy'
 import { Contact } from './routes/Contact'
 import { Serve } from './routes/Serve'
+
+// Karte und Lexikon bringen viel Datenmasse mit - sie werden erst beim
+// Aufruf geladen, damit der erste Seitenaufbau klein bleibt.
+const MapPage = lazy(() => import('./routes/MapPage'))
+const Lexicon = lazy(() => import('./routes/Lexicon'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -58,6 +63,22 @@ function Shell() {
         <Route path="/impuls" element={<DevotionPage />} />
         <Route path="/bibel" element={<Bible />} />
         <Route path="/bibel/plaene" element={<ReadingPlans />} />
+        <Route
+          path="/bibel/karte"
+          element={
+            <Suspense fallback={<div className="page"><div className="card small muted">Karte wird geladen …</div></div>}>
+              <MapPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/bibel/lexikon"
+          element={
+            <Suspense fallback={<div className="page"><div className="card small muted">Lexikon wird geladen …</div></div>}>
+              <Lexicon />
+            </Suspense>
+          }
+        />
         <Route path="/bibel/plan/:id" element={<ReadingPlan />} />
         <Route path="/bibel/:book/:chapter" element={<BibleReader />} />
         <Route path="/events" element={<Events />} />

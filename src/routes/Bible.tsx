@@ -141,6 +141,20 @@ export function Bible() {
             </Link>
 
             <section className="section">
+              <h2>Nachschlagen</h2>
+              <div className="grid-2">
+                <Link to="/bibel/karte" className="card card--tap card--flat">
+                  <b style={{ display: 'block' }}>Karte</b>
+                  <span className="tiny muted">Orte, Landschaften und Reisewege</span>
+                </Link>
+                <Link to="/bibel/lexikon" className="card card--tap card--flat">
+                  <b style={{ display: 'block' }}>Lexikon</b>
+                  <span className="tiny muted">Personen, Begriffe, Maße, Bräuche</span>
+                </Link>
+              </div>
+            </section>
+
+            <section className="section">
               <div className="section__head">
                 <h2>Lesepläne</h2>
                 <Link to="/bibel/plaene">Alle {READING_PLANS.length}</Link>
