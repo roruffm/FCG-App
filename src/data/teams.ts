@@ -19,6 +19,12 @@ export type Team = {
   needs: string[]
   rhythm: string
   contact: string
+  /**
+   * Gruppen-Id in ChurchTools. Erst wenn sie hier steht, holt die App Chat
+   * und Dateien dieses Teams von dort - `server/check-churchtools.mjs`
+   * listet die Ids der Instanz auf.
+   */
+  ctGroupId?: number
   /** Erweitertes Fuehrungszeugnis und Schutzkonzept-Schulung noetig. */
   protection?: boolean
   onboarding: string[]

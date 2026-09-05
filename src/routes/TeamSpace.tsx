@@ -5,7 +5,6 @@ import { teams, shifts } from '../data/teams'
 import { mailTo } from '../data/church'
 import { formatDate, formatTime, relativeDay } from '../lib/format'
 import { formatBytes, useTeamChat, useTeamDocs } from '../lib/teamspace'
-import { getDoc } from '../lib/idb'
 import { useApp } from '../state'
 import { IconNote, IconShield, IconUsers } from '../components/Icons'
 
@@ -20,8 +19,18 @@ export function TeamSpace() {
   const dateiFeld = useRef<HTMLInputElement>(null)
 
   const author = profile.name || 'Ich'
-  const { messages, send, remove } = useTeamChat(id ?? '', author)
-  const { docs, error, add, remove: removeDoc } = useTeamDocs(id ?? '', author)
+  /**
+   * Schluessel des Teams in der jeweiligen Quelle: auf dem Geraet die eigene
+   * Kennung, in ChurchTools die Gruppen-Id.
+   */
+  const team0 = teams.find((t) => t.id === id)
+  const quellSchluessel = import.meta.env.VITE_TEAM_API
+    ? team0?.ctGroupId
+      ? String(team0.ctGroupId)
+      : ''
+    : (id ?? '')
+  const { messages, send, remove, error: chatError } = useTeamChat(quellSchluessel, author)
+  const { docs, error, add, remove: removeDoc, load, source, quelle } = useTeamDocs(quellSchluessel, author)
 
   if (!team) {
     return (
@@ -42,10 +51,9 @@ export function TeamSpace() {
     .filter((s) => s.teamId === team.id)
     .sort((a, b) => a.date.localeCompare(b.date))
 
-  async function oeffnen(docId: string, name: string) {
-    const doc = await getDoc(docId)
-    if (!doc) return
-    const url = URL.createObjectURL(doc.blob)
+  async function oeffnen(docId: string) {
+    const { blob, name } = await load(docId)
+    const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = name
@@ -54,13 +62,12 @@ export function TeamSpace() {
   }
 
   async function teilen(docId: string) {
-    const doc = await getDoc(docId)
-    if (!doc) return
-    const datei = new File([doc.blob], doc.name, { type: doc.blob.type })
+    const { blob, name } = await load(docId)
+    const datei = new File([blob], name, { type: blob.type })
     if (navigator.canShare?.({ files: [datei] })) {
-      await navigator.share({ files: [datei], title: doc.name }).catch(() => {})
+      await navigator.share({ files: [datei], title: name }).catch(() => {})
     } else {
-      void oeffnen(docId, doc.name)
+      void oeffnen(docId)
     }
   }
 
@@ -68,6 +75,16 @@ export function TeamSpace() {
     <>
       <TopBar title={team.name} subtitle={team.area} back />
       <div className="page">
+        {source === 'churchtools' && !team.ctGroupId && (
+          <div className="notice notice--warn small">
+            <b>Diesem Team ist noch keine ChurchTools-Gruppe zugeordnet.</b>
+            <p style={{ margin: '6px 0 0' }}>
+              Die Gruppen-Id gehört in <code>src/data/teams.ts</code> (Feld <code>ctGroupId</code>).
+              Welche Id passt, zeigt <code>server/check-churchtools.mjs</code>.
+            </p>
+          </div>
+        )}
+
         {!istMitglied && (
           <div className="notice small">
             <b>Du bist nicht in diesem Team.</b>
@@ -98,10 +115,22 @@ export function TeamSpace() {
           </button>
         </div>
 
-        <div className="notice small">
-          Chat und Dateien liegen <b>nur auf diesem Gerät</b>. Andere im Team sehen sie noch nicht -
-          dafür braucht die App einen Server.
-        </div>
+        {source === 'geraet' ? (
+          <div className="notice small">
+            Chat und Dateien liegen <b>nur auf diesem Gerät</b>. Andere im Team sehen sie noch nicht -
+            dafür braucht die App einen Server.
+          </div>
+        ) : (
+          <div className="notice small">
+            Quelle: <b>{quelle}</b>. Chat und Dateien liegen in der Gemeindeverwaltung; es gelten die
+            dortigen Rechte.
+          </div>
+        )}
+        {chatError && (
+          <div className="notice notice--warn small">
+            Nachrichten konnten nicht geladen werden: {chatError}
+          </div>
+        )}
 
         {tab === 'chat' && (
           <>
@@ -220,7 +249,7 @@ export function TeamSpace() {
                     </div>
                   </div>
                   <div className="row" style={{ gap: 8, marginTop: 10 }}>
-                    <button className="btn btn--ghost btn--sm" onClick={() => void oeffnen(doc.id, doc.name)}>
+                    <button className="btn btn--ghost btn--sm" onClick={() => void oeffnen(doc.id)}>
                       Speichern
                     </button>
                     <button className="btn btn--ghost btn--sm" onClick={() => void teilen(doc.id)}>
@@ -235,8 +264,9 @@ export function TeamSpace() {
             </div>
 
             <p className="tiny muted">
-              Dateien liegen im Speicher dieses Browsers. Löschst du die Websitedaten, sind sie weg -
-              sie ersetzen keine Ablage der Gemeinde.
+              {source === 'geraet'
+                ? 'Dateien liegen im Speicher dieses Browsers. Löschst du die Websitedaten, sind sie weg - sie ersetzen keine Ablage der Gemeinde.'
+                : 'Dateien liegen in der Gemeindeverwaltung. Löschen wirkt dort für alle.'}
             </p>
           </>
         )}

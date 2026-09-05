@@ -1,96 +1,113 @@
-import { useCallback, useEffect, useState } from 'react'
-import { usePersistentState } from './storage'
-import { deleteDoc, listDocs, putDoc, type StoredDoc } from './idb'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { teamRepo, type ChatMessage, type DocMeta, type TeamRepo } from './teamRepo'
 
 /**
  * Teambereiche: Nachrichten und Dokumente je Team.
  *
- * Beides liegt auf dem Geraet - Nachrichten im localStorage, Dateien in
- * IndexedDB. Sobald ein Server dazukommt, tauschen die beiden Haken hier
- * ihre Quelle; die Oberflaeche bleibt, wie sie ist.
+ * Die Oberflaeche fragt hier, nicht am Speicher. Wo die Daten liegen,
+ * entscheidet `teamRepo()` - heute das Geraet, mit hinterlegtem Dienst
+ * ChurchTools.
  */
 
-export type ChatMessage = {
-  id: string
-  author: string
-  text: string
-  at: string
+export type { ChatMessage, DocMeta }
+
+export function useRepo(): TeamRepo {
+  return useMemo(() => teamRepo(), [])
 }
 
 export function useTeamChat(teamId: string, author: string) {
-  const [alle, setAlle] = usePersistentState<Record<string, ChatMessage[]>>('team-chats', {})
-  const messages = alle[teamId] ?? []
-
-  const send = useCallback(
-    (text: string) => {
-      const trimmed = text.trim()
-      if (!trimmed) return
-      const message: ChatMessage = {
-        id: `m-${Date.now()}`,
-        author: author || 'Ich',
-        text: trimmed,
-        at: new Date().toISOString(),
-      }
-      setAlle((prev) => ({ ...prev, [teamId]: [...(prev[teamId] ?? []), message] }))
-    },
-    [author, setAlle, teamId]
-  )
-
-  const remove = useCallback(
-    (id: string) =>
-      setAlle((prev) => ({ ...prev, [teamId]: (prev[teamId] ?? []).filter((m) => m.id !== id) })),
-    [setAlle, teamId]
-  )
-
-  return { messages, send, remove }
-}
-
-export function useTeamDocs(teamId: string, author: string) {
-  const [docs, setDocs] = useState<StoredDoc[]>([])
+  const repo = useRepo()
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(() => {
-    listDocs(teamId)
+    // Ohne Schluessel gibt es nichts zu holen - etwa wenn einem Team noch
+    // keine ChurchTools-Gruppe zugeordnet ist.
+    if (!teamId) {
+      setMessages([])
+      return
+    }
+    repo
+      .listMessages(teamId)
+      .then((list) => {
+        setMessages(list)
+        setError(null)
+      })
+      .catch((e: Error) => setError(e.message))
+  }, [repo, teamId])
+
+  useEffect(refresh, [refresh])
+
+  const send = useCallback(
+    (text: string) => {
+      if (!text.trim()) return
+      repo
+        .sendMessage(teamId, text, author)
+        .then(refresh)
+        .catch((e: Error) => setError(e.message))
+    },
+    [author, refresh, repo, teamId]
+  )
+
+  const remove = useCallback(
+    (id: string) => {
+      repo
+        .removeMessage(teamId, id)
+        .then(refresh)
+        .catch((e: Error) => setError(e.message))
+    },
+    [refresh, repo, teamId]
+  )
+
+  return { messages, send, remove, error, source: repo.source, quelle: repo.label }
+}
+
+export function useTeamDocs(teamId: string, author: string) {
+  const repo = useRepo()
+  const [docs, setDocs] = useState<DocMeta[]>([])
+  const [error, setError] = useState<string | null>(null)
+
+  const refresh = useCallback(() => {
+    if (!teamId) {
+      setDocs([])
+      return
+    }
+    repo
+      .listDocs(teamId)
       .then((list) => {
         setDocs(list)
         setError(null)
       })
       .catch((e: Error) => setError(e.message))
-  }, [teamId])
+  }, [repo, teamId])
 
   useEffect(refresh, [refresh])
 
   const add = useCallback(
     async (files: FileList | File[]) => {
       try {
-        for (const file of Array.from(files)) {
-          await putDoc({
-            id: `d-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-            teamId,
-            name: file.name,
-            type: file.type || 'Datei',
-            size: file.size,
-            addedAt: new Date().toISOString(),
-            addedBy: author || 'Ich',
-            blob: file,
-          })
-        }
+        await repo.addDocs(teamId, Array.from(files), author)
         refresh()
       } catch (e) {
         setError((e as Error).message)
       }
     },
-    [author, refresh, teamId]
+    [author, refresh, repo, teamId]
   )
 
   const remove = useCallback(
     (id: string) => {
-      void deleteDoc(id).then(refresh)
+      repo
+        .removeDoc(teamId, id)
+        .then(refresh)
+        .catch((e: Error) => setError(e.message))
     },
-    [refresh]
+    [refresh, repo, teamId]
   )
 
-  return { docs, error, add, remove, refresh }
+  const load = useCallback((id: string) => repo.loadDoc(teamId, id), [repo, teamId])
+
+  return { docs, error, add, remove, load, refresh, source: repo.source, quelle: repo.label }
 }
 
 export function formatBytes(bytes: number): string {

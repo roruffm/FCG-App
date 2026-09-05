@@ -97,10 +97,23 @@ Fuer echten Austausch braucht es einen Server. Was dann dazukommt:
 | Moderation und Meldefunktion | Voraussetzung fuer Chat mit Jugendlichen |
 | Aufbewahrung und Loeschkonzept | Chatverlaeufe sind personenbezogene Daten |
 
-Die App ist darauf vorbereitet: `src/lib/teamspace.ts` und `src/lib/idb.ts`
-kapseln den gesamten Zugriff. Ein Server wird dort eingehaengt, die Oberflaeche
-bleibt unveraendert. Naheliegend waere eine Anbindung an die
-Gemeindeverwaltung, die Gruppen, Rechte und Dateien schon kennt.
+**Die Anbindung an ChurchTools ist vorbereitet** - siehe
+[`server/ANLEITUNG.md`](server/ANLEITUNG.md):
+
+- `src/lib/teamRepo.ts` haelt beide Umsetzungen hinter einer Schnittstelle:
+  Geraet (heute) und ChurchTools. Die Oberflaeche kennt nur die Schnittstelle.
+- `server/churchtools-proxy.mjs` ist ein kleiner Dienst ohne Zusatzpakete, der
+  das Token haelt und der App nur Teams, Beitraege und Dateien weitergibt.
+  Schreibzugriff ist standardmaessig aus.
+- `server/check-churchtools.mjs` prueft die angenommenen API-Pfade gegen eure
+  Instanz und nennt die Gruppen-Ids fuer `ctGroupId` in `src/data/teams.ts`.
+- Umgestellt wird ueber `VITE_TEAM_API` beim Bauen. Ohne die Variable bleibt
+  alles beim Geraet.
+
+Geprueft ist die Kette App -> Dienst -> API gegen einen Nachbau der
+ChurchTools-Antworten: Beitraege lesen, Nachricht senden, Dateien auflisten und
+herunterladen. **Nicht geprueft** sind die echten ChurchTools-Pfade - dafuer
+ist Schritt 2 der Anleitung da.
 
 ### Aus Version 2 bereits angelegt
 - **Connectgruppen-Finder** mit Filter nach Lebensphase, Stadtteil, Wochentag, Sprache und freien Plätzen
