@@ -485,3 +485,52 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 14px 18px 16px;
   z-index: 25;
 }
+
+/* ---------- Linktree ---------- */
+.linktree {
+  padding: 24px 18px calc(var(--nav-h) + 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+.linktree__kopf { text-align: center; }
+.linktree__logo {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  background: var(--ink);
+  margin-bottom: 14px;
+}
+.linktree__kopf h1 { font-size: 1.5rem; }
+.linktree__claim {
+  margin: 6px 0 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+.linktree__vers {
+  display: block;
+  background: linear-gradient(150deg, var(--primary), var(--primary-dark));
+  color: #f2f7f7;
+  border-radius: 20px;
+  padding: 18px;
+}
+.linktree__vers p { font-size: 0.98rem; line-height: 1.5; }
+.linktree__vers .muted { color: #bcd3d4; }
+.linktree__gruppe { display: flex; flex-direction: column; gap: 12px; }
+.linktree__titel { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.linktree__titel h2 { font-size: 1.05rem; }
+.linktree__eintrag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 16px;
+}
+.linktree__eintrag--gross {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.linktree__eintrag--geplant { opacity: 0.72; box-shadow: none; }
+.linktree__eintrag--geplant .badge { white-space: nowrap; align-self: flex-start; }
+.linktree__pfeil { flex: none; color: var(--text-muted); font-size: 1.05rem; }
+.linktree__fuss { text-align: center; border-top: 1px solid var(--border); padding-top: 18px; }

@@ -3,7 +3,7 @@ import { Suspense, lazy, useEffect, useState } from 'react'
 import { AppProvider, useApp } from './state'
 import { BrandSheet } from './components/BrandSheet'
 import { BottomNav } from './components/BottomNav'
-import { Home } from './routes/Home'
+import { Start } from './routes/Start'
 import { Sermons } from './routes/Sermons'
 import { SermonDetail } from './routes/SermonDetail'
 import { Ask } from './routes/Ask'
@@ -58,7 +58,7 @@ function Shell() {
     <div className="app">
       <DemoBar onOpenBrand={() => setBrandOpen(true)} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Start />} />
         <Route path="/predigten" element={<Sermons />} />
         <Route path="/predigten/:id" element={<SermonDetail />} />
         <Route path="/frag" element={<Ask />} />

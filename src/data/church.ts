@@ -61,6 +61,16 @@ export const church = {
     impressum: 'https://fcg-frankfurt.de/impressum',
     datenschutz: 'https://fcg-frankfurt.de/datenschutz',
     intern: 'https://fcg-frankfurt.de/intern',
+
+    /**
+     * Teambereich in ChurchTools. Der Eintrag zeigt auf das oeffentliche
+     * Verzeichnis der Gemeinde; sobald die Adresse der eigenen Instanz
+     * feststeht (meist https://<name>.church.tools), gehoert sie hierher.
+     */
+    churchtools: 'https://find.church.tools/fcg-frankfurt',
+
+    /** Wiki - wird noch aufgebaut. Solange leer, zeigt die App es als geplant. */
+    wiki: '',
   },
 
   social: {

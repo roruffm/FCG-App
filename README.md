@@ -58,6 +58,31 @@ Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android
 
 ---
 
+## Aufbau: Linktree als Einstieg
+
+Die Startseite ist ein **Linktree**: alle Anlaufstellen der Gemeinde
+untereinander, gruppiert nach dem, was jemand gerade sucht. Seiten dieser App
+stehen dabei gleichberechtigt neben den Kanaelen draussen - fuer den Nutzer ist
+beides schlicht "die FCG".
+
+| Gruppe | Enthaelt |
+|---|---|
+| Diesen Sonntag | Livestream, Zeiten und Anfahrt, Neu hier? |
+| Predigten hoeren | YouTube, Spotify, Apple Podcasts, Archiv in der App, Frag die Predigten |
+| Taeglich | Bibelimpuls, Bibel lesen, Lesepläne |
+| Anschluss finden | Connectgruppen, Kurse, Taufe, Termine, Gebetswand, Gemeinschaften |
+| Fuer Mitarbeitende | ChurchTools, Teams in der App, Mitmachen, Wiki, interner Bereich, PULS |
+| Folgen und unterstuetzen | Instagram, Facebook, Newsletter, Spenden, Website |
+
+Gepflegt wird der Baum in [`src/data/links.ts`](src/data/links.ts), die Adressen
+selbst in [`src/data/church.ts`](src/data/church.ts). Ein Eintrag ist entweder
+`intern` (Seite der App), `extern` (neuer Tab, mit ↗ gekennzeichnet) oder
+`geplant` - dann wird er angezeigt, aber nicht verlinkt. Das Wiki steht auf
+`geplant`, bis seine Adresse in `church.web.wiki` eingetragen ist; ein toter
+Link waere schlimmer als ein ehrlicher Hinweis.
+
+Die untere Navigation bleibt: Start, Bibel, Predigten, Events, Ich.
+
 ## Was drin ist
 
 ### Version 1 der Roadmap - vollständig
