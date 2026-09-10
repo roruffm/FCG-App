@@ -549,3 +549,50 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .start__vers .muted { color: #b3cccd; }
 
 .start__fuss { text-align: center; border-top: 1px solid var(--border); padding-top: 16px; }
+
+/* ---------- Kalender ---------- */
+.kalender { display: flex; flex-direction: column; gap: 10px; }
+.kalender__kopf { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.kalender__kopf .icon-btn { width: 34px; height: 34px; font-size: 1.2rem; line-height: 1; }
+.kalender__gitter { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.kalender__gitter--kopf {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-weight: 600;
+}
+.kalender__tag {
+  position: relative;
+  height: 34px;
+  border: 0;
+  background: none;
+  border-radius: 9px;
+  color: var(--text);
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kalender__tag:disabled { color: var(--text-muted); opacity: 0.5; cursor: default; }
+.kalender__tag[data-heute='ja'] { box-shadow: inset 0 0 0 1.5px var(--accent); font-weight: 700; }
+.kalender__tag[aria-pressed='true'] { background: var(--accent-mid); color: #fff; }
+.kalender__tag[aria-pressed='true'] .kalender__punkt { background: #fff; }
+.kalender__punkt {
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.kalender__tagesliste { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+.kalender__termin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.kalender__termin:last-child { border-bottom: 0; }

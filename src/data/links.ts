@@ -40,13 +40,19 @@ export const kanaele: Kachel[] = [
 export const appBereiche: Zeile[] = [
   { label: 'Neu hier?', hinweis: 'Ablauf, Kinder, Anfahrt', ziel: '/neu-hier' },
   { label: 'Predigten', hinweis: 'Archiv und Fragen stellen', ziel: '/predigten' },
-  { label: 'Bibel', hinweis: 'Text, Karte, Lexikon', ziel: '/bibel' },
-  { label: 'Termine', hinweis: 'Kalender und Anmeldung', ziel: '/events' },
-  { label: 'Teams', hinweis: 'Chat, Dokumente, Dienste', ziel: '/teams' },
   { label: 'Mitmachen', hinweis: 'Wo Verstärkung gesucht wird', ziel: '/mitmachen' },
 ]
 
 export const mehr: { titel: string; zeilen: Zeile[] }[] = [
+  {
+    titel: 'Täglich',
+    zeilen: [
+      { label: 'Vers des Tages', hinweis: 'Ein Vers mit Einordnung', ziel: '/impuls' },
+      { label: 'Bibel lesen', hinweis: 'Text, Karte, Lexikon, Auslegungen', ziel: '/bibel' },
+      { label: 'Lesepläne', ziel: '/bibel/plaene' },
+      { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
+    ],
+  },
   {
     titel: 'Für Gäste',
     zeilen: [
@@ -54,21 +60,22 @@ export const mehr: { titel: string; zeilen: Zeile[] }[] = [
       { label: 'Connectgruppe finden', ziel: '/gruppen' },
       { label: 'Kurse und Seminare', ziel: church.web.kurse, extern: true },
       { label: 'Taufe', ziel: church.web.taufe, extern: true },
+    ],
+  },
+  {
+    titel: 'Für Mitglieder',
+    zeilen: [
+      { label: 'Meine Teams', hinweis: 'Chat, Dokumente, Dienste', ziel: '/teams' },
+      { label: 'Mein Bereich', hinweis: 'Favoriten, Anmeldungen, Notizen', ziel: '/profil' },
+      { label: 'Meine Connectgruppe', ziel: '/gruppen' },
       { label: 'Unsere Gemeinschaften', ziel: church.web.gemeinschaften, extern: true },
+      { label: 'Alle Termine und Anmeldungen', ziel: '/events' },
     ],
   },
   {
-    titel: 'Täglich',
+    titel: 'Für Staff',
     zeilen: [
-      { label: 'Bibelimpuls des Tages', ziel: '/impuls' },
-      { label: 'Lesepläne', ziel: '/bibel/plaene' },
-      { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
-      { label: 'Apple Podcasts', ziel: church.social.applePodcasts, extern: true },
-    ],
-  },
-  {
-    titel: 'Für Mitarbeitende',
-    zeilen: [
+      { label: 'Teambereich in ChurchTools', ziel: church.web.churchtools, extern: true },
       { label: 'Interner Bereich der Website', ziel: church.web.intern, extern: true },
       { label: 'PULS Leiterschaftsnetzwerk', ziel: church.web.puls, extern: true },
     ],
@@ -78,6 +85,7 @@ export const mehr: { titel: string; zeilen: Zeile[] }[] = [
     zeilen: [
       { label: 'Newsletter abonnieren', ziel: church.web.newsletter, extern: true },
       { label: 'Spenden', ziel: church.web.spende, extern: true },
+      { label: 'Apple Podcasts', ziel: church.social.applePodcasts, extern: true },
       { label: 'Facebook', ziel: church.social.facebook, extern: true },
     ],
   },

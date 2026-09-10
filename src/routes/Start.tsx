@@ -4,8 +4,7 @@ import { fcgLogo } from '../data/logo'
 import { church } from '../data/church'
 import { appBereiche, kanaele, mehr } from '../data/links'
 import type { IconName, Kachel, Zeile } from '../data/links'
-import { dailyVerse } from '../data/dailyVerses'
-import { useVerse } from '../lib/useBible'
+import { KalenderWidget } from '../components/KalenderWidget'
 import {
   IconCamera,
   IconChevron,
@@ -32,8 +31,6 @@ const icons: Record<IconName, typeof IconGlobe> = {
  */
 export function Start() {
   const [offen, setOffen] = useState(false)
-  const heute = dailyVerse()
-  const vers = useVerse(heute.ref)
 
   return (
     <div className="start">
@@ -51,6 +48,8 @@ export function Start() {
         ))}
       </div>
 
+      <KalenderWidget />
+
       <nav className="card start__liste" aria-label="Bereiche der App">
         {appBereiche.map((zeile) => (
           <Link key={zeile.ziel} to={zeile.ziel} className="start__zeile">
@@ -64,13 +63,6 @@ export function Start() {
           </Link>
         ))}
       </nav>
-
-      {vers && (
-        <Link to="/impuls" className="start__vers">
-          <span className="tiny muted">Vers des Tages · {vers.label}</span>
-          <span className="small" style={{ display: 'block', marginTop: 4 }}>„{vers.text}“</span>
-        </Link>
-      )}
 
       <button className="btn btn--ghost btn--block" onClick={() => setOffen((v) => !v)} aria-expanded={offen}>
         {offen ? 'Weniger anzeigen' : 'Mehr anzeigen'}

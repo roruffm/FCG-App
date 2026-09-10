@@ -60,24 +60,25 @@ Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android
 
 ## Aufbau: Linktree als Einstieg
 
-Die Startseite fuehrt in drei Ebenen, damit das Wichtigste ohne Scrollen
+Die Startseite fuehrt in vier Schritten, damit das Wichtigste ohne Scrollen
 dasteht:
 
 1. **Sechs Kacheln** - die Anlaufstellen ausserhalb der App: Website, YouTube,
    Instagram, Spotify, ChurchTools, Wiki.
-2. **Sechs Zeilen** - was die App selbst bietet: Neu hier?, Predigten, Bibel,
-   Termine, Teams, Mitmachen.
-3. **"Mehr anzeigen"** - alles Weitere, nach Anlass gruppiert: Fuer Gaeste,
-   Taeglich, Fuer Mitarbeitende, Folgen und unterstuetzen.
-
-Dazu der Vers des Tages als schmale Zeile und ein Fuss mit Kontakt, Impressum
-und Datenschutz.
+2. **Kalender** - der laufende Monat; Tage mit Terminen tragen einen Punkt, der
+   heutige Tag einen Ring. Angetippt zeigt ein Tag darunter, was ansteht.
+   Vorausgewaehlt ist der naechste Tag mit Terminen.
+3. **Drei Zeilen** - Neu hier?, Predigten, Mitmachen.
+4. **"Mehr anzeigen"** - alles Weitere, nach Anlass gruppiert: Taeglich (Vers
+   des Tages, Bibel, Lesepläne, Gebet), Fuer Gaeste, Fuer Mitglieder,
+   Fuer Staff, Folgen und unterstuetzen.
 
 Gepflegt wird der Baum in [`src/data/links.ts`](src/data/links.ts), die Adressen
-selbst in [`src/data/church.ts`](src/data/church.ts). Eine Kachel ohne Ziel gilt
-als geplant: Sie wird angezeigt, aber nicht verlinkt - so steht das Wiki da,
-bis seine Adresse in `church.web.wiki` eingetragen ist. Ein toter Link waere
-schlimmer als ein ehrlicher Hinweis.
+selbst in [`src/data/church.ts`](src/data/church.ts), der Kalender in
+[`src/components/KalenderWidget.tsx`](src/components/KalenderWidget.tsx). Eine
+Kachel ohne Ziel gilt als geplant: Sie wird angezeigt, aber nicht verlinkt - so
+steht das Wiki da, bis seine Adresse in `church.web.wiki` eingetragen ist. Ein
+toter Link waere schlimmer als ein ehrlicher Hinweis.
 
 Die untere Navigation bleibt: Start, Bibel, Predigten, Events, Ich.
 
