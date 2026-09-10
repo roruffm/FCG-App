@@ -1,70 +1,108 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fcgLogo } from '../data/logo'
 import { church } from '../data/church'
-import { linkGruppen } from '../data/links'
-import type { LinkEintrag } from '../data/links'
+import { appBereiche, kanaele, mehr } from '../data/links'
+import type { IconName, Kachel, Zeile } from '../data/links'
 import { dailyVerse } from '../data/dailyVerses'
 import { useVerse } from '../lib/useBible'
-import { useApp } from '../state'
+import {
+  IconCamera,
+  IconChevron,
+  IconGlobe,
+  IconHeadphones,
+  IconUsers,
+  IconVideo,
+  IconWiki,
+} from '../components/Icons'
+
+const icons: Record<IconName, typeof IconGlobe> = {
+  globe: IconGlobe,
+  video: IconVideo,
+  camera: IconCamera,
+  headphones: IconHeadphones,
+  users: IconUsers,
+  wiki: IconWiki,
+}
 
 /**
- * Startseite als Linktree: alle Anlaufstellen der Gemeinde untereinander,
- * gruppiert nach dem, was jemand gerade sucht - Sonntag, Predigten, Anschluss,
- * Mitarbeit. Interne Seiten der App stehen gleichberechtigt neben den
- * Kanaelen draussen; fuer den Nutzer ist beides schlicht "die FCG".
+ * Startseite: sechs Kacheln fuer die Kanaele, sechs Zeilen fuer die App,
+ * alles Weitere eingeklappt. Wer den Livestream sucht, soll ihn sehen -
+ * nicht erst an zwanzig Eintraegen vorbeiscrollen.
  */
 export function Start() {
-  const { profile } = useApp()
+  const [offen, setOffen] = useState(false)
   const heute = dailyVerse()
   const vers = useVerse(heute.ref)
 
   return (
-    <div className="linktree">
-      <header className="linktree__kopf">
-        <img className="linktree__logo" src={fcgLogo} alt="" />
+    <div className="start">
+      <header className="start__kopf">
+        <img className="start__logo" src={fcgLogo} alt="" />
         <h1>{church.short}</h1>
-        <p className="linktree__claim">{church.claim}</p>
-        <p className="small muted" style={{ margin: '10px 0 0' }}>
-          Sonntags {church.services[0].time} und {church.services[1].time} ·{' '}
-          {church.address.street}
+        <p className="start__zeiten">
+          Sonntags {church.services[0].time} und {church.services[1].time}
         </p>
       </header>
 
+      <div className="start__kacheln">
+        {kanaele.map((kachel) => (
+          <KachelFeld key={kachel.label} kachel={kachel} />
+        ))}
+      </div>
+
+      <nav className="card start__liste" aria-label="Bereiche der App">
+        {appBereiche.map((zeile) => (
+          <Link key={zeile.ziel} to={zeile.ziel} className="start__zeile">
+            <span style={{ minWidth: 0 }}>
+              <b className="small">{zeile.label}</b>
+              {zeile.hinweis && (
+                <span className="tiny muted" style={{ display: 'block' }}>{zeile.hinweis}</span>
+              )}
+            </span>
+            <IconChevron />
+          </Link>
+        ))}
+      </nav>
+
       {vers && (
-        <Link to="/impuls" className="linktree__vers">
-          <span className="tagbox tiny">Vers des Tages</span>
-          <p style={{ margin: '10px 0 4px' }}>„{vers.text}“</p>
-          <span className="tiny muted">{vers.label}</span>
+        <Link to="/impuls" className="start__vers">
+          <span className="tiny muted">Vers des Tages · {vers.label}</span>
+          <span className="small" style={{ display: 'block', marginTop: 4 }}>„{vers.text}“</span>
         </Link>
       )}
 
-      {linkGruppen.map((gruppe) => (
-        <section key={gruppe.titel} className="linktree__gruppe">
-          <div className="linktree__titel">
-            <h2>{gruppe.titel}</h2>
-            {gruppe.unterzeile && <span className="tiny muted">{gruppe.unterzeile}</span>}
-          </div>
-          <div className="stack">
-            {gruppe.eintraege.map((eintrag) => (
-              <Eintrag key={eintrag.label} eintrag={eintrag} />
-            ))}
-          </div>
-        </section>
-      ))}
+      <button className="btn btn--ghost btn--block" onClick={() => setOffen((v) => !v)} aria-expanded={offen}>
+        {offen ? 'Weniger anzeigen' : 'Mehr anzeigen'}
+      </button>
 
-      <footer className="linktree__fuss">
-        <div className="row" style={{ gap: 14, justifyContent: 'center' }}>
-          <Link className="small" to="/kontakt">Kontakt</Link>
-          <a className="small" href={church.web.impressum} target="_blank" rel="noreferrer noopener">
-            Impressum ↗
-          </a>
-          <a className="small" href={church.web.datenschutz} target="_blank" rel="noreferrer noopener">
-            Datenschutz ↗
-          </a>
-          <Link className="small" to="/datenschutz">Daten in der App</Link>
+      {offen && (
+        <div className="stack">
+          {mehr.map((gruppe) => (
+            <section key={gruppe.titel} className="section">
+              <h2 className="small muted">{gruppe.titel}</h2>
+              <div className="card start__liste">
+                {gruppe.zeilen.map((zeile) => (
+                  <ZeilenFeld key={zeile.label} zeile={zeile} />
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
-        <p className="tiny muted" style={{ marginTop: 12 }}>
-          {profile.name ? `Angemeldet als ${profile.name} · ` : ''}
+      )}
+
+      <footer className="start__fuss">
+        <div className="row" style={{ gap: 14, justifyContent: 'center' }}>
+          <Link className="tiny" to="/kontakt">Kontakt</Link>
+          <a className="tiny" href={church.web.impressum} target="_blank" rel="noreferrer noopener">
+            Impressum
+          </a>
+          <a className="tiny" href={church.web.datenschutz} target="_blank" rel="noreferrer noopener">
+            Datenschutz
+          </a>
+          <Link className="tiny" to="/datenschutz">Daten in der App</Link>
+        </div>
+        <p className="tiny muted" style={{ marginTop: 10 }}>
           Prototyp mit Beispielinhalten - keine offizielle App der FCG Frankfurt.
         </p>
       </footer>
@@ -72,49 +110,38 @@ export function Start() {
   )
 }
 
-function Eintrag({ eintrag }: { eintrag: LinkEintrag }) {
+function KachelFeld({ kachel }: { kachel: Kachel }) {
+  const Icon = icons[kachel.icon]
   const inhalt = (
     <>
-      <span style={{ minWidth: 0 }}>
-        <b className={eintrag.gross ? undefined : 'small'}>{eintrag.label}</b>
-        <span className="tiny muted" style={{ display: 'block', marginTop: 2 }}>
-          {eintrag.hinweis}
-        </span>
-      </span>
-      <span className="linktree__pfeil" aria-hidden>
-        {eintrag.art === 'extern' ? '↗' : eintrag.art === 'geplant' ? '' : '›'}
-      </span>
+      <Icon />
+      <span className="small">{kachel.label}</span>
+      {kachel.geplant && <span className="tiny muted">in Vorbereitung</span>}
     </>
   )
 
-  if (eintrag.art === 'geplant') {
-    return (
-      <div className="card linktree__eintrag linktree__eintrag--geplant">
-        {inhalt}
-        <span className="badge" style={{ marginLeft: 8 }}>in Vorbereitung</span>
-      </div>
-    )
-  }
+  if (!kachel.ziel) return <div className="start__kachel start__kachel--geplant">{inhalt}</div>
 
-  if (eintrag.art === 'extern') {
+  return (
+    <a className="start__kachel" href={kachel.ziel} target="_blank" rel="noreferrer noopener">
+      {inhalt}
+    </a>
+  )
+}
+
+function ZeilenFeld({ zeile }: { zeile: Zeile }) {
+  if (zeile.extern) {
     return (
-      <a
-        className={`card card--tap linktree__eintrag${eintrag.gross ? ' linktree__eintrag--gross' : ''}`}
-        href={eintrag.ziel}
-        target="_blank"
-        rel="noreferrer noopener"
-      >
-        {inhalt}
+      <a className="start__zeile" href={zeile.ziel} target="_blank" rel="noreferrer noopener">
+        <span className="small">{zeile.label}</span>
+        <span className="tiny muted" aria-hidden>↗</span>
       </a>
     )
   }
-
   return (
-    <Link
-      className={`card card--tap linktree__eintrag${eintrag.gross ? ' linktree__eintrag--gross' : ''}`}
-      to={eintrag.ziel!}
-    >
-      {inhalt}
+    <Link className="start__zeile" to={zeile.ziel}>
+      <span className="small">{zeile.label}</span>
+      <IconChevron />
     </Link>
   )
 }

@@ -60,26 +60,24 @@ Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android
 
 ## Aufbau: Linktree als Einstieg
 
-Die Startseite ist ein **Linktree**: alle Anlaufstellen der Gemeinde
-untereinander, gruppiert nach dem, was jemand gerade sucht. Seiten dieser App
-stehen dabei gleichberechtigt neben den Kanaelen draussen - fuer den Nutzer ist
-beides schlicht "die FCG".
+Die Startseite fuehrt in drei Ebenen, damit das Wichtigste ohne Scrollen
+dasteht:
 
-| Gruppe | Enthaelt |
-|---|---|
-| Diesen Sonntag | Livestream, Zeiten und Anfahrt, Neu hier? |
-| Predigten hoeren | YouTube, Spotify, Apple Podcasts, Archiv in der App, Frag die Predigten |
-| Taeglich | Bibelimpuls, Bibel lesen, Lesepläne |
-| Anschluss finden | Connectgruppen, Kurse, Taufe, Termine, Gebetswand, Gemeinschaften |
-| Fuer Mitarbeitende | ChurchTools, Teams in der App, Mitmachen, Wiki, interner Bereich, PULS |
-| Folgen und unterstuetzen | Instagram, Facebook, Newsletter, Spenden, Website |
+1. **Sechs Kacheln** - die Anlaufstellen ausserhalb der App: Website, YouTube,
+   Instagram, Spotify, ChurchTools, Wiki.
+2. **Sechs Zeilen** - was die App selbst bietet: Neu hier?, Predigten, Bibel,
+   Termine, Teams, Mitmachen.
+3. **"Mehr anzeigen"** - alles Weitere, nach Anlass gruppiert: Fuer Gaeste,
+   Taeglich, Fuer Mitarbeitende, Folgen und unterstuetzen.
+
+Dazu der Vers des Tages als schmale Zeile und ein Fuss mit Kontakt, Impressum
+und Datenschutz.
 
 Gepflegt wird der Baum in [`src/data/links.ts`](src/data/links.ts), die Adressen
-selbst in [`src/data/church.ts`](src/data/church.ts). Ein Eintrag ist entweder
-`intern` (Seite der App), `extern` (neuer Tab, mit ↗ gekennzeichnet) oder
-`geplant` - dann wird er angezeigt, aber nicht verlinkt. Das Wiki steht auf
-`geplant`, bis seine Adresse in `church.web.wiki` eingetragen ist; ein toter
-Link waere schlimmer als ein ehrlicher Hinweis.
+selbst in [`src/data/church.ts`](src/data/church.ts). Eine Kachel ohne Ziel gilt
+als geplant: Sie wird angezeigt, aber nicht verlinkt - so steht das Wiki da,
+bis seine Adresse in `church.web.wiki` eingetragen ist. Ein toter Link waere
+schlimmer als ein ehrlicher Hinweis.
 
 Die untere Navigation bleibt: Start, Bibel, Predigten, Events, Ich.
 
