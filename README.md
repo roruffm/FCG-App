@@ -64,7 +64,7 @@ Umgesetzt aus dem Entwurf **"Start Redesign"** (Claude Design). Gast, Mitglied
 und Staff suchen Verschiedenes - statt allen dieselbe Linkwand zu zeigen, waehlt
 man oben die Rolle:
 
-| | Gast | Mitglied | Staff |
+| | Gast | Mitglied | Leader |
 |---|---|---|---|
 | **Aufmacher** | Gottesdienstzeiten und Anfahrt | naechster Termin mit offener Anmeldung | Leitungsdashboard |
 | **Hauptliste** | Der erste Schritt | Dein Bereich | Arbeitswege |
@@ -291,7 +291,7 @@ Gastartikeln: beide Seiten teilen sich denselben Speicherschluessel.
 |---|---|---|
 | Gast | 7 | Erster Besuch, Verstehen |
 | Mitglied | 8 | Dazugehoeren, Mitarbeiten, Hilfe, Praktisches |
-| Staff | 10 | Verantwortung, Ablaeufe, Praktisches |
+| Leader | 10 | Verantwortung, Ablaeufe, Praktisches |
 
 Ein Artikel kann zu mehreren Sichten gehoeren - "Raeume buchen" betrifft
 Mitglieder wie Mitarbeitende. Sichtbar ist er trotzdem immer nur in der
@@ -312,3 +312,38 @@ Leitung. Am dringendsten ist **Notfall im Gottesdienst**: Standort von
 Erste-Hilfe-Material und AED, benannte Ersthelfer und der Sammelpunkt muessen
 fuer das Gebaeude konkret eingetragen werden, sonst hilft der Artikel im
 Ernstfall nicht.
+
+## Passwort vor Mitglied und Leader
+
+**Gast** ist offen. **Mitglied** und **Leader** fragen beim Umschalten nach einem
+Passwort; erst danach wechselt die Sicht. Das gilt auf der Startseite und im
+Wiki gleichermassen, weil beide denselben Umschalter benutzen. Einmal
+freigeschaltet bleibt es auf dem Geraet gemerkt - darunter steht ein sichtbarer
+Weg zurueck ("wieder sperren"), damit ein geliehenes Handy nicht offen bleibt.
+
+Im Quelltext stehen nur die SHA-256-Werte, nicht die Passwoerter. Eine
+gespeicherte Rolle ohne passende Freischaltung faellt auf Gast zurueck - wer den
+`localStorage`-Eintrag von Hand setzt, kommt darueber nicht hinein.
+
+### Was dieser Schutz nicht ist
+
+Eine Tuer, kein Tresor. Die Pruefung laeuft im Browser, also auf dem Geraet
+dessen, der sie ueberwinden will:
+
+- Wer die Entwicklerwerkzeuge oeffnet, kann die Freischaltung selbst setzen.
+- Die Hashes sind im Bundle sichtbar und lassen sich durchprobieren.
+- Wer das Passwort einmal hat, gibt es weiter - eine Sperre ohne Konten kennt
+  keinen Einzelentzug.
+
+Sie haelt Neugierige von Seiten fern, die sie nichts angehen. Sie schuetzt keine
+Daten. Alles wirklich Vertrauliche - Mitgliederlisten, Seelsorge, Personelles -
+gehoert hinter eine Anmeldung mit Serverpruefung; in dieser Gemeinde am ehesten
+ueber ChurchTools, wofuer unter `server/` bereits die Anbindung vorbereitet ist.
+
+### Nebenbei behoben
+
+`usePersistentState` hielt pro Aufrufstelle eigenen State: Schrieb eine
+Komponente, sah die andere weiter ihren alten Wert, bis die Seite neu lud. Die
+Freischaltung ist zuerst genau daran gescheitert - der Umschalter schaltete
+frei, die Rollenpruefung sah es nicht und setzte sofort auf Gast zurueck. Jetzt
+teilen sich alle Aufrufstellen desselben Schluessels einen Wert.

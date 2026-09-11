@@ -10,6 +10,8 @@ import { KalenderWidget } from '../components/KalenderWidget'
 import { KanalSymbole } from '../components/KanalSymbole'
 import { formatTime, relativeDay } from '../lib/format'
 import { usePersistentState } from '../lib/storage'
+import { RollenWahl } from '../components/RollenWahl'
+import { useRolle } from '../lib/rollenzugang'
 
 /**
  * Startseite nach Rollen (Entwurf "Start Redesign").
@@ -19,7 +21,7 @@ import { usePersistentState } from '../lib/storage'
  * unter "Mehr" richten sich danach. Die Wahl bleibt auf dem Geraet gespeichert.
  */
 export function Start() {
-  const [rolle, setRolle] = usePersistentState<Rolle>('start-rolle', 'gast')
+  const [rolle, setRolle] = useRolle()
   const [mehrOffen, setMehrOffen] = usePersistentState('start-mehr-offen', false)
 
   const aktuelleRolle = rollen.find((r) => r.id === rolle) ?? rollen[0]
@@ -49,21 +51,13 @@ export function Start() {
       </header>
 
       <div>
-        <div className="rollenwahl" role="group" aria-label="Sicht wählen">
-          {rollen.map((r) => (
-            <button
-              key={r.id}
-              className="rolle"
-              aria-pressed={r.id === rolle}
-              onClick={() => {
-                setRolle(r.id)
-                setMehrOffen(false)
-              }}
-            >
-              {r.label}
-            </button>
-          ))}
-        </div>
+        <RollenWahl
+          rolle={rolle}
+          onWechsel={(ziel) => {
+            setRolle(ziel)
+            setMehrOffen(false)
+          }}
+        />
         <p className="tiny muted start__rollenhinweis">{aktuelleRolle.hinweis}</p>
       </div>
 

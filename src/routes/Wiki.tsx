@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TopBar } from '../components/TopBar'
 import { rollen } from '../data/links'
-import type { Rolle } from '../data/links'
 import {
   artikelFuer,
   artikelText,
@@ -11,7 +10,8 @@ import {
   wikiStand,
 } from '../data/wiki'
 import type { WikiArtikel } from '../data/wiki'
-import { usePersistentState } from '../lib/storage'
+import { RollenWahl } from '../components/RollenWahl'
+import { useRolle } from '../lib/rollenzugang'
 
 /**
  * Wiki-Uebersicht.
@@ -26,7 +26,7 @@ import { usePersistentState } from '../lib/storage'
  * trennen, aber einfach alles zu mischen wuerde die Trennung aufheben.
  */
 export function Wiki() {
-  const [rolle, setRolle] = usePersistentState<Rolle>('start-rolle', 'gast')
+  const [rolle, setRolle] = useRolle()
   const [suche, setSuche] = useState('')
 
   const begriff = suche.trim().toLowerCase()
@@ -58,18 +58,7 @@ export function Wiki() {
       <TopBar title="Wiki" subtitle="Nachschlagen statt nachfragen" back />
       <div className="page">
         <div>
-          <div className="rollenwahl" role="group" aria-label="Sicht wählen">
-            {rollen.map((r) => (
-              <button
-                key={r.id}
-                className="rolle"
-                aria-pressed={r.id === rolle}
-                onClick={() => setRolle(r.id)}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
+          <RollenWahl rolle={rolle} onWechsel={setRolle} />
           <p className="tiny muted start__rollenhinweis">
             {alle.length} Artikel für diese Sicht · Stand {formatStand(wikiStand)}
           </p>

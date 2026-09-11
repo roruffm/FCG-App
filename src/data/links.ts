@@ -14,7 +14,7 @@ export type Rolle = 'gast' | 'mitglied' | 'staff'
 export const rollen: { id: Rolle; label: string; hinweis: string }[] = [
   { id: 'gast', label: 'Gast', hinweis: 'Zeigt zuerst, was am Sonntag zählt.' },
   { id: 'mitglied', label: 'Mitglied', hinweis: 'Zeigt zuerst Teams, Dienste und Anmeldungen.' },
-  { id: 'staff', label: 'Staff', hinweis: 'Zeigt zuerst Leitungs- und Arbeitswege.' },
+  { id: 'staff', label: 'Leader', hinweis: 'Zeigt zuerst Leitungs- und Arbeitswege.' },
 ]
 
 export type Zeile = {

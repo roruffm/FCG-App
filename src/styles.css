@@ -721,3 +721,25 @@ button, input, select, textarea { font: inherit; color: inherit; }
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* Geschuetzte Rollen: kleines Schloss im Schalter, Weg zurueck darunter */
+.rolle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.rolle__schloss { display: inline-flex; opacity: 0.55; }
+.rolle[aria-pressed='true'] .rolle__schloss { opacity: 0.85; }
+
+.rollenwahl__abmelden {
+  display: block;
+  margin: 8px auto 0;
+  border: 0;
+  background: none;
+  padding: 2px 6px;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text-muted);
+}
