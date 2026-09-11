@@ -77,7 +77,7 @@ export const church = {
      * die App kennt keine Anmeldung - wer den Zugriff begrenzen will, muss das
      * im Dashboard selbst tun.
      */
-    leitungsdashboard: 'https://fcg-leitungsdashboard.ronjarubens.chatgpt.site/',
+    leitungsdashboard: 'https://fcg-dashboard-web-production.up.railway.app/',
   },
 
   social: {
