@@ -2,6 +2,7 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-d
 import { useEffect, useState } from 'react'
 import { AppProvider, useApp } from './state'
 import { BrandSheet } from './components/BrandSheet'
+import { Fehlerfang } from './components/Fehlerfang'
 import { Start } from './routes/Start'
 import { Sermons } from './routes/Sermons'
 import { SermonDetail } from './routes/SermonDetail'
@@ -18,6 +19,7 @@ import { Teams } from './routes/Teams'
 import { TeamSpace } from './routes/TeamSpace'
 import { Wiki } from './routes/Wiki'
 import { WikiArtikelSeite } from './routes/WikiArtikelSeite'
+import { Diagnose } from './routes/Diagnose'
 
 
 function ScrollToTop() {
@@ -44,29 +46,37 @@ function DemoBar({ onOpenBrand }: { onOpenBrand: () => void }) {
 function Shell() {
   const { brand, setBrand } = useApp()
   const [brandOpen, setBrandOpen] = useState(false)
+  const { pathname } = useLocation()
 
   return (
     <div className="app">
       <DemoBar onOpenBrand={() => setBrandOpen(true)} />
-      <Routes>
-        <Route path="/" element={<Start />} />
-        <Route path="/predigten" element={<Sermons />} />
-        <Route path="/predigten/:id" element={<SermonDetail />} />
-        <Route path="/frag" element={<Ask />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/events/:id" element={<EventDetail />} />
-        <Route path="/gruppen" element={<Groups />} />
-        <Route path="/neu-hier" element={<NewHere />} />
-        <Route path="/gebet" element={<Prayer />} />
-        <Route path="/datenschutz" element={<Privacy />} />
-        <Route path="/kontakt" element={<Contact />} />
-        <Route path="/mitmachen" element={<Serve />} />
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/teams/:id" element={<TeamSpace />} />
-        <Route path="/wiki" element={<Wiki />} />
-        <Route path="/wiki/:slug" element={<WikiArtikelSeite />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      {/*
+        Beim Seitenwechsel neu aufsetzen: Sonst bliebe die Fehlermeldung stehen,
+        auch wenn man laengst woanders hinnavigiert hat.
+      */}
+      <Fehlerfang key={pathname}>
+        <Routes>
+          <Route path="/" element={<Start />} />
+          <Route path="/predigten" element={<Sermons />} />
+          <Route path="/predigten/:id" element={<SermonDetail />} />
+          <Route path="/frag" element={<Ask />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetail />} />
+          <Route path="/gruppen" element={<Groups />} />
+          <Route path="/neu-hier" element={<NewHere />} />
+          <Route path="/gebet" element={<Prayer />} />
+          <Route path="/datenschutz" element={<Privacy />} />
+          <Route path="/kontakt" element={<Contact />} />
+          <Route path="/mitmachen" element={<Serve />} />
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/teams/:id" element={<TeamSpace />} />
+          <Route path="/wiki" element={<Wiki />} />
+          <Route path="/wiki/:slug" element={<WikiArtikelSeite />} />
+          <Route path="/diagnose" element={<Diagnose />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Fehlerfang>
       {brandOpen && <BrandSheet brand={brand} setBrand={setBrand} onClose={() => setBrandOpen(false)} />}
     </div>
   )

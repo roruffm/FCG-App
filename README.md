@@ -430,3 +430,32 @@ wenn es noch keinen gespeicherten Seitenstand gibt.
 
 Nachgestellt mit einem Server, der 15 Sekunden braucht: vorher 15 Sekunden
 weiss, jetzt nach **3,1 Sekunden** sichtbar.
+
+## Wenn die Seite doch leer bleibt
+
+Eine weisse Seite sieht bei jeder Ursache gleich aus - veraltetes HTML, eine
+fehlende Datei, ein abgebrochener Download, ein Absturz beim Rendern. Deshalb
+gibt es jetzt drei Netze statt weiterer Vermutungen.
+
+**Notstart** (`index.html`). Hat React nach fuenf Sekunden nichts gerendert -
+oder scheitert schon das Laden der Programmdatei -, meldet die Seite den
+Service Worker ab, leert die Caches und laedt einmal neu. Das ist genau der
+Handgriff, den man sonst selbst macht. Ein zweiter Versuch pro Sitzung findet
+nicht statt: Danach erscheint eine sichtbare Meldung mit Grund und Adresse
+statt Weiss.
+
+**Fehlerfang** (`components/Fehlerfang.tsx`). Stuerzt eine Seite beim Rendern
+ab, raeumt React sonst den ganzen Baum ab - die App wird weiss, ohne Hinweis,
+und nur ein Neuladen hilft. Jetzt bleibt eine Meldung stehen, mit dem
+Fehlertext unter "Technische Angaben". Der Notstart deckt das nicht ab: Der
+prueft einmal beim Start, ein Absturz beim Weiterklicken passiert lange danach.
+
+**Diagnose** (`#/diagnose`, verlinkt im Fuss der Startseite). Zeigt Baustand,
+Programmdatei, Service Worker, Cache-Inhalt, ob der Notstart gegriffen hat und
+welche Werte gespeichert sind. Ein Bildschirmfoto genuegt, um eine weisse Seite
+einzugrenzen; persoenliche Daten stehen nicht darin. Darunter ein Knopf, der
+Service Worker und Caches abraeumt und neu startet.
+
+Die wichtigste Frage beantwortet die erste Zeile: **Baustand**. Stimmt der nicht
+mit der letzten Veroeffentlichung ueberein, laeuft auf dem Geraet ein alter
+Stand - dann liegt es am Zwischenspeicher und nicht an der App.

@@ -15,5 +15,109 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!--
+      Notstart.
+
+      Bleibt die Seite leer, hilft heute nur Aktualisieren von Hand. Genau das
+      macht dieser Wachhund von selbst: Hat React nach ein paar Sekunden nichts
+      gerendert - oder scheitert schon das Laden des Skripts -, raeumt er
+      Service Worker und Caches ab und laedt einmal neu.
+
+      Warum so grob: Die Ursache einer weissen Seite ist von aussen nicht zu
+      unterscheiden (veraltetes HTML, fehlende Datei, abgebrochener Download,
+      Absturz beim Rendern). Abraeumen und einmal frisch laden hilft bei allen,
+      und ein einzelner Neustart kostet weniger als eine Seite, die nie kommt.
+
+      Gegen Endlosschleifen: Der Versuch wird in sessionStorage vermerkt und
+      genau einmal pro Sitzung unternommen. Danach erscheint eine sichtbare
+      Meldung statt Weiss - und ein Knopf, der den Grund nennt. Eine leere
+      Seite ohne Hinweis ist das Schlimmste von allem.
+    -->
+    <script>
+      (function () {
+        var MARKE = 'fcg-app:notstart'
+        var WARTEN = 5000
+        var erledigt = false
+
+        function gestartet() {
+          var wurzel = document.getElementById('root')
+          return wurzel && wurzel.children.length > 0
+        }
+
+        function meldung(grund) {
+          var wurzel = document.getElementById('root')
+          if (!wurzel) return
+          wurzel.innerHTML =
+            '<div style="max-width:33rem;margin:0 auto;padding:40px 20px;font:400 15px/1.6 system-ui,sans-serif;color:#000">' +
+            '<h1 style="font-size:1.3rem;margin:0 0 10px">Die App konnte nicht starten</h1>' +
+            '<p style="margin:0 0 16px;color:#55686a">Ein Neustart hat schon nicht geholfen. Meist liegt es an einer ' +
+            'unterbrochenen Verbindung - manchmal an einem Fehler in der App.</p>' +
+            '<button id="fcg-neu" style="appearance:none;border:0;border-radius:999px;background:#006269;color:#fff;' +
+            'font:700 15px system-ui,sans-serif;padding:12px 20px;cursor:pointer">Nochmal versuchen</button>' +
+            '<p style="margin:18px 0 0;font-size:12px;color:#55686a">Grund: ' + grund + '</p>' +
+            '<p style="margin:6px 0 0;font-size:12px;color:#55686a">Adresse: ' + location.href + '</p>' +
+            '</div>'
+          var knopf = document.getElementById('fcg-neu')
+          if (knopf) knopf.onclick = function () {
+            try { sessionStorage.removeItem(MARKE) } catch (e) {}
+            location.reload()
+          }
+        }
+
+        function notstart(grund) {
+          if (erledigt || gestartet()) return
+          erledigt = true
+
+          var schonversucht
+          try { schonversucht = sessionStorage.getItem(MARKE) } catch (e) { schonversucht = null }
+          if (schonversucht) return meldung(grund)
+
+          try { sessionStorage.setItem(MARKE, grund) } catch (e) { return meldung(grund) }
+
+          var neuladen = function () { location.reload() }
+          var aufgaben = []
+          if (navigator.serviceWorker) {
+            aufgaben.push(
+              navigator.serviceWorker.getRegistrations()
+                .then(function (rs) { return Promise.all(rs.map(function (r) { return r.unregister() })) })
+                .catch(function () {})
+            )
+          }
+          if (window.caches) {
+            aufgaben.push(
+              caches.keys()
+                .then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k) })) })
+                .catch(function () {})
+            )
+          }
+          Promise.all(aufgaben).then(neuladen, neuladen)
+          // Falls Abraeumen haengt, trotzdem neu laden.
+          setTimeout(neuladen, 2500)
+        }
+
+        // Eine Datei, die nicht laedt, muss nicht abgewartet werden.
+        window.addEventListener(
+          'error',
+          function (e) {
+            var ziel = e.target
+            if (ziel && (ziel.tagName === 'SCRIPT' || ziel.tagName === 'LINK')) {
+              notstart('Datei nicht geladen: ' + (ziel.src || ziel.href || '?'))
+            }
+          },
+          true
+        )
+
+        window.setTimeout(function () { notstart('Nach ' + WARTEN / 1000 + ' Sekunden nichts gerendert') }, WARTEN)
+
+        // Laeuft die App, ist der Vermerk hinfaellig - sonst waere der naechste
+        // echte Fehlstart in dieser Sitzung sofort die Meldung statt ein Versuch.
+        window.addEventListener('load', function () {
+          window.setTimeout(function () {
+            if (gestartet()) { try { sessionStorage.removeItem(MARKE) } catch (e) {} }
+          }, 1200)
+        })
+      })()
+    </script>
   </body>
 </html>

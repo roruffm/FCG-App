@@ -116,6 +116,7 @@ export function Start() {
             Datenschutz
           </a>
           <Link className="tiny" to="/datenschutz">Daten in der App</Link>
+          <Link className="tiny" to="/diagnose">Diagnose</Link>
         </div>
         <p className="tiny muted" style={{ marginTop: 10 }}>
           Prototyp mit Beispielinhalten - keine offizielle App der FCG Frankfurt.
