@@ -37,8 +37,51 @@
     <script>
       (function () {
         var MARKE = 'fcg-app:notstart'
+        var PROTOKOLL = 'fcg-app:protokoll'
         var WARTEN = 5000
         var erledigt = false
+
+        /*
+          Kleines Protokoll, das ein Aktualisieren ueberlebt (sessionStorage
+          bleibt im selben Tab bestehen). Es haelt fest, was bei jedem
+          Seitenwechsel passiert ist und welche Fehler auftraten - denn eine
+          leere Seite sagt von sich aus nichts. Auf #/diagnose steht es dann
+          lesbar; ein Bildschirmfoto genuegt zur Fehlersuche.
+        */
+        var start = Date.now()
+        function notiere(art, text) {
+          try {
+            var liste = JSON.parse(sessionStorage.getItem(PROTOKOLL) || '[]')
+            liste.push({ t: Date.now() - start, art: art, text: String(text).slice(0, 300) })
+            // Nur die letzten Eintraege behalten - das Protokoll soll klein bleiben.
+            sessionStorage.setItem(PROTOKOLL, JSON.stringify(liste.slice(-40)))
+          } catch (e) {}
+        }
+        window.__fcgNotiere = notiere
+
+        function wurzelKinder() {
+          var w = document.getElementById('root')
+          return w ? w.children.length : -1
+        }
+
+        notiere('start', location.hash || '#/')
+
+        window.addEventListener('hashchange', function () {
+          notiere('wechsel', location.hash)
+          // Kurz danach nachsehen, ob etwas dasteht.
+          window.setTimeout(function () {
+            notiere('nachher', location.hash + ' -> root=' + wurzelKinder() + ', hoehe=' +
+              (document.getElementById('root') || {}).offsetHeight)
+          }, 600)
+        })
+
+        window.addEventListener('error', function (e) {
+          if (e && e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) return
+          notiere('fehler', (e && e.message) || 'unbekannt')
+        })
+        window.addEventListener('unhandledrejection', function (e) {
+          notiere('abgelehnt', (e && e.reason && (e.reason.message || e.reason)) || 'unbekannt')
+        })
 
         function gestartet() {
           var wurzel = document.getElementById('root')
@@ -68,6 +111,7 @@
         function notstart(grund) {
           if (erledigt || gestartet()) return
           erledigt = true
+          notiere('notstart', grund)
 
           var schonversucht
           try { schonversucht = sessionStorage.getItem(MARKE) } catch (e) { schonversucht = null }
@@ -101,8 +145,23 @@
           'error',
           function (e) {
             var ziel = e.target
-            if (ziel && (ziel.tagName === 'SCRIPT' || ziel.tagName === 'LINK')) {
-              notstart('Datei nicht geladen: ' + (ziel.src || ziel.href || '?'))
+            if (!ziel || (ziel.tagName !== 'SCRIPT' && ziel.tagName !== 'LINK')) return
+
+            var adresse = ziel.src || ziel.href || '?'
+            notiere('datei', adresse)
+
+            /*
+              Nur die eigene Programmdatei ist ein Notfall.
+
+              Die Schriften von Google sind absichtlich unkritisch eingebunden -
+              scheitern sie, greift der Ersatz-Stack und die App laeuft normal
+              weiter. Frueher loeste auch das den Notstart aus: In einem
+              langsamen Mobilnetz haette die App sich grundlos selbst neu
+              geladen, was den Fehler ausgeloest haette, den sie beheben soll.
+            */
+            var eigen = adresse.indexOf(location.origin) === 0
+            if (eigen && /\/assets\/.*\.js/.test(adresse)) {
+              notstart('Programmdatei nicht geladen: ' + adresse)
             }
           },
           true

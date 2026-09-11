@@ -10,9 +10,11 @@ import { TopBar } from '../components/TopBar'
  * bleibt die Fehlersuche Raterei - mit ihnen genuegt ein Bildschirmfoto.
  */
 type Zeile = { name: string; wert: string }
+type Eintrag = { t: number; art: string; text: string }
 
 export function Diagnose() {
   const [zeilen, setZeilen] = useState<Zeile[]>([])
+  const [protokoll, setProtokoll] = useState<Eintrag[]>([])
   const [kopiert, setKopiert] = useState(false)
 
   useEffect(() => {
@@ -99,6 +101,14 @@ export function Diagnose() {
         z.push({ name: 'Gespeicherte Werte', wert: 'nicht abfragbar' })
       }
 
+      // Protokoll der letzten Seitenwechsel und Fehler (siehe index.html).
+      try {
+        const roh = sessionStorage.getItem('fcg-app:protokoll')
+        if (roh && !abgemeldet) setProtokoll(JSON.parse(roh) as Eintrag[])
+      } catch {
+        /* kein sessionStorage - dann eben ohne Protokoll */
+      }
+
       if (!abgemeldet) setZeilen(z)
     }
 
@@ -108,7 +118,12 @@ export function Diagnose() {
     }
   }, [])
 
-  const alsText = zeilen.map((z) => `${z.name}: ${z.wert}`).join('\n')
+  const alsText = [
+    ...zeilen.map((z) => `${z.name}: ${z.wert}`),
+    '',
+    'Protokoll:',
+    ...protokoll.map((e) => `  +${(e.t / 1000).toFixed(1)}s ${e.art}: ${e.text}`),
+  ].join('\n')
 
   return (
     <>
@@ -130,6 +145,40 @@ export function Diagnose() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="section">
+          <h2>Protokoll</h2>
+          <div className="card">
+            {protokoll.length === 0 ? (
+              <p className="small muted" style={{ margin: 0 }}>
+                Noch nichts aufgezeichnet. Ruf eine Unterseite auf, die leer bleibt, aktualisiere
+                dann einmal und komm hierher zurück - der Verlauf bleibt im Tab erhalten.
+              </p>
+            ) : (
+              <ol className="tiny" style={{ margin: 0, paddingLeft: 18, display: 'grid', gap: 4 }}>
+                {protokoll.map((e, i) => (
+                  <li key={i} style={{ wordBreak: 'break-word' }}>
+                    <span className="muted">+{(e.t / 1000).toFixed(1)}s</span>{' '}
+                    <b>{e.art}</b> {e.text}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+          <button
+            className="btn btn--ghost btn--block"
+            onClick={() => {
+              try {
+                sessionStorage.removeItem('fcg-app:protokoll')
+              } catch {
+                /* egal */
+              }
+              setProtokoll([])
+            }}
+          >
+            Protokoll leeren
+          </button>
         </section>
 
         <section className="section">

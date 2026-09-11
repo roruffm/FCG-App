@@ -110,8 +110,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
   gap: 12px;
   padding: 14px 18px calc(14px + env(safe-area-inset-top, 0px));
   padding-top: calc(14px + env(safe-area-inset-top, 0px));
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
-  backdrop-filter: blur(12px);
+  /*
+    Undurchsichtig und ohne backdrop-filter.
+
+    Die Kopfzeile ist `position: relative` - es scrollt nichts dahinter, die
+    Weichzeichnung war also folgenlos schoen. Erzwungen hat sie aber eine
+    eigene Compositing-Ebene, und die ist auf Android Chrome eine bekannte
+    Quelle fuer Inhalte, die schlicht nicht gezeichnet werden: Die Seite bleibt
+    leer, bis irgendetwas ein Neuzeichnen ausloest - etwa ein Aktualisieren.
+    Dazu passt, dass ausgerechnet die Startseite funktioniert: Sie ist die
+    einzige Seite ohne Kopfzeile.
+  */
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
 .topbar__title {

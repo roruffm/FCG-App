@@ -450,6 +450,11 @@ und nur ein Neuladen hilft. Jetzt bleibt eine Meldung stehen, mit dem
 Fehlertext unter "Technische Angaben". Der Notstart deckt das nicht ab: Der
 prueft einmal beim Start, ein Absturz beim Weiterklicken passiert lange danach.
 
+**Protokoll**. Der Notstart zeichnet jeden Seitenwechsel und jeden Fehler in
+`sessionStorage` auf. Das ueberlebt ein Aktualisieren im selben Tab - also
+genau den Handgriff, mit dem man eine leere Seite loswird. Auf `#/diagnose`
+steht danach lesbar, was auf der leeren Seite passiert ist.
+
 **Diagnose** (`#/diagnose`, verlinkt im Fuss der Startseite). Zeigt Baustand,
 Programmdatei, Service Worker, Cache-Inhalt, ob der Notstart gegriffen hat und
 welche Werte gespeichert sind. Ein Bildschirmfoto genuegt, um eine weisse Seite
@@ -459,3 +464,24 @@ Service Worker und Caches abraeumt und neu startet.
 Die wichtigste Frage beantwortet die erste Zeile: **Baustand**. Stimmt der nicht
 mit der letzten Veroeffentlichung ueberein, laeuft auf dem Geraet ein alter
 Stand - dann liegt es am Zwischenspeicher und nicht an der App.
+
+### Kopfzeile ohne backdrop-filter
+
+`.topbar` hatte `backdrop-filter: blur(12px)` auf einem `position: relative`
+Element - dahinter scrollt nichts, die Weichzeichnung war also folgenlos
+schoen. Erzwungen hat sie aber eine eigene Compositing-Ebene, und die ist auf
+Android Chrome eine bekannte Quelle fuer Inhalte, die schlicht nicht gezeichnet
+werden: Die Seite bleibt leer, bis irgendetwas ein Neuzeichnen ausloest.
+
+Dazu passt die auffaelligste Beobachtung aus dem Fehlerbericht: Ausgerechnet
+die **Startseite** funktioniert - sie ist die einzige Seite **ohne** Kopfzeile.
+Die Kopfzeile ist jetzt undurchsichtig und ohne Filter; sichtbar aendert sich
+nichts.
+
+### Schriften sind kein Notfall
+
+Der Notstart reagierte anfangs auf jede fehlgeschlagene Datei - auch auf das
+Stylesheet von Google Fonts. Das ist absichtlich unkritisch eingebunden: faellt
+es aus, greift der Ersatz-Stack. In einem langsamen Mobilnetz haette die App
+sich deswegen grundlos neu geladen und damit genau den Fehler erzeugt, den sie
+beheben soll. Jetzt loest nur die eigene Programmdatei den Notstart aus.
