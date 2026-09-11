@@ -141,17 +141,26 @@ function KachelFeld({ kachel }: { kachel: Kachel }) {
 }
 
 function ZeilenFeld({ zeile }: { zeile: Zeile }) {
+  const text = (
+    <span style={{ minWidth: 0 }}>
+      <span className="small">{zeile.label}</span>
+      {zeile.hinweis && (
+        <span className="tiny muted" style={{ display: 'block' }}>{zeile.hinweis}</span>
+      )}
+    </span>
+  )
+
   if (zeile.extern) {
     return (
       <a className="start__zeile" href={zeile.ziel} target="_blank" rel="noreferrer noopener">
-        <span className="small">{zeile.label}</span>
+        {text}
         <span className="tiny muted" aria-hidden>↗</span>
       </a>
     )
   }
   return (
     <Link className="start__zeile" to={zeile.ziel}>
-      <span className="small">{zeile.label}</span>
+      {text}
       <IconChevron />
     </Link>
   )

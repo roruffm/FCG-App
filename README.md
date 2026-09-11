@@ -86,14 +86,11 @@ Die untere Navigation bleibt: Start, Bibel, Predigten, Events, Ich.
 
 ### Leitungsdashboard
 
-Das Reporting laeuft ausserhalb dieser App. `/leitung` bindet es ein und stellt
-den Weg im neuen Tab immer sichtbar darueber - viele Seiten verbieten das
-Einbetten, und dann bliebe sonst nur ein leerer Rahmen. Bleibt er nach sechs
-Sekunden leer, sagt die Seite das ausdruecklich.
-
-Erreichbar ist es unter *Mehr anzeigen -> Fuer Staff*. **Die App kennt keine
-Anmeldung**: Wer den Zugriff begrenzen will, muss das im Dashboard selbst tun -
-ein Link in einer oeffentlichen App macht die Adresse auffindbar.
+Das Reporting laeuft ausserhalb dieser App und ist passwortgeschuetzt. Ein
+Versuch, es einzubetten, scheiterte - die Seite erlaubt das nicht. Deshalb
+verlinkt die App sie direkt: *Mehr anzeigen -> Fuer Staff -> Leitungsdashboard*,
+mit dem Hinweis, dass eine Anmeldung noetig ist. Die Adresse steht in
+`church.web.leitungsdashboard`.
 
 ## Was drin ist
 

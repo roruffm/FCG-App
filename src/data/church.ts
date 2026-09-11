@@ -73,9 +73,8 @@ export const church = {
     wiki: '',
 
     /**
-     * Leitungsdashboard (Reporting). Die Adresse ist oeffentlich erreichbar,
-     * die App kennt keine Anmeldung - wer den Zugriff begrenzen will, muss das
-     * im Dashboard selbst tun.
+     * Leitungsdashboard (Reporting). Passwortgeschuetzt und nicht einbettbar -
+     * deshalb verlinkt die App es direkt, statt es in einen Rahmen zu setzen.
      */
     leitungsdashboard: 'https://fcg-dashboard-web-production.up.railway.app/',
   },

@@ -87,7 +87,12 @@ export const mehr: { titel: string; zeilen: Zeile[] }[] = [
   {
     titel: 'Für Staff',
     zeilen: [
-      { label: 'Leitungsdashboard', hinweis: 'Zahlen und Auswertungen', ziel: '/leitung' },
+      {
+        label: 'Leitungsdashboard',
+        hinweis: 'Zahlen und Auswertungen · Anmeldung nötig',
+        ziel: church.web.leitungsdashboard,
+        extern: true,
+      },
       { label: 'Teambereich in ChurchTools', ziel: church.web.churchtools, extern: true },
       { label: 'Interner Bereich der Website', ziel: church.web.intern, extern: true },
       { label: 'PULS Leiterschaftsnetzwerk', ziel: church.web.puls, extern: true },
