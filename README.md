@@ -83,7 +83,8 @@ Gruppen, Kacheln) und [`src/data/church.ts`](src/data/church.ts) (Adressen).
 Eine Kachel ohne Ziel gilt als geplant: Sie wird angezeigt, aber nicht
 verlinkt - so steht das Wiki da, bis seine Adresse in `church.web.wiki` steht.
 
-Die untere Navigation bleibt: Start, Bibel, Predigten, Events, Ich.
+Die untere Navigation ist auf zwei Punkte reduziert: **Start** und **Ich**.
+Alles Weitere fuehrt ueber die Startseite.
 
 ### Leitungsdashboard
 
@@ -172,7 +173,7 @@ Die Vorlage nennt vier rote Linien. Sie sind hier als Verhalten umgesetzt:
   Suizid, Missbrauch, Gewalt, Selbstverletzung und Kindeswohl. Statt einer Antwort
   erscheint eine Weiterleitung an Telefonseelsorge, Notruf und das Seelsorgeteam.
 - **Kein Glaubens-Scoring** - es existiert keine Datenstruktur, die Personen bewertet.
-  Der Streak-Zähler zählt gelesene Impulse, nicht Frömmigkeit, und ist nur lokal sichtbar.
+  Es gibt keine Datenstruktur, die Personen bewertet.
 - **Keine verdeckte Profilbildung** - Personalisierung ist im Profil abschaltbar
   (`aiConsent`), alle persönlichen Daten liegen im Prototyp ausschließlich lokal und
   lassen sich mit einem Klick löschen.
@@ -200,16 +201,18 @@ von dort jederzeit neu einlesen.
 
 ```
 src/
-  data/          Demo-Inhalte (Predigten inkl. Transkript, Impulse, Events, Gruppen, Gebete)
-                 sowie Tagesverse und Lesepläne aus dem Schwesterprojekt
-  lib/bible.ts   Bibeltext laden, Kontextartikel, Volltextsuche
-  lib/reference.ts  Stellenangaben erkennen ("Roem 8,38-39")
+  data/          Inhalte: Predigten inkl. Transkript, Events, Gruppen, Teams,
+                 Gebete, Stammdaten der Gemeinde, Linkstruktur der Startseite
   lib/search.ts  "Frag die Predigten" - Ranking, Zitate, Krisen-Erkennung
+  lib/teamRepo.ts  Teamdaten: Geraet oder ChurchTools
+  lib/idb.ts     Dateien der Teams in IndexedDB
   lib/storage.ts localStorage-Persistenz
-  state.tsx      App-Zustand: Favoriten, Notizen, Fortschritt, Anmeldungen, Profil
-  components/    Navigation, Predigtkarte, Player, Icons
-  routes/        Start, Predigten, Frag, Impuls, Events, Gruppen, Neu hier, Gebet, Profil, Datenschutz
-public/          Manifest, Icons, Service Worker
+  state.tsx      App-Zustand: Favoriten, Notizen, Anmeldungen, Teams, Profil
+  components/    Navigation, Kalender, Kanalsymbole, Predigtkarte, Player, Icons
+  routes/        Start, Predigten, Frag, Events, Gruppen, Neu hier, Gebet,
+                 Teams, Mitmachen, Kontakt, Profil, Datenschutz
+public/          Manifest, Logo, Service Worker
+server/          ChurchTools-Anbindung (Dienst, Zuordnung, Pruefskript)
 ```
 
 **Der Prototyp hat bewusst kein Backend.** Alle Inhalte stehen als typisierte
