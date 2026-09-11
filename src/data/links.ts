@@ -28,13 +28,6 @@ export type Zeile = {
 
 export type Gruppe = { titel: string; zeilen: Zeile[] }
 
-export type Kachel = {
-  kuerzel: string
-  label: string
-  status: string
-  ziel?: string
-}
-
 /** Hauptliste je Rolle - der Weg, den diese Rolle am haeufigsten geht. */
 export const jetzt: Record<Rolle, Gruppe> = {
   gast: {
@@ -52,7 +45,6 @@ export const jetzt: Record<Rolle, Gruppe> = {
       { kuerzel: 'TM', label: 'Meine Teams', hinweis: 'Chat, Dokumente, Dienste', ziel: '/teams' },
       { kuerzel: 'ICH', label: 'Mein Bereich', hinweis: 'Favoriten, Anmeldungen, Notizen', ziel: '/profil' },
       { kuerzel: 'MM', label: 'Mitmachen', ziel: '/mitmachen' },
-      { kuerzel: 'BI', label: 'Bibel lesen', hinweis: 'Text, Karte, Lexikon, Lesepläne', ziel: '/bibel' },
     ],
   },
   staff: {
@@ -84,23 +76,12 @@ export const jetzt: Record<Rolle, Gruppe> = {
   },
 }
 
-export const kanaele: Kachel[] = [
-  { kuerzel: 'WEB', label: 'Website', status: 'fcg-frankfurt.de', ziel: church.web.home },
-  { kuerzel: 'CT', label: 'ChurchTools', status: 'Anmeldung', ziel: church.web.churchtools },
-  { kuerzel: 'YT', label: 'YouTube', status: 'Livestream', ziel: church.social.youtube },
-  { kuerzel: 'IG', label: 'Instagram', status: 'täglich', ziel: church.social.instagram },
-  { kuerzel: 'SP', label: 'Spotify', status: 'Predigten', ziel: church.social.spotify },
-  { kuerzel: 'WIKI', label: 'Wiki', status: 'in Vorbereitung', ziel: church.web.wiki || undefined },
-]
-
 export const mehr: Record<Rolle, Gruppe[]> = {
   gast: [
     {
       titel: 'Täglich',
       zeilen: [
-        { label: 'Vers des Tages', hinweis: 'Ein Vers mit Einordnung', ziel: '/impuls' },
-        { label: 'Bibel lesen', hinweis: 'Text, Karte, Lexikon', ziel: '/bibel' },
-        { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
+            { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
       ],
     },
     {
@@ -109,6 +90,7 @@ export const mehr: Record<Rolle, Gruppe[]> = {
         { label: 'Kurse und Seminare', ziel: church.web.kurse, extern: true },
         { label: 'Taufe', ziel: church.web.taufe, extern: true },
         { label: 'Alle Termine', ziel: '/events' },
+        { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
       ],
     },
     {
@@ -116,8 +98,7 @@ export const mehr: Record<Rolle, Gruppe[]> = {
       zeilen: [
         { label: 'Newsletter abonnieren', ziel: church.web.newsletter, extern: true },
         { label: 'Spenden', ziel: church.web.spende, extern: true },
-        { label: 'Apple Podcasts', ziel: church.social.applePodcasts, extern: true },
-        { label: 'Facebook', ziel: church.social.facebook, extern: true },
+          { label: 'Facebook', ziel: church.social.facebook, extern: true },
       ],
     },
   ],
@@ -125,15 +106,14 @@ export const mehr: Record<Rolle, Gruppe[]> = {
     {
       titel: 'Täglich',
       zeilen: [
-        { label: 'Vers des Tages', hinweis: 'Ein Vers mit Einordnung', ziel: '/impuls' },
-        { label: 'Lesepläne', ziel: '/bibel/plaene' },
-        { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
+            { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
       ],
     },
     {
       titel: 'Gemeinde',
       zeilen: [
         { label: 'Meine Connectgruppe', ziel: '/gruppen' },
+        { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
         { label: 'Unsere Gemeinschaften', ziel: church.web.gemeinschaften, extern: true },
         { label: 'Alle Termine und Anmeldungen', ziel: '/events' },
         { label: 'Kurse und Seminare', ziel: church.web.kurse, extern: true },
@@ -144,8 +124,7 @@ export const mehr: Record<Rolle, Gruppe[]> = {
       zeilen: [
         { label: 'Newsletter abonnieren', ziel: church.web.newsletter, extern: true },
         { label: 'Spenden', ziel: church.web.spende, extern: true },
-        { label: 'Apple Podcasts', ziel: church.social.applePodcasts, extern: true },
-      ],
+        ],
     },
   ],
   staff: [
@@ -174,9 +153,7 @@ export const mehr: Record<Rolle, Gruppe[]> = {
       titel: 'Für mich',
       zeilen: [
         { label: 'Mein Bereich', hinweis: 'Favoriten, Anmeldungen, Notizen', ziel: '/profil' },
-        { label: 'Bibel lesen', ziel: '/bibel' },
-        { label: 'Vers des Tages', ziel: '/impuls' },
-      ],
+          ],
     },
   ],
 }

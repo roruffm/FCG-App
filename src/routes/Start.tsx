@@ -2,11 +2,12 @@ import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { fcgLogo } from '../data/logo'
 import { church } from '../data/church'
-import { jetzt, kanaele, mehr, rollen } from '../data/links'
-import type { Kachel, Rolle, Zeile } from '../data/links'
+import { jetzt, mehr, rollen } from '../data/links'
+import type { Rolle, Zeile } from '../data/links'
 import { events } from '../data/events'
 import { teams } from '../data/teams'
 import { KalenderWidget } from '../components/KalenderWidget'
+import { KanalSymbole } from '../components/KanalSymbole'
 import { formatTime, relativeDay } from '../lib/format'
 import { usePersistentState } from '../lib/storage'
 
@@ -88,11 +89,7 @@ export function Start() {
 
       <section className="start__block">
         <h2 className="start__blocktitel">Kanäle</h2>
-        <div className="start__kacheln">
-          {kanaele.map((kachel) => (
-            <KachelFeld key={kachel.label} kachel={kachel} />
-          ))}
-        </div>
+        <KanalSymbole />
       </section>
 
       <button
@@ -244,20 +241,3 @@ function ZeilenFeld({ zeile }: { zeile: Zeile }) {
   )
 }
 
-function KachelFeld({ kachel }: { kachel: Kachel }) {
-  const inhalt = (
-    <>
-      <span className="start__kachel-kuerzel">{kachel.kuerzel}</span>
-      <span className="start__kachel-label">{kachel.label}</span>
-      <span className="tiny muted">{kachel.status}</span>
-    </>
-  )
-
-  if (!kachel.ziel) return <div className="start__kachel start__kachel--geplant">{inhalt}</div>
-
-  return (
-    <a className="start__kachel" href={kachel.ziel} target="_blank" rel="noreferrer noopener">
-      {inhalt}
-    </a>
-  )
-}

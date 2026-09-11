@@ -5,7 +5,6 @@ import { events } from '../data/events'
 import { useApp } from '../state'
 import { SermonCard } from '../components/SermonCard'
 import { formatDate } from '../lib/format'
-import { biblePath } from '../lib/bible'
 import { ExternalLink } from '../components/ExternalLink'
 import { church } from '../data/church'
 
@@ -18,9 +17,6 @@ export function Profile() {
     favorites,
     listenLater,
     registrations,
-    savedVerses,
-    doneDevotions,
-    streak,
     notes,
     myTeams,
   } = useApp()
@@ -28,7 +24,6 @@ export function Profile() {
   const favoriteSermons = sermons.filter((s) => favorites.has(s.id))
   const laterSermons = sermons.filter((s) => listenLater.has(s.id))
   const myEvents = events.filter((e) => registrations.has(e.id)).sort((a, b) => a.start.localeCompare(b.start))
-  const verses = Object.values(savedVerses).sort((a, b) => b.savedAt.localeCompare(a.savedAt))
   const noteCount = Object.values(notes).filter((n) => n.trim()).length
 
   return (
@@ -36,14 +31,6 @@ export function Profile() {
       <TopBar title="Mein Bereich" subtitle="Favoriten, Anmeldungen, Einstellungen" />
       <div className="page">
         <section className="grid-2">
-          <div className="stat">
-            <b>{streak}</b>
-            <span className="tiny muted">Tage Impuls-Streak</span>
-          </div>
-          <div className="stat">
-            <b>{doneDevotions.ids.length}</b>
-            <span className="tiny muted">Impulse gelesen</span>
-          </div>
           <div className="stat">
             <b>{favoriteSermons.length}</b>
             <span className="tiny muted">Favoriten</span>
@@ -88,28 +75,6 @@ export function Profile() {
             <div className="stack">
               {favoriteSermons.map((s) => (
                 <SermonCard key={s.id} sermon={s} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {verses.length > 0 && (
-          <section className="section">
-            <h2>Gespeicherte Verse</h2>
-            <div className="card">
-              {verses.map((v) => (
-                <Link
-                  key={`${v.book}.${v.chapter}.${v.verse}`}
-                  className="list-item"
-                  to={biblePath(v.book, v.chapter, v.verse)}
-                >
-                  <div style={{ minWidth: 0 }}>
-                    <b className="small">
-                      {v.bookName} {v.chapter},{v.verse}
-                    </b>
-                    <div className="tiny muted">„{v.text}“</div>
-                  </div>
-                </Link>
               ))}
             </div>
           </section>

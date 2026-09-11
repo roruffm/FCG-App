@@ -101,8 +101,6 @@ mit dem Hinweis, dass eine Anmeldung noetig ist. Die Adresse steht in
 | **Predigtbibliothek** | Archiv mit Volltextsuche, Filter nach Thema, Prediger, Serie und Bibelbuch |
 | **Player** | Kapitelmarken, 15s/30s-Sprünge, 1×/1,5×/2×, gespeicherter Hörfortschritt, „weiterhören“ auf der Startseite |
 | **Kurzfassung** | Drei Kernaussagen je Predigt, sichtbar als KI-Entwurf gekennzeichnet |
-| **Täglicher Bibelimpuls** | Vers des Tages, drei Tiefen (1 Minute / 5 Minuten / Vertiefung), Reflexionsfrage, Gebet, Streak-Zähler |
-| **Themenpfade** | Identität, Gebet & Klage, Vertrauen im Sturm, Glaube im Alltag - mit Fortschritt |
 | **Events** | Gemeindekalender nach Kategorie, Detailseite, Anmeldung mit Platzzähler |
 | **New-here-Modus** | Ablauf, Parken, Kinderprogramm, Kollekte, FAQ, nächste Schritte |
 | **Favoriten & später hören** | Persönlicher Bereich mit Anmeldungen, Notizen, gespeicherten Versen |
@@ -186,63 +184,17 @@ Die Seite `/datenschutz` erklärt das für Nutzer in verständlicher Sprache.
 
 ---
 
-## Bibelteil - uebernommen aus `roruffm/bible-study`
+## Was nicht mehr drin ist
 
-Der komplette Bibelteil stammt aus dem Schwesterprojekt **„Entgegen - Bibel lesen
-und verstehen"**. Uebernommen wurden Datensaetze und Logik, nicht die Oberflaeche:
-Die Bedienung ist neu gebaut und folgt dem Design der FCG.
+Der Bibelteil - Volltext der Lutherbibel 1912, 723 Kontextartikel, Karte,
+Lexikon, Lesepläne - und der Vers des Tages wurden auf Wunsch wieder
+**entfernt**. Mit ihnen sind rund 9 MB Daten aus `public/` verschwunden; der
+Produktionsbuild ist von 9,1 MB auf 440 kB geschrumpft.
 
-| Uebernommen | Woher | Wo in dieser App |
-|---|---|---|
-| Bibeltext, 66 Buecher | `public/bibel/luther1912/` | `public/bibel/luther1912/`, je Buch nachgeladen |
-| Referenz-Parser („Roem 8,38-39") | `src/lib/reference.ts` | `src/lib/reference.ts`, unveraendert bis auf Importpfade |
-| 723 Kontextartikel | `src/content/commentary.ts` (4,9 MB TypeScript) | nach Buch aufgeteilt in `public/kontext/*.json` |
-| 50 kuratierte Tagesverse | `src/content/verseOfDay.ts` | `src/data/dailyVerses.ts` |
-| 17 Lesepläne | `src/content/readingPlans.ts` | `src/data/readingPlans.ts` |
-
-**Neu in dieser App:**
-
-- **Tab „Bibel"** mit Buchuebersicht, Stellen-Eingabe und Volltextsuche
-- **Leseansicht** mit anklickbaren Versen: speichern, teilen, Kontext oeffnen;
-  ein Punkt am Vers zeigt an, wo ein Artikel beginnt
-- **Kontext & Auslegung** je Kapitel - historische Einordnung, Deutungen mit
-  Angabe der Tradition, Querverweise, Woerter des Urtextes
-- **Lesepläne** mit Fortschritt pro Geraet
-- **Bibelimpuls** zieht jetzt den echten Verstext; „5 Minuten" und „Vertiefung"
-  blenden den Kontextartikel ein, wo einer vorliegt
-- **Bibelstellen sind ueberall verlinkt** - Predigt-Kernvers, Themenpfade, Querverweise
-
-**Textgrundlage:** Lutherbibel 1912, gemeinfrei (Rohdaten: wldeh/bible-api). Moderne
-Uebersetzungen wie *Hoffnung fuer Alle* sind urheberrechtlich geschuetzt und
-brauchen eine Lizenz von Biblica/Fontis oder eine Anbindung ueber API.Bible; der
-Datensatz laesst sich dann unter `public/bibel/<id>/` ergaenzen, ohne die
-Oberflaeche zu aendern. Elberfelder 1905 und KJV liegen im Schwesterprojekt
-ebenfalls gemeinfrei vor und koennen als Vergleichstexte nachgezogen werden.
-
-### Karte und Lexikon
-
-| Uebernommen | Woher | Wo in dieser App |
-|---|---|---|
-| 124 Lexikoneintraege | `src/content/lexicon.ts`, `realia.ts` | `src/data/lexicon.ts`, Seite `/bibel/lexikon` |
-| Ortsdatenbank mit Koordinaten | `src/content/places.ts` | `src/data/places.ts` |
-| Reisewege (Abraham, Auszug, Missionsreisen …) | `src/content/journeys.ts` | `src/data/journeys.ts` |
-| Kartengrundlage (Natural Earth, gemeinfrei) | `public/karten/regionen.json` | unveraendert |
-| Beschriftungs-Algorithmus | `src/lib/mapLabels.ts` | unveraendert |
-
-Die Kartendarstellung ist neu und fuers Telefon gebaut: ein Ausschnitt zur Zeit,
-Zoom und Verschieben, Beschriftung nur dort, wo Platz ist - wobei Orte vom Rang
-eines Jerusalem ihren Namen immer bekommen. Jeder Punkt fuehrt zu den Stellen,
-an denen der Ort vorkommt, und weiter ins Lexikon. Im Leseansicht-Blatt zeigt
-jeder ausgewaehlte Vers, was sich darin nachschlagen laesst.
-
-Karte und Lexikon werden als eigene Buendel nachgeladen (`React.lazy`), damit
-der erste Seitenaufbau klein bleibt.
-
-**Noch nicht uebernommen** (im Schwesterprojekt vorhanden): Zeitleiste,
-Evangelien-Synopse, Konkordanz, Auswendiglern-Bereich und der Verse-Chat mit
-eigenem Server.
-
----
+Wer das zurueckholen will: Alles liegt im Git-Verlauf (letzter Stand mit
+Bibelteil: Commit `7524b33`). Der Bestand selbst kommt aus dem Schwesterprojekt
+[roruffm/bible-study](https://github.com/roruffm/bible-study) und laesst sich
+von dort jederzeit neu einlesen.
 
 ## Aufbau
 

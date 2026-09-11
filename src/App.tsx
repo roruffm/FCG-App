@@ -1,5 +1,5 @@
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { Suspense, lazy, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AppProvider, useApp } from './state'
 import { BrandSheet } from './components/BrandSheet'
 import { BottomNav } from './components/BottomNav'
@@ -7,11 +7,6 @@ import { Start } from './routes/Start'
 import { Sermons } from './routes/Sermons'
 import { SermonDetail } from './routes/SermonDetail'
 import { Ask } from './routes/Ask'
-import { DevotionPage } from './routes/DevotionPage'
-import { Bible } from './routes/Bible'
-import { BibleReader } from './routes/BibleReader'
-import { ReadingPlans } from './routes/ReadingPlans'
-import { ReadingPlan } from './routes/ReadingPlan'
 import { Events } from './routes/Events'
 import { EventDetail } from './routes/EventDetail'
 import { Groups } from './routes/Groups'
@@ -24,10 +19,6 @@ import { Serve } from './routes/Serve'
 import { Teams } from './routes/Teams'
 import { TeamSpace } from './routes/TeamSpace'
 
-// Karte und Lexikon bringen viel Datenmasse mit - sie werden erst beim
-// Aufruf geladen, damit der erste Seitenaufbau klein bleibt.
-const MapPage = lazy(() => import('./routes/MapPage'))
-const Lexicon = lazy(() => import('./routes/Lexicon'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -62,27 +53,6 @@ function Shell() {
         <Route path="/predigten" element={<Sermons />} />
         <Route path="/predigten/:id" element={<SermonDetail />} />
         <Route path="/frag" element={<Ask />} />
-        <Route path="/impuls" element={<DevotionPage />} />
-        <Route path="/bibel" element={<Bible />} />
-        <Route path="/bibel/plaene" element={<ReadingPlans />} />
-        <Route
-          path="/bibel/karte"
-          element={
-            <Suspense fallback={<div className="page"><div className="card small muted">Karte wird geladen …</div></div>}>
-              <MapPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/bibel/lexikon"
-          element={
-            <Suspense fallback={<div className="page"><div className="card small muted">Lexikon wird geladen …</div></div>}>
-              <Lexicon />
-            </Suspense>
-          }
-        />
-        <Route path="/bibel/plan/:id" element={<ReadingPlan />} />
-        <Route path="/bibel/:book/:chapter" element={<BibleReader />} />
         <Route path="/events" element={<Events />} />
         <Route path="/events/:id" element={<EventDetail />} />
         <Route path="/gruppen" element={<Groups />} />

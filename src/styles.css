@@ -664,3 +664,31 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .kalender__termin:last-child { border-bottom: 0; }
 
+
+/* ---------- Kanäle als farbige Symbole ---------- */
+.kanaele {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 6px;
+}
+.kanal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  color: var(--text);
+  min-width: 0;
+}
+.kanal__kreis {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow);
+}
+.kanal__kreis svg { width: 24px; height: 24px; }
+.kanal__label { font-size: 0.7rem; font-weight: 600; line-height: 1.2; }
+.kanal__status { font-size: 0.62rem; color: var(--text-muted); line-height: 1.1; }
+.kanal--geplant { opacity: 0.6; }
