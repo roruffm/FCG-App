@@ -11,6 +11,10 @@ name: Webseite veröffentlichen
 # Ein Basispfad muss nicht gesetzt werden: Vite baut mit `base: './'`, alle
 # Verweise sind relativ, und der Router arbeitet mit Hash-Routen. Die Seite
 # läuft dadurch sowohl unter /FCG-App/ als auch unter einer eigenen Domain.
+#
+# Die 404-Seite erzeugt `npm run build` selbst (scripts/build-404.mjs). Eine
+# blosse Kopie von index.html war hier falsch: deren relative Skriptpfade
+# zeigen unter tieferen Adressen ins Leere und die Seite blieb weiss.
 
 on:
   push:
@@ -43,13 +47,11 @@ jobs:
       - run: npm ci
 
       - name: Typen prüfen und bauen
+        # APP_BASE sagt der 404-Seite, wo die App liegt - siehe
+        # scripts/build-404.mjs. Bei eigener Domain entfaellt die Zeile.
         run: npm run build
-
-      # GitHub Pages liefert unbekannte Pfade nicht an die App aus. Die App
-      # nutzt Hash-Routen, ein direkt aufgerufener Pfad ohne Raute landet
-      # trotzdem hier - und von dort in der App.
-      - name: Fallback-Seite ablegen
-        run: cp dist/index.html dist/404.html
+        env:
+          APP_BASE: /FCG-App/
 
       - uses: actions/configure-pages@v5
 

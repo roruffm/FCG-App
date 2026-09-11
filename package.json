@@ -6,7 +6,7 @@
   "description": "FCG Gemeinde-App - Gemeinde verbinden. Glauben vertiefen. Alltag erreichen.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/build-sw.mjs",
+    "build": "tsc -b && vite build && node scripts/build-sw.mjs && node scripts/build-404.mjs",
     "preview": "vite preview",
     "lint": "tsc -b --noEmit false --emitDeclarationOnly false"
   },

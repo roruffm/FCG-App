@@ -16,6 +16,13 @@ const SHELL = `fcg-shell-${VERSION}`
 const DATA = 'fcg-data-v1'
 const PRECACHE = __PRECACHE__
 
+/**
+ * Wie lange ein Seitenaufruf auf das Netz wartet, bevor die gespeicherte
+ * Huelle ausgeliefert wird. Kurz genug, dass niemand auf Weiss schaut; lang
+ * genug, dass ein normales Mobilnetz noch die frische Fassung liefert.
+ */
+const NAV_TIMEOUT = 3000
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(SHELL).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
@@ -48,17 +55,51 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url)
   if (req.method !== 'GET' || url.origin !== self.location.origin) return
 
-  // Seitenaufrufe: immer zuerst das Netz, und zwar am Browser-Cache vorbei.
-  // Nur so wirkt eine neue Veroeffentlichung sofort.
+  // Seitenaufrufe: zuerst das Netz, am Browser-Cache vorbei - nur so wirkt eine
+  // neue Veroeffentlichung sofort. Aber nicht unbegrenzt lange: haengt die
+  // Verbindung, bekommt der Nutzer sonst eine weisse Seite, bis das Netz
+  // irgendwann antwortet. Nach kurzer Wartezeit liefern wir die gespeicherte
+  // Huelle aus; die neue Fassung uebernimmt dann beim naechsten Aufruf.
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req, { cache: 'no-store' })
-        .then((res) => {
-          const copy = res.clone()
-          caches.open(SHELL).then((c) => c.put('index', copy))
-          return res
-        })
-        .catch(() => caches.open(SHELL).then((c) => c.match('index')).then((hit) => hit ?? Response.error()))
+      (async () => {
+        const cache = await caches.open(SHELL)
+
+        const ausCache = async () => {
+          // Erst die zuletzt gesehene Seite, sonst die beim Installieren
+          // vorgeladene Huelle. Frueher wurde nur 'index' gesucht - das gibt
+          // es aber erst nach einem geglueckten Seitenaufruf, und bis dahin
+          // blieb die Seite leer.
+          return (await cache.match('index')) ?? (await cache.match('./')) ?? (await cache.match(new URL('./', self.location).href))
+        }
+
+        let abbruch
+        const netz = fetch(req, { cache: 'no-store', signal: (abbruch = new AbortController()).signal })
+
+        const wartezeit = new Promise((loese) => setTimeout(() => loese('zulangsam'), NAV_TIMEOUT))
+
+        try {
+          const ergebnis = await Promise.race([netz, wartezeit])
+
+          if (ergebnis === 'zulangsam') {
+            const hit = await ausCache()
+            if (hit) {
+              // Das Netz weiterlaufen lassen und den Stand auffrischen -
+              // abbrechen wuerde die naechste Seite wieder alt aussehen lassen.
+              netz.then((res) => res.ok && cache.put('index', res.clone())).catch(() => {})
+              return hit
+            }
+            return await netz
+          }
+
+          if (ergebnis.ok) cache.put('index', ergebnis.clone())
+          return ergebnis
+        } catch (fehler) {
+          abbruch.abort()
+          const hit = await ausCache()
+          return hit ?? Response.error()
+        }
+      })()
     )
     return
   }

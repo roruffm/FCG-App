@@ -53,6 +53,11 @@ mit Hash-Routen (`/#/predigten/p-2026-08-30`). Die Seite läuft dadurch unverän
 `/FCG-App/`, unter einer eigenen Domain und auch direkt vom Dateisystem.
 Für eine eigene Domain genügt eine Datei `public/CNAME` mit der Domain darin.
 
+Eine Ausnahme braucht doch eine Angabe: die 404-Seite. Sie muss wissen, wo die
+App liegt, um einen tiefen Pfad in eine Hash-Route umzuschreiben - das ist eine
+Eigenschaft der Veröffentlichung und nicht erratbar. Der Workflow setzt dafür
+`APP_BASE: /FCG-App/`; ohne Angabe gilt `/`, was für eine eigene Domain stimmt.
+
 Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android)
 öffnen - die Oberfläche ist mobil gedacht.
 
@@ -378,3 +383,50 @@ der Name, weil Teamchat und Gebetsanliegen ihn als Autor verwenden.
 Mit aufgeraeumt: die CSS-Variable fuer die Leistenhoehe samt der drei Stellen,
 die Platz fuer sie freihielten, und `.verse-sheet` - ein Rest des laengst
 entfernten Bibelteils.
+
+## Behobener Fehler: leere Unterseite
+
+Zwei Ursachen, beide fuehren zu einer weissen Seite.
+
+### 1. Tiefe Adressen liefen ins Leere
+
+GitHub Pages beantwortet jeden unbekannten Pfad mit `404.html`. Die war bisher
+eine **Kopie von index.html** - und darin stehen die Skriptverweise relativ:
+
+```html
+<script src="./assets/index-abc123.js">
+```
+
+Unter `/FCG-App/wiki/kirchendeutsch` loest der Browser das zu
+`/FCG-App/wiki/assets/index-abc123.js` auf. Die Datei gibt es dort nicht, das
+Skript laedt nie, `<div id="root">` bleibt leer. Nachgestellt: ab der zweiten
+Pfadebene drei 404er und eine leere Seite.
+
+`404.html` ist jetzt keine Kopie mehr, sondern erzeugt (`scripts/build-404.mjs`)
+und laedt gar keine eigenen Dateien. Sie schreibt den Pfad um:
+
+```
+/FCG-App/wiki/kirchendeutsch  ->  /FCG-App/#/wiki/kirchendeutsch
+```
+
+Damit sind tiefe Adressen nicht nur nicht mehr leer, sie landen auch am
+richtigen Ort statt auf der Startseite. Der `cp`-Schritt im Workflow ist
+entfallen - er haette die erzeugte Datei wieder ueberschrieben.
+
+### 2. Seitenaufruf ohne Wartezeit
+
+Der Service Worker holte Seitenaufrufe **immer zuerst aus dem Netz**, damit eine
+neue Veroeffentlichung sofort wirkt - aber ohne Abbruch nach oben. Haengt die
+Verbindung, schaut der Nutzer so lange auf Weiss, wie das Netz braucht. Ein
+Aktualisieren trifft dann oft eine schnellere Verbindung und wirkt wie die
+Loesung. Dazu kam: der Rueckfall suchte nur den Schluessel `index`, den es erst
+nach einem geglueckten Seitenaufruf gibt - die vorgeladene Huelle wurde nie
+benutzt.
+
+Jetzt wartet ein Seitenaufruf **drei Sekunden** auf das Netz und liefert danach
+die gespeicherte Huelle; die Antwort aus dem Netz laeuft weiter und frischt den
+Stand fuer das naechste Mal auf. Der Rueckfall nimmt die vorgeladene Huelle,
+wenn es noch keinen gespeicherten Seitenstand gibt.
+
+Nachgestellt mit einem Server, der 15 Sekunden braucht: vorher 15 Sekunden
+weiss, jetzt nach **3,1 Sekunden** sichtbar.
