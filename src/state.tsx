@@ -7,20 +7,20 @@ import type { Brand } from './lib/branding'
 import type { PrayerRequest } from './data/types'
 
 
+/**
+ * Nur noch der Anzeigename.
+ *
+ * Interessen, Push-Themen, Einsteiger-Schalter und KI-Einwilligung sassen im
+ * Bereich "Ich"; mit ihm sind sie entfallen. Sie hier stehen zu lassen haette
+ * Zustand ergeben, den nichts mehr setzt und nichts mehr liest. Der Name
+ * bleibt, weil Teamchat und Gebetsanliegen ihn als Autor verwenden.
+ */
 export type Profile = {
   name: string
-  isNewHere: boolean
-  interests: string[]
-  pushTopics: string[]
-  aiConsent: boolean
 }
 
 const defaultProfile: Profile = {
   name: '',
-  isNewHere: false,
-  interests: [],
-  pushTopics: ['Gottesdienst', 'Jugend'],
-  aiConsent: true,
 }
 
 type AppState = {

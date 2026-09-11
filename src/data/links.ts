@@ -44,7 +44,6 @@ export const jetzt: Record<Rolle, Gruppe> = {
     titel: 'Dein Bereich',
     zeilen: [
       { kuerzel: 'TM', label: 'Meine Teams', hinweis: 'Chat, Dokumente, Dienste', ziel: '/teams' },
-      { kuerzel: 'ICH', label: 'Mein Bereich', hinweis: 'Favoriten, Anmeldungen, Notizen', ziel: '/profil' },
       { kuerzel: 'MM', label: 'Mitmachen', ziel: '/mitmachen' },
       { kuerzel: 'WI', label: 'Wiki', hinweis: 'Mitgliedschaft, Taufe, Seelsorge, Mitarbeit', ziel: '/wiki' },
     ],
@@ -151,12 +150,6 @@ export const mehr: Record<Rolle, Gruppe[]> = {
         { label: 'Connectgruppen', ziel: '/gruppen' },
         { label: 'Unsere Gemeinschaften', ziel: church.web.gemeinschaften, extern: true },
       ],
-    },
-    {
-      titel: 'Für mich',
-      zeilen: [
-        { label: 'Mein Bereich', hinweis: 'Favoriten, Anmeldungen, Notizen', ziel: '/profil' },
-          ],
     },
   ],
 }

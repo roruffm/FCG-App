@@ -2,7 +2,6 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-d
 import { useEffect, useState } from 'react'
 import { AppProvider, useApp } from './state'
 import { BrandSheet } from './components/BrandSheet'
-import { BottomNav } from './components/BottomNav'
 import { Start } from './routes/Start'
 import { Sermons } from './routes/Sermons'
 import { SermonDetail } from './routes/SermonDetail'
@@ -12,7 +11,6 @@ import { EventDetail } from './routes/EventDetail'
 import { Groups } from './routes/Groups'
 import { NewHere } from './routes/NewHere'
 import { Prayer } from './routes/Prayer'
-import { Profile } from './routes/Profile'
 import { Privacy } from './routes/Privacy'
 import { Contact } from './routes/Contact'
 import { Serve } from './routes/Serve'
@@ -60,7 +58,6 @@ function Shell() {
         <Route path="/gruppen" element={<Groups />} />
         <Route path="/neu-hier" element={<NewHere />} />
         <Route path="/gebet" element={<Prayer />} />
-        <Route path="/profil" element={<Profile />} />
         <Route path="/datenschutz" element={<Privacy />} />
         <Route path="/kontakt" element={<Contact />} />
         <Route path="/mitmachen" element={<Serve />} />
@@ -70,7 +67,6 @@ function Shell() {
         <Route path="/wiki/:slug" element={<WikiArtikelSeite />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <BottomNav />
       {brandOpen && <BrandSheet brand={brand} setBrand={setBrand} onClose={() => setBrandOpen(false)} />}
     </div>
   )

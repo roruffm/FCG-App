@@ -84,8 +84,8 @@ Gruppen, Kacheln) und [`src/data/church.ts`](src/data/church.ts) (Adressen).
 Eine Kachel ohne Ziel gilt als geplant: Sie wird angezeigt, aber nicht
 verlinkt - so steht das Wiki da, bis seine Adresse in `church.web.wiki` steht.
 
-Die untere Navigation ist auf zwei Punkte reduziert: **Start** und **Ich**.
-Alles Weitere fuehrt ueber die Startseite.
+Es gibt **keine untere Navigation**. Die Startseite ist der einzige Einstieg;
+alles Weitere fuehrt ueber sie und ueber die Zurueck-Taste der Kopfzeile.
 
 ### Leitungsdashboard
 
@@ -176,7 +176,7 @@ Die Vorlage nennt vier rote Linien. Sie sind hier als Verhalten umgesetzt:
   erscheint eine Weiterleitung an Telefonseelsorge, Notruf und das Seelsorgeteam.
 - **Kein Glaubens-Scoring** - es existiert keine Datenstruktur, die Personen bewertet.
   Es gibt keine Datenstruktur, die Personen bewertet.
-- **Keine verdeckte Profilbildung** - Personalisierung ist im Profil abschaltbar
+- **Keine verdeckte Profilbildung** - die App wertet nichts ueber Personen aus
   (`aiConsent`), alle persönlichen Daten liegen im Prototyp ausschließlich lokal und
   lassen sich mit einem Klick löschen.
 - **Menschliche Eskalation** - sensible Wege führen zu Kontaktadressen, nicht zu Automatik.
@@ -209,11 +209,11 @@ src/
   lib/teamRepo.ts  Teamdaten: Geraet oder ChurchTools
   lib/idb.ts     Dateien der Teams in IndexedDB
   lib/storage.ts localStorage-Persistenz
-  state.tsx      App-Zustand: Favoriten, Notizen, Anmeldungen, Teams, Profil
-  components/    Navigation, Kalender, Kanalsymbole, Predigtkarte, Player, Icons
+  state.tsx      App-Zustand: Favoriten, Notizen, Anmeldungen, Teams, Anzeigename
+  components/    Rollenwahl, Kalender, Kanalsymbole, Predigtkarte, Player, Icons
   data/wiki.ts   Wiki-Artikel je Rolle, mit Status geprueft/entwurf
   routes/        Start, Predigten, Frag, Events, Gruppen, Neu hier, Gebet,
-                 Teams, Mitmachen, Kontakt, Profil, Datenschutz, Wiki
+                 Teams, Mitmachen, Kontakt, Datenschutz, Wiki
 public/          Manifest, Logo, Service Worker
 server/          ChurchTools-Anbindung (Dienst, Zuordnung, Pruefskript)
 ```
@@ -263,7 +263,7 @@ Uebernommen aus dem Stylesheet von fcg-frankfurt.de (als MHTML-Archiv geliefert)
 
 | Rolle | Wert | Verwendung in der App |
 |---|---|---|
-| Petrol | `#006269` | Hausfarbe: Hero, Buttons, aktive Navigation |
+| Petrol | `#006269` | Hausfarbe: Hero, Buttons, aktive Rollenwahl |
 | Dunkelpetrol | `#00444B` | Prototyp-Band, dunkle Flaechen, Verlaeufe |
 | Mint | `#D8E3E4` | heller Begleitton (als `--accent-soft` aus der Hausfarbe gemischt) |
 | Schwarz | `#000000` | Bildmarke und der Kasten-Stil der Website (`.tagbox`) |
@@ -347,3 +347,34 @@ Komponente, sah die andere weiter ihren alten Wert, bis die Seite neu lud. Die
 Freischaltung ist zuerst genau daran gescheitert - der Umschalter schaltete
 frei, die Rollenpruefung sah es nicht und setzte sofort auf Gast zurueck. Jetzt
 teilen sich alle Aufrufstellen desselben Schluessels einen Wert.
+
+## Kein Bereich "Ich", keine untere Leiste
+
+Der persoenliche Bereich ist entfallen, und damit die untere Navigationsleiste:
+sie haette nur noch auf die Startseite gezeigt. Die Startseite ist jetzt der
+einzige Einstieg. Alte Adressen wie `#/profil` landen ueber die Sammelroute
+dort, statt ins Leere zu laufen.
+
+Was der Bereich gezeigt hat, war groesstenteils eine Zusammenfassung: Favoriten,
+spaeter hoeren, Anmeldungen und Notizen gibt es weiterhin, gesetzt werden sie
+dort, wo sie entstehen - auf der Predigt- und der Terminseite.
+
+Zwei Dinge gab es aber nur dort, und die sind mitgezogen statt weggefallen:
+
+- **"Meine Daten auf diesem Geraet loeschen"** steht jetzt auf der
+  Datenschutzseite (`#/datenschutz`), wo ohnehin erklaert wird, was lokal
+  gespeichert wird. Die einzige Loeschmoeglichkeit der App verschwinden zu
+  lassen waere ein Rueckschritt gewesen, den niemand bestellt hat.
+- **Der Anzeigename** steht jetzt im Teambereich, direkt unter dem
+  Nachrichtenfeld - an der einzigen Stelle, an der er fuer andere sichtbar
+  wird. Vorher verwies der Text dort auf den Bereich "Ich"; dieser Verweis
+  waere ins Leere gegangen.
+
+Der uebrige Profilzustand - Interessen, Push-Themen, Einsteiger-Schalter,
+KI-Einwilligung - ist entfallen. Ohne die Seite setzt ihn nichts mehr und liest
+ihn nichts mehr; stehen zu lassen haette toten Zustand ergeben. Geblieben ist
+der Name, weil Teamchat und Gebetsanliegen ihn als Autor verwenden.
+
+Mit aufgeraeumt: die CSS-Variable fuer die Leistenhoehe samt der drei Stellen,
+die Platz fuer sie freihielten, und `.verse-sheet` - ein Rest des laengst
+entfernten Bibelteils.

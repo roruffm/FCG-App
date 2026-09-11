@@ -13,7 +13,7 @@ type Tab = 'chat' | 'dokumente' | 'info'
 export function TeamSpace() {
   const { id } = useParams()
   const team = teams.find((t) => t.id === id)
-  const { profile, myTeams, onboardingDone } = useApp()
+  const { profile, updateProfile, myTeams, onboardingDone } = useApp()
   const [tab, setTab] = useState<Tab>('chat')
   const [entwurf, setEntwurf] = useState('')
   const dateiFeld = useRef<HTMLInputElement>(null)
@@ -196,9 +196,20 @@ export function TeamSpace() {
                 Senden
               </button>
             </form>
-            <p className="tiny muted">
-              Schreibst du als: {author}. Der Name lässt sich im Bereich „Ich" ändern.
-            </p>
+            {/*
+              Der Name stand frueher im Bereich "Ich". Mit dessen Wegfall steht er
+              hier - an der einzigen Stelle, an der er fuer andere sichtbar wird.
+            */}
+            <label className="row tiny muted" style={{ gap: 8, flexWrap: 'nowrap', marginTop: 4 }}>
+              <span style={{ flex: 'none' }}>Du schreibst als</span>
+              <input
+                className="input input--klein"
+                value={profile.name}
+                placeholder="Ich"
+                aria-label="Dein Anzeigename im Team"
+                onChange={(e) => updateProfile({ name: e.target.value })}
+              />
+            </label>
           </>
         )}
 

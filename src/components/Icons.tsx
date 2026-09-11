@@ -46,9 +46,6 @@ export const IconArrowLeft = (p: IconProps) => (
 export const IconChevron = (p: IconProps) => (
   <svg {...base} {...p}><path d="m9 5.5 6.5 6.5L9 18.5" /></svg>
 )
-export const IconUser = (p: IconProps) => (
-  <svg {...base} {...p}><circle cx="12" cy="8" r="3.6" /><path d="M4.5 20.5c0-4 3.4-6.5 7.5-6.5s7.5 2.5 7.5 6.5" /></svg>
-)
 export const IconPray = (p: IconProps) => (
   <svg {...base} {...p}><path d="M12 3v7M8.5 6.5h7" /><path d="M6 21c0-4 2.7-7 6-7s6 3 6 7" /></svg>
 )

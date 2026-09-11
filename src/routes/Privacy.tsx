@@ -85,6 +85,29 @@ export function Privacy() {
         </section>
 
         <section className="section">
+          <h2>Deine Daten auf diesem Gerät</h2>
+          <div className="card">
+            <p className="small muted" style={{ margin: '0 0 12px' }}>
+              Favoriten, Notizen, Hörfortschritt, Anmeldungen und freigeschaltete Bereiche liegen
+              ausschließlich in diesem Browser - es gibt kein Konto und keinen Server, der mitliest.
+              Du kannst alles in einem Schritt entfernen.
+            </p>
+            <button
+              className="btn btn--ghost btn--block"
+              onClick={() => {
+                if (!confirm('Alle lokal gespeicherten Daten dieser App löschen?')) return
+                Object.keys(localStorage)
+                  .filter((k) => k.startsWith('fcg-app:'))
+                  .forEach((k) => localStorage.removeItem(k))
+                location.reload()
+              }}
+            >
+              Meine Daten auf diesem Gerät löschen
+            </button>
+          </div>
+        </section>
+
+        <section className="section">
           <h2>Verbindliche Texte</h2>
           <div className="card">
             <ExternalLink href={church.web.datenschutz} hint="Gilt für die Gemeinde und ihre Angebote">
