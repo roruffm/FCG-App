@@ -78,9 +78,6 @@ export function SermonDetail() {
           <ExternalLink href={church.social.spotify} hint="Predigten der FCG Frankfurt">
             <b className="small">Podcast bei Spotify</b>
           </ExternalLink>
-          <ExternalLink href={church.social.applePodcasts} hint="Predigten der FCG Frankfurt">
-            <b className="small">Podcast bei Apple</b>
-          </ExternalLink>
           <p className="tiny muted" style={{ margin: '10px 0 0' }}>
             Der Player oben zeigt die Bedienung mit Kapitelmarken und Hörfortschritt. Die Medien liegen
             heute auf YouTube und im Podcast; im Betrieb kämen sie aus dem Redaktionssystem und würden

@@ -49,7 +49,7 @@ das Repository auf öffentlich stellen.
 ### Ohne Basispfad-Gefummel
 
 Vite baut mit `base: './'`, alle Verweise sind relativ, und der Router arbeitet
-mit Hash-Routen (`/#/bibel/roem/8`). Die Seite läuft dadurch unverändert unter
+mit Hash-Routen (`/#/predigten/p-2026-08-30`). Die Seite läuft dadurch unverändert unter
 `/FCG-App/`, unter einer eigenen Domain und auch direkt vom Dateisystem.
 Für eine eigene Domain genügt eine Datei `public/CNAME` mit der Domain darin.
 

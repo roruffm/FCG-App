@@ -84,8 +84,6 @@ export const church = {
     instagram: 'https://www.instagram.com/fcg.frankfurt/',
     facebook: 'https://www.facebook.com/fcgfrankfurt/',
     spotify: 'https://open.spotify.com/show/0uN69RvnHYypk6CEiw3PlM',
-    applePodcasts:
-      'https://podcasts.apple.com/us/podcast/predigten-der-fcg-frankfurt/id1626994613',
   },
 } as const
 

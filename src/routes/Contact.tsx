@@ -68,9 +68,6 @@ export function Contact() {
             <ExternalLink href={social.spotify} hint="Predigten als Podcast">
               <b className="small">Spotify</b>
             </ExternalLink>
-            <ExternalLink href={social.applePodcasts} hint="Predigten als Podcast">
-              <b className="small">Apple Podcasts</b>
-            </ExternalLink>
             <ExternalLink href={social.instagram} hint="Was gerade läuft">
               <b className="small">Instagram</b>
             </ExternalLink>
