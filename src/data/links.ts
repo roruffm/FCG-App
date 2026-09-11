@@ -100,7 +100,6 @@ export const mehr: Record<Rolle, Gruppe[]> = {
       zeilen: [
         { label: 'Newsletter abonnieren', ziel: church.web.newsletter, extern: true },
         { label: 'Spenden', ziel: church.web.spende, extern: true },
-          { label: 'Facebook', ziel: church.social.facebook, extern: true },
       ],
     },
   ],
