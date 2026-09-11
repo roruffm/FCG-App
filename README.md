@@ -63,13 +63,15 @@ Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android
 Die Startseite fuehrt in vier Schritten, damit das Wichtigste ohne Scrollen
 dasteht:
 
-1. **Sechs Kacheln** - die Anlaufstellen ausserhalb der App: Website, YouTube,
-   Instagram, Spotify, ChurchTools, Wiki.
-2. **Kalender** - der laufende Monat; Tage mit Terminen tragen einen Punkt, der
+1. **Drei kleine Symbole** - YouTube, Instagram, Spotify. Kanaele, die man am
+   Zeichen erkennt, brauchen keine Kachel.
+2. **Drei Kacheln** - die Portale, in denen man sich laenger aufhaelt:
+   Website, ChurchTools, Wiki.
+3. **Kalender** - der laufende Monat; Tage mit Terminen tragen einen Punkt, der
    heutige Tag einen Ring. Angetippt zeigt ein Tag darunter, was ansteht.
    Vorausgewaehlt ist der naechste Tag mit Terminen.
-3. **Drei Zeilen** - Neu hier?, Predigten, Mitmachen.
-4. **"Mehr anzeigen"** - alles Weitere, nach Anlass gruppiert: Taeglich (Vers
+4. **Drei Zeilen** - Neu hier?, Predigten, Mitmachen.
+5. **"Mehr anzeigen"** - alles Weitere, nach Anlass gruppiert: Taeglich (Vers
    des Tages, Bibel, Lesepläne, Gebet), Fuer Gaeste, Fuer Mitglieder,
    Fuer Staff, Folgen und unterstuetzen.
 
@@ -81,6 +83,17 @@ steht das Wiki da, bis seine Adresse in `church.web.wiki` eingetragen ist. Ein
 toter Link waere schlimmer als ein ehrlicher Hinweis.
 
 Die untere Navigation bleibt: Start, Bibel, Predigten, Events, Ich.
+
+### Leitungsdashboard
+
+Das Reporting laeuft ausserhalb dieser App. `/leitung` bindet es ein und stellt
+den Weg im neuen Tab immer sichtbar darueber - viele Seiten verbieten das
+Einbetten, und dann bliebe sonst nur ein leerer Rahmen. Bleibt er nach sechs
+Sekunden leer, sagt die Seite das ausdruecklich.
+
+Erreichbar ist es unter *Mehr anzeigen -> Fuer Staff*. **Die App kennt keine
+Anmeldung**: Wer den Zugriff begrenzen will, muss das im Dashboard selbst tun -
+ein Link in einer oeffentlichen App macht die Adresse auffindbar.
 
 ## Was drin ist
 

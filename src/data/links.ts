@@ -21,6 +21,13 @@ export type Kachel = {
   geplant?: boolean
 }
 
+/** Kleine runde Symbole - die Kanaele, die man an ihrem Zeichen erkennt. */
+export type Symbolziel = {
+  label: string
+  icon: IconName
+  ziel: string
+}
+
 export type Zeile = {
   label: string
   hinweis?: string
@@ -28,13 +35,18 @@ export type Zeile = {
   extern?: boolean
 }
 
+/** Die drei Portale, in denen man sich laenger aufhaelt. */
 export const kanaele: Kachel[] = [
   { label: 'Website', icon: 'globe', ziel: church.web.home },
+  { label: 'ChurchTools', icon: 'users', ziel: church.web.churchtools },
+  { label: 'Wiki', icon: 'wiki', ziel: church.web.wiki || undefined, geplant: !church.web.wiki },
+]
+
+/** Kanaele zum Zuschauen und Hoeren - als Symbol erkennbar, spart Platz. */
+export const symbole: Symbolziel[] = [
   { label: 'YouTube', icon: 'video', ziel: church.social.youtube },
   { label: 'Instagram', icon: 'camera', ziel: church.social.instagram },
   { label: 'Spotify', icon: 'headphones', ziel: church.social.spotify },
-  { label: 'ChurchTools', icon: 'users', ziel: church.web.churchtools },
-  { label: 'Wiki', icon: 'wiki', ziel: church.web.wiki || undefined, geplant: !church.web.wiki },
 ]
 
 export const appBereiche: Zeile[] = [
@@ -75,6 +87,7 @@ export const mehr: { titel: string; zeilen: Zeile[] }[] = [
   {
     titel: 'Für Staff',
     zeilen: [
+      { label: 'Leitungsdashboard', hinweis: 'Zahlen und Auswertungen', ziel: '/leitung' },
       { label: 'Teambereich in ChurchTools', ziel: church.web.churchtools, extern: true },
       { label: 'Interner Bereich der Website', ziel: church.web.intern, extern: true },
       { label: 'PULS Leiterschaftsnetzwerk', ziel: church.web.puls, extern: true },

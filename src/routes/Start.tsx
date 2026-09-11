@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fcgLogo } from '../data/logo'
 import { church } from '../data/church'
-import { appBereiche, kanaele, mehr } from '../data/links'
+import { appBereiche, kanaele, mehr, symbole } from '../data/links'
 import type { IconName, Kachel, Zeile } from '../data/links'
 import { KalenderWidget } from '../components/KalenderWidget'
 import {
@@ -41,6 +41,25 @@ export function Start() {
           Sonntags {church.services[0].time} und {church.services[1].time}
         </p>
       </header>
+
+      <div className="start__symbole">
+        {symbole.map((eintrag) => {
+          const Icon = icons[eintrag.icon]
+          return (
+            <a
+              key={eintrag.label}
+              className="start__symbol"
+              href={eintrag.ziel}
+              target="_blank"
+              rel="noreferrer noopener"
+              title={eintrag.label}
+              aria-label={eintrag.label}
+            >
+              <Icon />
+            </a>
+          )
+        })}
+      </div>
 
       <div className="start__kacheln">
         {kanaele.map((kachel) => (

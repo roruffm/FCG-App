@@ -71,6 +71,13 @@ export const church = {
 
     /** Wiki - wird noch aufgebaut. Solange leer, zeigt die App es als geplant. */
     wiki: '',
+
+    /**
+     * Leitungsdashboard (Reporting). Die Adresse ist oeffentlich erreichbar,
+     * die App kennt keine Anmeldung - wer den Zugriff begrenzen will, muss das
+     * im Dashboard selbst tun.
+     */
+    leitungsdashboard: 'https://fcg-leitungsdashboard.ronjarubens.chatgpt.site/',
   },
 
   social: {

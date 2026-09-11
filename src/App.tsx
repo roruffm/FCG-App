@@ -23,6 +23,7 @@ import { Contact } from './routes/Contact'
 import { Serve } from './routes/Serve'
 import { Teams } from './routes/Teams'
 import { TeamSpace } from './routes/TeamSpace'
+import { Leitung } from './routes/Leitung'
 
 // Karte und Lexikon bringen viel Datenmasse mit - sie werden erst beim
 // Aufruf geladen, damit der erste Seitenaufbau klein bleibt.
@@ -94,6 +95,7 @@ function Shell() {
         <Route path="/mitmachen" element={<Serve />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teams/:id" element={<TeamSpace />} />
+        <Route path="/leitung" element={<Leitung />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />
