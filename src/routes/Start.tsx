@@ -49,11 +49,11 @@ export function Start() {
       </header>
 
       <div>
-        <div className="start__rollen" role="group" aria-label="Sicht wählen">
+        <div className="rollenwahl" role="group" aria-label="Sicht wählen">
           {rollen.map((r) => (
             <button
               key={r.id}
-              className="start__rolle"
+              className="rolle"
               aria-pressed={r.id === rolle}
               onClick={() => {
                 setRolle(r.id)

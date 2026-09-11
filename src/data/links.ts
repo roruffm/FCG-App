@@ -37,6 +37,7 @@ export const jetzt: Record<Rolle, Gruppe> = {
       { kuerzel: 'PR', label: 'Predigt hören', hinweis: 'Archiv und Fragen stellen', ziel: '/predigten' },
       { kuerzel: 'CG', label: 'Connectgruppe finden', hinweis: 'Nach Stadtteil und Lebensphase', ziel: '/gruppen' },
       { kuerzel: 'KT', label: 'Zeiten und Anfahrt', hinweis: church.address.street, ziel: '/kontakt' },
+      { kuerzel: 'WI', label: 'Wiki', hinweis: 'Ablauf, Kirchendeutsch, häufige Fragen', ziel: '/wiki' },
     ],
   },
   mitglied: {
@@ -45,6 +46,7 @@ export const jetzt: Record<Rolle, Gruppe> = {
       { kuerzel: 'TM', label: 'Meine Teams', hinweis: 'Chat, Dokumente, Dienste', ziel: '/teams' },
       { kuerzel: 'ICH', label: 'Mein Bereich', hinweis: 'Favoriten, Anmeldungen, Notizen', ziel: '/profil' },
       { kuerzel: 'MM', label: 'Mitmachen', ziel: '/mitmachen' },
+      { kuerzel: 'WI', label: 'Wiki', hinweis: 'Mitgliedschaft, Taufe, Seelsorge, Mitarbeit', ziel: '/wiki' },
     ],
   },
   staff: {
@@ -72,6 +74,7 @@ export const jetzt: Record<Rolle, Gruppe> = {
         extern: true,
       },
       { kuerzel: 'TM', label: 'Meine Teams', hinweis: 'Chat, Dokumente, Dienste', ziel: '/teams' },
+      { kuerzel: 'WI', label: 'Wiki', hinweis: 'Schutzkonzept, Datenschutz, Abläufe', ziel: '/wiki' },
     ],
   },
 }

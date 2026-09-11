@@ -18,6 +18,8 @@ import { Contact } from './routes/Contact'
 import { Serve } from './routes/Serve'
 import { Teams } from './routes/Teams'
 import { TeamSpace } from './routes/TeamSpace'
+import { Wiki } from './routes/Wiki'
+import { WikiArtikelSeite } from './routes/WikiArtikelSeite'
 
 
 function ScrollToTop() {
@@ -64,6 +66,8 @@ function Shell() {
         <Route path="/mitmachen" element={<Serve />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teams/:id" element={<TeamSpace />} />
+        <Route path="/wiki" element={<Wiki />} />
+        <Route path="/wiki/:slug" element={<WikiArtikelSeite />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />

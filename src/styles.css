@@ -504,8 +504,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .start__kopf h1 { font-size: 1.35rem; }
 .start__zeiten { margin: 4px 0 0; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
 
-/* Rollenwahl: Gast, Mitglied, Staff */
-.start__rollen {
+/* Rollenwahl: Gast, Mitglied, Staff - geteilt von Startseite und Wiki */
+.rollenwahl {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
@@ -514,7 +514,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   border-radius: 999px;
   padding: 4px;
 }
-.start__rolle {
+.rolle {
   border: 0;
   background: transparent;
   color: var(--text-muted);
@@ -524,7 +524,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-size: 0.85rem;
   cursor: pointer;
 }
-.start__rolle[aria-pressed='true'] { background: var(--primary); color: #fff; }
+.rolle[aria-pressed='true'] { background: var(--primary); color: #fff; }
 .start__rollenhinweis { margin: 8px 2px 0; text-align: center; }
 
 /* Aufmacher der jeweiligen Rolle */
@@ -692,3 +692,32 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .kanal__label { font-size: 0.7rem; font-weight: 600; line-height: 1.2; }
 .kanal__status { font-size: 0.62rem; color: var(--text-muted); line-height: 1.1; }
 .kanal--geplant { opacity: 0.6; }
+
+/* ---------- Wiki ---------- */
+.wiki-liste,
+.wiki-schritte {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+  line-height: 1.55;
+}
+.wiki-schritte { counter-reset: schritt; }
+.wiki-liste li::marker { color: var(--primary); }
+.wiki-schritte li::marker { color: var(--primary); font-weight: 700; }
+
+.wiki-begriffe { margin: 0; display: grid; gap: 8px; }
+.wiki-begriffe dt { font-weight: 700; font-size: 0.88rem; }
+.wiki-begriffe dd { margin: 4px 0 0; }
+
+/* Schalter, der wie ein Link aussieht - fuer den Sprung in eine andere Sicht. */
+.linkbtn {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}

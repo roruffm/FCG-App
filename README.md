@@ -71,8 +71,9 @@ man oben die Rolle:
 | **Unter "Mehr"** | Taeglich, Kennenlernen, Folgen | Taeglich, Gemeinde, Folgen | Leitung, Gemeinde, Fuer mich |
 
 Gleich bleiben fuer alle: Kopf mit Zeiten, der **Kalender** des laufenden
-Monats, die sechs **Kanaele** (Website, ChurchTools, YouTube, Instagram,
-Spotify, Wiki) und der Fuss. Die Rollenwahl bleibt auf dem Geraet gespeichert.
+Monats, die sieben **Kanaele** (Website, ChurchTools, YouTube, Instagram,
+Spotify, Facebook, Wiki) und der Fuss. Die Rollenwahl bleibt auf dem Geraet
+gespeichert - und gilt auch im Wiki, das dieselbe Dreiteilung benutzt.
 
 Zwei Angaben im Aufmacher rechnet die App aus den vorhandenen Daten aus, statt
 sie fest einzutragen: der Termin fuer Mitglieder kommt aus `src/data/events.ts`
@@ -104,6 +105,7 @@ mit dem Hinweis, dass eine Anmeldung noetig ist. Die Adresse steht in
 | **Kurzfassung** | Drei Kernaussagen je Predigt, sichtbar als KI-Entwurf gekennzeichnet |
 | **Events** | Gemeindekalender nach Kategorie, Detailseite, Anmeldung mit Platzzähler |
 | **New-here-Modus** | Ablauf, Parken, Kinderprogramm, Kollekte, FAQ, nächste Schritte |
+| **Wiki** | 24 Artikel, getrennt nach Gast (7), Mitglied (8) und Staff (10), mit Suche, Querverweisen und Entwurfskennzeichnung |
 | **Favoriten & später hören** | Persönlicher Bereich mit Anmeldungen, Notizen, gespeicherten Versen |
 | **Push-Einstellungen** | Themenauswahl statt Gießkanne (Oberfläche; Versand braucht Backend) |
 
@@ -209,8 +211,9 @@ src/
   lib/storage.ts localStorage-Persistenz
   state.tsx      App-Zustand: Favoriten, Notizen, Anmeldungen, Teams, Profil
   components/    Navigation, Kalender, Kanalsymbole, Predigtkarte, Player, Icons
+  data/wiki.ts   Wiki-Artikel je Rolle, mit Status geprueft/entwurf
   routes/        Start, Predigten, Frag, Events, Gruppen, Neu hier, Gebet,
-                 Teams, Mitmachen, Kontakt, Profil, Datenschutz
+                 Teams, Mitmachen, Kontakt, Profil, Datenschutz, Wiki
 public/          Manifest, Logo, Service Worker
 server/          ChurchTools-Anbindung (Dienst, Zuordnung, Pruefskript)
 ```
@@ -277,3 +280,35 @@ stellt sie deshalb im Stack voran und faellt auf **Archivo** (Ueberschriften) un
 
 Das Farbschema laesst sich weiterhin ueber den Button **Design** im Prototyp-Band
 umstellen (FCG Frankfurt als Standard, dazu Varianten und freie Hex-Werte).
+
+## Das Wiki
+
+Nachschlagen statt nachfragen - und zwar getrennt nach den drei Sichten der
+Startseite. Wer dort **Staff** gewaehlt hat, landet im Wiki nicht wieder bei den
+Gastartikeln: beide Seiten teilen sich denselben Speicherschluessel.
+
+| Sicht | Artikel | Kategorien |
+|---|---|---|
+| Gast | 7 | Erster Besuch, Verstehen |
+| Mitglied | 8 | Dazugehoeren, Mitarbeiten, Hilfe, Praktisches |
+| Staff | 10 | Verantwortung, Ablaeufe, Praktisches |
+
+Ein Artikel kann zu mehreren Sichten gehoeren - "Raeume buchen" betrifft
+Mitglieder wie Mitarbeitende. Sichtbar ist er trotzdem immer nur in der
+gewaehlten Sicht, sonst waere der Nutzen der Trennung dahin. Die Suche haelt
+sich daran und meldet Treffer in anderen Sichten nur als Zeile zum Anklicken.
+
+### Geprueft und Entwurf
+
+Was sich auf fcg-frankfurt.de nachlesen laesst - Zeiten, Adresse, Angebote,
+Bankverbindung - ist **geprueft**. Alles, was interne Ablaeufe beschreibt, die
+sich von aussen nicht nachpruefen lassen, ist als **Entwurf** gekennzeichnet:
+im Artikel, in der Liste und als Zaehler ueber der Uebersicht.
+
+Das ist kein Schoenheitsfehler, sondern Absicht. Ein Wiki, das erfundene
+Dienstwege als Tatsachen ausgibt, richtet mehr Schaden an als eines, das seine
+Luecken zeigt - und die Entwuerfe sind zugleich die Aufgabenliste fuer die
+Leitung. Am dringendsten ist **Notfall im Gottesdienst**: Standort von
+Erste-Hilfe-Material und AED, benannte Ersthelfer und der Sammelpunkt muessen
+fuer das Gebaeude konkret eingetragen werden, sonst hilft der Artikel im
+Ernstfall nicht.

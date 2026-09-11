@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { church } from '../data/church'
 
 /**
@@ -13,6 +14,8 @@ type Kanal = {
   label: string
   farbe: string
   ziel?: string
+  /** Ziel liegt in der App - dann Router-Link statt neuem Tab. */
+  intern?: boolean
   status?: string
   symbol: React.ReactNode
 }
@@ -100,8 +103,10 @@ export const kanaele: Kanal[] = [
   {
     label: 'Wiki',
     farbe: '#55686a',
-    ziel: church.web.wiki || undefined,
-    status: 'in Vorbereitung',
+    // Das Wiki liegt in der App selbst. Sobald eine externe Adresse in den
+    // Stammdaten steht, hat sie Vorrang.
+    ziel: church.web.wiki || '/wiki',
+    intern: !church.web.wiki,
     symbol: (
       <svg viewBox="0 0 24 24" fill="none" stroke={weiss} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
         <path d="M5 4.5h9l5 5V19.5H5z" />
@@ -130,6 +135,13 @@ export function KanalSymbole() {
             <div key={kanal.label} className="kanal kanal--geplant">
               {inhalt}
             </div>
+          )
+        }
+        if (kanal.intern) {
+          return (
+            <Link key={kanal.label} className="kanal" to={kanal.ziel}>
+              {inhalt}
+            </Link>
           )
         }
         return (
