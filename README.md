@@ -58,29 +58,30 @@ Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android
 
 ---
 
-## Aufbau: Linktree als Einstieg
+## Aufbau: Startseite nach Rollen
 
-Die Startseite fuehrt in vier Schritten, damit das Wichtigste ohne Scrollen
-dasteht:
+Umgesetzt aus dem Entwurf **"Start Redesign"** (Claude Design). Gast, Mitglied
+und Staff suchen Verschiedenes - statt allen dieselbe Linkwand zu zeigen, waehlt
+man oben die Rolle:
 
-1. **Drei kleine Symbole** - YouTube, Instagram, Spotify. Kanaele, die man am
-   Zeichen erkennt, brauchen keine Kachel.
-2. **Drei Kacheln** - die Portale, in denen man sich laenger aufhaelt:
-   Website, ChurchTools, Wiki.
-3. **Kalender** - der laufende Monat; Tage mit Terminen tragen einen Punkt, der
-   heutige Tag einen Ring. Angetippt zeigt ein Tag darunter, was ansteht.
-   Vorausgewaehlt ist der naechste Tag mit Terminen.
-4. **Drei Zeilen** - Neu hier?, Predigten, Mitmachen.
-5. **"Mehr anzeigen"** - alles Weitere, nach Anlass gruppiert: Taeglich (Vers
-   des Tages, Bibel, Lesepläne, Gebet), Fuer Gaeste, Fuer Mitglieder,
-   Fuer Staff, Folgen und unterstuetzen.
+| | Gast | Mitglied | Staff |
+|---|---|---|---|
+| **Aufmacher** | Gottesdienstzeiten und Anfahrt | naechster Termin mit offener Anmeldung | Leitungsdashboard |
+| **Hauptliste** | Der erste Schritt | Dein Bereich | Arbeitswege |
+| **Unter "Mehr"** | Taeglich, Kennenlernen, Folgen | Taeglich, Gemeinde, Folgen | Leitung, Gemeinde, Fuer mich |
 
-Gepflegt wird der Baum in [`src/data/links.ts`](src/data/links.ts), die Adressen
-selbst in [`src/data/church.ts`](src/data/church.ts), der Kalender in
-[`src/components/KalenderWidget.tsx`](src/components/KalenderWidget.tsx). Eine
-Kachel ohne Ziel gilt als geplant: Sie wird angezeigt, aber nicht verlinkt - so
-steht das Wiki da, bis seine Adresse in `church.web.wiki` eingetragen ist. Ein
-toter Link waere schlimmer als ein ehrlicher Hinweis.
+Gleich bleiben fuer alle: Kopf mit Zeiten, der **Kalender** des laufenden
+Monats, die sechs **Kanaele** (Website, ChurchTools, YouTube, Instagram,
+Spotify, Wiki) und der Fuss. Die Rollenwahl bleibt auf dem Geraet gespeichert.
+
+Zwei Angaben im Aufmacher rechnet die App aus den vorhandenen Daten aus, statt
+sie fest einzutragen: der Termin fuer Mitglieder kommt aus `src/data/events.ts`
+samt belegten Plaetzen, die Zahl der suchenden Teams aus `src/data/teams.ts`.
+
+Gepflegt wird das in [`src/data/links.ts`](src/data/links.ts) (Rollen, Listen,
+Gruppen, Kacheln) und [`src/data/church.ts`](src/data/church.ts) (Adressen).
+Eine Kachel ohne Ziel gilt als geplant: Sie wird angezeigt, aber nicht
+verlinkt - so steht das Wiki da, bis seine Adresse in `church.web.wiki` steht.
 
 Die untere Navigation bleibt: Start, Bibel, Predigten, Events, Ich.
 

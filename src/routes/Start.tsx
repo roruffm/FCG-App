@@ -1,36 +1,41 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { fcgLogo } from '../data/logo'
 import { church } from '../data/church'
-import { appBereiche, kanaele, mehr, symbole } from '../data/links'
-import type { IconName, Kachel, Zeile } from '../data/links'
+import { jetzt, kanaele, mehr, rollen } from '../data/links'
+import type { Kachel, Rolle, Zeile } from '../data/links'
+import { events } from '../data/events'
+import { teams } from '../data/teams'
 import { KalenderWidget } from '../components/KalenderWidget'
-import {
-  IconCamera,
-  IconChevron,
-  IconGlobe,
-  IconHeadphones,
-  IconUsers,
-  IconVideo,
-  IconWiki,
-} from '../components/Icons'
-
-const icons: Record<IconName, typeof IconGlobe> = {
-  globe: IconGlobe,
-  video: IconVideo,
-  camera: IconCamera,
-  headphones: IconHeadphones,
-  users: IconUsers,
-  wiki: IconWiki,
-}
+import { formatTime, relativeDay } from '../lib/format'
+import { usePersistentState } from '../lib/storage'
 
 /**
- * Startseite: sechs Kacheln fuer die Kanaele, sechs Zeilen fuer die App,
- * alles Weitere eingeklappt. Wer den Livestream sucht, soll ihn sehen -
- * nicht erst an zwanzig Eintraegen vorbeiscrollen.
+ * Startseite nach Rollen (Entwurf "Start Redesign").
+ *
+ * Gast, Mitglied und Staff suchen Verschiedenes. Statt allen dieselbe Linkwand
+ * zu zeigen, waehlt man oben die Rolle - Aufmacher, Hauptliste und die Gruppen
+ * unter "Mehr" richten sich danach. Die Wahl bleibt auf dem Geraet gespeichert.
  */
 export function Start() {
-  const [offen, setOffen] = useState(false)
+  const [rolle, setRolle] = usePersistentState<Rolle>('start-rolle', 'gast')
+  const [mehrOffen, setMehrOffen] = usePersistentState('start-mehr-offen', false)
+
+  const aktuelleRolle = rollen.find((r) => r.id === rolle) ?? rollen[0]
+  const liste = jetzt[rolle]
+
+  /** Naechster Termin mit Anmeldung - Aufmacher fuer Mitglieder. */
+  const naechsteAnmeldung = useMemo(
+    () =>
+      [...events]
+        .filter((e) => e.registration && new Date(e.start) >= new Date())
+        .sort((a, b) => a.start.localeCompare(b.start))[0],
+    []
+  )
+
+  const gesuchteTeams = useMemo(() => teams.filter((t) => t.needs.length > 0).length, [])
+
+  const hero = heroFuer(rolle, naechsteAnmeldung)
 
   return (
     <div className="start">
@@ -42,65 +47,73 @@ export function Start() {
         </p>
       </header>
 
-      <div className="start__symbole">
-        {symbole.map((eintrag) => {
-          const Icon = icons[eintrag.icon]
-          return (
-            <a
-              key={eintrag.label}
-              className="start__symbol"
-              href={eintrag.ziel}
-              target="_blank"
-              rel="noreferrer noopener"
-              title={eintrag.label}
-              aria-label={eintrag.label}
+      <div>
+        <div className="start__rollen" role="group" aria-label="Sicht wählen">
+          {rollen.map((r) => (
+            <button
+              key={r.id}
+              className="start__rolle"
+              aria-pressed={r.id === rolle}
+              onClick={() => {
+                setRolle(r.id)
+                setMehrOffen(false)
+              }}
             >
-              <Icon />
-            </a>
-          )
-        })}
+              {r.label}
+            </button>
+          ))}
+        </div>
+        <p className="tiny muted start__rollenhinweis">{aktuelleRolle.hinweis}</p>
       </div>
 
-      <div className="start__kacheln">
-        {kanaele.map((kachel) => (
-          <KachelFeld key={kachel.label} kachel={kachel} />
-        ))}
-      </div>
+      <HeroKarte hero={hero} />
+
+      <section className="start__block">
+        <h2 className="start__blocktitel">{liste.titel}</h2>
+        <div className="card start__liste">
+          {liste.zeilen.map((zeile) => (
+            <ZeilenFeld
+              key={zeile.label}
+              zeile={
+                zeile.label === 'Mitmachen'
+                  ? { ...zeile, hinweis: `${gesuchteTeams} Teams suchen Verstärkung` }
+                  : zeile
+              }
+            />
+          ))}
+        </div>
+      </section>
 
       <KalenderWidget />
 
-      <nav className="card start__liste" aria-label="Bereiche der App">
-        {appBereiche.map((zeile) => (
-          <Link key={zeile.ziel} to={zeile.ziel} className="start__zeile">
-            <span style={{ minWidth: 0 }}>
-              <b className="small">{zeile.label}</b>
-              {zeile.hinweis && (
-                <span className="tiny muted" style={{ display: 'block' }}>{zeile.hinweis}</span>
-              )}
-            </span>
-            <IconChevron />
-          </Link>
-        ))}
-      </nav>
-
-      <button className="btn btn--ghost btn--block" onClick={() => setOffen((v) => !v)} aria-expanded={offen}>
-        {offen ? 'Weniger anzeigen' : 'Mehr anzeigen'}
-      </button>
-
-      {offen && (
-        <div className="stack">
-          {mehr.map((gruppe) => (
-            <section key={gruppe.titel} className="section">
-              <h2 className="small muted">{gruppe.titel}</h2>
-              <div className="card start__liste">
-                {gruppe.zeilen.map((zeile) => (
-                  <ZeilenFeld key={zeile.label} zeile={zeile} />
-                ))}
-              </div>
-            </section>
+      <section className="start__block">
+        <h2 className="start__blocktitel">Kanäle</h2>
+        <div className="start__kacheln">
+          {kanaele.map((kachel) => (
+            <KachelFeld key={kachel.label} kachel={kachel} />
           ))}
         </div>
-      )}
+      </section>
+
+      <button
+        className="btn btn--ghost btn--block"
+        onClick={() => setMehrOffen(!mehrOffen)}
+        aria-expanded={mehrOffen}
+      >
+        {mehrOffen ? 'Weniger anzeigen' : 'Mehr anzeigen'}
+      </button>
+
+      {mehrOffen &&
+        mehr[rolle].map((gruppe) => (
+          <section key={gruppe.titel} className="start__block">
+            <h2 className="start__blocktitel">{gruppe.titel}</h2>
+            <div className="card start__liste">
+              {gruppe.zeilen.map((zeile) => (
+                <ZeilenFeld key={zeile.label} zeile={zeile} />
+              ))}
+            </div>
+          </section>
+        ))}
 
       <footer className="start__fuss">
         <div className="row" style={{ gap: 14, justifyContent: 'center' }}>
@@ -121,13 +134,122 @@ export function Start() {
   )
 }
 
-function KachelFeld({ kachel }: { kachel: Kachel }) {
-  const Icon = icons[kachel.icon]
+type Hero = {
+  eyebrow: string
+  titel: string
+  text: string
+  cta: string
+  ziel: string
+  extern?: boolean
+}
+
+function heroFuer(rolle: Rolle, termin: (typeof events)[number] | undefined): Hero {
+  if (rolle === 'staff') {
+    return {
+      eyebrow: 'Für Staff',
+      titel: 'Leitungsdashboard',
+      text: 'Zahlen, Anmeldungen und Auswertungen · Anmeldung nötig.',
+      cta: 'Dashboard öffnen',
+      ziel: church.web.leitungsdashboard,
+      extern: true,
+    }
+  }
+
+  if (rolle === 'mitglied') {
+    if (!termin) {
+      return {
+        eyebrow: 'Diese Woche',
+        titel: 'Keine Anmeldung offen',
+        text: 'Im Kalender stehen die nächsten Termine der Gemeinde.',
+        cta: 'Zum Kalender',
+        ziel: '/events',
+      }
+    }
+    // Titel kurz halten - Zeit und Plaetze stehen in der Zeile darunter,
+    // sonst laeuft der Aufmacher ueber drei Zeilen.
+    const zeitpunkt = `${relativeDay(termin.start)}, ${formatTime(termin.start)} Uhr`
+    const plaetze =
+      termin.seats !== undefined
+        ? ` · ${termin.taken ?? 0} von ${termin.seats} Plätzen belegt`
+        : ''
+    return {
+      eyebrow: 'Diese Woche',
+      titel: termin.title,
+      text: `${zeitpunkt}${plaetze} · Anmeldung offen.`,
+      cta: 'Anmelden',
+      ziel: `/events/${termin.id}`,
+    }
+  }
+
+  return {
+    eyebrow: 'Zum ersten Mal da?',
+    titel: `Sonntag, ${church.services[0].time} und ${church.services[1].time}`,
+    text: `${church.address.street} · Kinderkirche und Übersetzung vor Ort.`,
+    cta: 'Ablauf und Anfahrt',
+    ziel: '/neu-hier',
+  }
+}
+
+function HeroKarte({ hero }: { hero: Hero }) {
   const inhalt = (
     <>
-      <Icon />
-      <span className="small">{kachel.label}</span>
-      {kachel.geplant && <span className="tiny muted">in Vorbereitung</span>}
+      <div className="start__hero-eyebrow">{hero.eyebrow}</div>
+      <h2>{hero.titel}</h2>
+      <p>{hero.text}</p>
+      <span className="start__hero-cta">{hero.cta} →</span>
+    </>
+  )
+
+  if (hero.extern) {
+    return (
+      <a className="start__hero" href={hero.ziel} target="_blank" rel="noreferrer noopener">
+        {inhalt}
+      </a>
+    )
+  }
+  return (
+    <Link className="start__hero" to={hero.ziel}>
+      {inhalt}
+    </Link>
+  )
+}
+
+function ZeilenFeld({ zeile }: { zeile: Zeile }) {
+  const inhalt = (
+    <>
+      <span className="start__zeile-text">
+        {zeile.kuerzel && <span className="start__kuerzel" aria-hidden>{zeile.kuerzel}</span>}
+        <span style={{ minWidth: 0 }}>
+          <b>{zeile.label}</b>
+          {zeile.hinweis && <span className="tiny muted">{zeile.hinweis}</span>}
+        </span>
+      </span>
+      <span className="start__mark" aria-hidden>
+        {zeile.extern ? '↗' : '›'}
+      </span>
+    </>
+  )
+
+  if (zeile.extern) {
+    return (
+      <a className="start__zeile" href={zeile.ziel} target="_blank" rel="noreferrer noopener">
+        {inhalt}
+      </a>
+    )
+  }
+  return (
+    <Link className="start__zeile" to={zeile.ziel}>
+      {inhalt}
+    </Link>
+  )
+}
+
+function KachelFeld({ kachel }: { kachel: Kachel }) {
+  const inhalt = (
+    <>
+      <span className="start__kachel-kuerzel">{kachel.kuerzel}</span>
+      <span className="start__kachel-label">{kachel.label}</span>
+      <span className="tiny muted">{kachel.status}</span>
     </>
   )
 
@@ -137,31 +259,5 @@ function KachelFeld({ kachel }: { kachel: Kachel }) {
     <a className="start__kachel" href={kachel.ziel} target="_blank" rel="noreferrer noopener">
       {inhalt}
     </a>
-  )
-}
-
-function ZeilenFeld({ zeile }: { zeile: Zeile }) {
-  const text = (
-    <span style={{ minWidth: 0 }}>
-      <span className="small">{zeile.label}</span>
-      {zeile.hinweis && (
-        <span className="tiny muted" style={{ display: 'block' }}>{zeile.hinweis}</span>
-      )}
-    </span>
-  )
-
-  if (zeile.extern) {
-    return (
-      <a className="start__zeile" href={zeile.ziel} target="_blank" rel="noreferrer noopener">
-        {text}
-        <span className="tiny muted" aria-hidden>↗</span>
-      </a>
-    )
-  }
-  return (
-    <Link className="start__zeile" to={zeile.ziel}>
-      {text}
-      <IconChevron />
-    </Link>
   )
 }
