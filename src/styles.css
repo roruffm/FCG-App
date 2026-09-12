@@ -100,6 +100,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: var(--bg);
   position: relative;
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+
+  /*
+    Scroll-Anchoring aus.
+
+    Chrome verschiebt die Scrollposition von sich aus, wenn sich Inhalt
+    oberhalb des Bildausschnitts in der Groesse aendert - gedacht fuer
+    nachladende Werbung. Bei einem Seitenwechsel wird hier aber der gesamte
+    Inhalt ersetzt, und dann arbeitet die Hilfe gegen uns: Man landet in einem
+    Bereich unterhalb der neuen, kuerzeren Seite und sieht nichts. Samsung
+    Internet verhaelt sich hier anders als Chrome, was zum Fehlerbild passt.
+  */
+  overflow-anchor: none;
 }
 
 .topbar {

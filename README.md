@@ -492,3 +492,32 @@ Stylesheet von Google Fonts. Das ist absichtlich unkritisch eingebunden: faellt
 es aus, greift der Ersatz-Stack. In einem langsamen Mobilnetz haette die App
 sich deswegen grundlos neu geladen und damit genau den Fehler erzeugt, den sie
 beheben soll. Jetzt loest nur die eigene Programmdatei den Notstart aus.
+
+### Chrome und die Scrollposition
+
+Der Fehlerbericht enthielt den entscheidenden Hinweis: **Chrome ja, Samsung
+Internet nein.** Beide sind Chromium - der Unterschied liegt also in etwas, das
+Chrome tut und Samsung Internet nicht. Zwei Mechanismen kommen dafuer in Frage,
+und beide verschieben die Scrollposition:
+
+1. **`history.scrollRestoration`** steht standardmaessig auf `auto`. Bei einem
+   Hash-Router ist jeder Klick ein History-Eintrag, und Chrome stellt dafuer
+   eine Scrollposition wieder her - auch wenn die neue Seite kuerzer ist als die
+   alte. Man steht dann unterhalb des Inhalts und sieht nichts. Ein
+   Aktualisieren setzt die Position zurueck, und "auf einmal" ist alles da.
+   Jetzt auf `manual`.
+
+2. **Scroll-Anchoring.** Chrome verschiebt die Position von sich aus, wenn sich
+   Inhalt oberhalb des Bildausschnitts in der Groesse aendert - gedacht fuer
+   nachladende Werbung. Beim Seitenwechsel wird hier aber der ganze Inhalt
+   ersetzt, und dann arbeitet die Hilfe gegen uns. Jetzt `overflow-anchor: none`
+   auf `.app`.
+
+Dazu laeuft die Rueckstellung nach oben in `useLayoutEffect` statt `useEffect` -
+also **vor** dem Zeichnen, nicht danach - mit einem zweiten Anlauf im naechsten
+Bild, falls Chrome seine Wiederherstellung erst nach dem Layout durchsetzt.
+
+Das Protokoll schreibt bei jedem Seitenwechsel `root`, `hoehe`, `scrollY` und
+`fenster` mit. Damit ist die Frage, die von aussen nicht zu beantworten war,
+eindeutig belegbar: Ist nichts gerendert (`root=0`), oder ist gerendert und man
+sieht es nur nicht (`scrollY` gross, `hoehe` klein)?

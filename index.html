@@ -70,8 +70,21 @@
           notiere('wechsel', location.hash)
           // Kurz danach nachsehen, ob etwas dasteht.
           window.setTimeout(function () {
-            notiere('nachher', location.hash + ' -> root=' + wurzelKinder() + ', hoehe=' +
-              (document.getElementById('root') || {}).offsetHeight)
+            /*
+              Die vier Zahlen entscheiden die Frage, die von aussen nicht zu
+              beantworten ist: Ist nichts gerendert (root=0), oder ist gerendert
+              und man sieht es nur nicht, weil die Seite unter dem Bildausschnitt
+              steht (scrollY gross, hoehe klein)?
+            */
+            var w = document.getElementById('root') || {}
+            notiere(
+              'nachher',
+              location.hash +
+                ' -> root=' + wurzelKinder() +
+                ', hoehe=' + w.offsetHeight +
+                ', scrollY=' + Math.round(window.scrollY) +
+                ', fenster=' + window.innerHeight
+            )
           }, 600)
         })
 
