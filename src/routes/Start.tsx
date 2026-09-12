@@ -2,36 +2,47 @@ import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { fcgLogo } from '../data/logo'
 import { church } from '../data/church'
-import { jetzt, mehr, rollen } from '../data/links'
+import { jetzt } from '../data/links'
 import type { Rolle, Zeile } from '../data/links'
 import { events } from '../data/events'
 import { teams } from '../data/teams'
-import { KalenderWidget } from '../components/KalenderWidget'
 import { KanalSymbole } from '../components/KanalSymbole'
-import { formatTime, relativeDay } from '../lib/format'
-import { usePersistentState } from '../lib/storage'
 import { RollenWahl } from '../components/RollenWahl'
+import { formatTime, relativeDay } from '../lib/format'
 import { useRolle } from '../lib/rollenzugang'
 
 /**
- * Startseite nach Rollen (Entwurf "Start Redesign").
+ * Startseite - umgesetzt aus dem Entwurf "FCG Start 1b".
  *
- * Gast, Mitglied und Staff suchen Verschiedenes. Statt allen dieselbe Linkwand
- * zu zeigen, waehlt man oben die Rolle - Aufmacher, Hauptliste und die Gruppen
- * unter "Mehr" richten sich danach. Die Wahl bleibt auf dem Geraet gespeichert.
+ * Petrolfarbener Kopf mit Marke und Rollenwahl, darunter Aufmacher, genau eine
+ * Liste, der naechste Termin, die Kanaele und zwei Kacheln. Die frueheren
+ * Gruppen unter "Mehr anzeigen" sind entfallen; sie waren eine zweite Linkwand
+ * unter der ersten.
+ *
+ * Zwei Angaben rechnet die App aus vorhandenen Daten, statt sie einzutragen:
+ * der naechste Termin samt belegten Plaetzen aus events.ts und die Zahl der
+ * suchenden Teams aus teams.ts. Der Entwurf hatte dort Beispielzahlen - feste
+ * Zahlen auf der Startseite waeren schlecht gealtert.
  */
 export function Start() {
   const [rolle, setRolle] = useRolle()
-  const [mehrOffen, setMehrOffen] = usePersistentState('start-mehr-offen', false)
 
-  const aktuelleRolle = rollen.find((r) => r.id === rolle) ?? rollen[0]
   const liste = jetzt[rolle]
 
-  /** Naechster Termin mit Anmeldung - Aufmacher fuer Mitglieder. */
+  /** Naechster Termin mit offener Anmeldung. */
   const naechsteAnmeldung = useMemo(
     () =>
       [...events]
         .filter((e) => e.registration && new Date(e.start) >= new Date())
+        .sort((a, b) => a.start.localeCompare(b.start))[0],
+    []
+  )
+
+  /** Naechster Termin ueberhaupt - fuer die Zeile unter der Liste. */
+  const naechsterTermin = useMemo(
+    () =>
+      [...events]
+        .filter((e) => new Date(e.start) >= new Date())
         .sort((a, b) => a.start.localeCompare(b.start))[0],
     []
   )
@@ -43,85 +54,69 @@ export function Start() {
   return (
     <div className="start">
       <header className="start__kopf">
-        <img className="start__logo" src={fcgLogo} alt="" />
-        <h1>{church.short}</h1>
-        <p className="start__zeiten">
-          Sonntags {church.services[0].time} und {church.services[1].time}
-        </p>
+        <div className="start__marke">
+          <img className="start__logo" src={fcgLogo} alt="" />
+          <div>
+            {/* Semantisch die Ueberschrift der Seite, optisch wie im Entwurf. */}
+            <h1 className="start__name">{church.short}</h1>
+            <div className="start__zeiten">
+              Sonntags {church.services[0].time.replace(' Uhr', '')} &amp; {church.services[1].time}
+            </div>
+          </div>
+        </div>
+        <RollenWahl rolle={rolle} onWechsel={setRolle} dunkel />
       </header>
 
-      <div>
-        <RollenWahl
-          rolle={rolle}
-          onWechsel={(ziel) => {
-            setRolle(ziel)
-            setMehrOffen(false)
-          }}
-        />
-        <p className="tiny muted start__rollenhinweis">{aktuelleRolle.hinweis}</p>
-      </div>
+      <div className="start__inhalt">
+        <HeroKarte hero={hero} />
 
-      <HeroKarte hero={hero} />
+        <section className="start__block">
+          <h2 className="start__blocktitel">{liste.titel}</h2>
+          <div className="start__liste">
+            {liste.zeilen.map((zeile) => (
+              <ZeilenFeld
+                key={zeile.label}
+                zeile={
+                  zeile.kuerzel === 'MM'
+                    ? { ...zeile, hinweis: `${gesuchteTeams} Teams suchen Verstärkung` }
+                    : zeile
+                }
+              />
+            ))}
+          </div>
+        </section>
 
-      <section className="start__block">
-        <h2 className="start__blocktitel">{liste.titel}</h2>
-        <div className="card start__liste">
-          {liste.zeilen.map((zeile) => (
-            <ZeilenFeld
-              key={zeile.label}
-              zeile={
-                zeile.label === 'Mitmachen'
-                  ? { ...zeile, hinweis: `${gesuchteTeams} Teams suchen Verstärkung` }
-                  : zeile
-              }
-            />
-          ))}
-        </div>
-      </section>
+        <TerminZeile termin={naechsterTermin} />
 
-      <KalenderWidget />
+        <section className="start__block">
+          <h2 className="start__blocktitel">Kanäle</h2>
+          <KanalSymbole />
+        </section>
 
-      <section className="start__block">
-        <h2 className="start__blocktitel">Kanäle</h2>
-        <KanalSymbole />
-      </section>
-
-      <button
-        className="btn btn--ghost btn--block"
-        onClick={() => setMehrOffen(!mehrOffen)}
-        aria-expanded={mehrOffen}
-      >
-        {mehrOffen ? 'Weniger anzeigen' : 'Mehr anzeigen'}
-      </button>
-
-      {mehrOffen &&
-        mehr[rolle].map((gruppe) => (
-          <section key={gruppe.titel} className="start__block">
-            <h2 className="start__blocktitel">{gruppe.titel}</h2>
-            <div className="card start__liste">
-              {gruppe.zeilen.map((zeile) => (
-                <ZeilenFeld key={zeile.label} zeile={zeile} />
-              ))}
-            </div>
-          </section>
-        ))}
-
-      <footer className="start__fuss">
-        <div className="row" style={{ gap: 14, justifyContent: 'center' }}>
-          <Link className="tiny" to="/kontakt">Kontakt</Link>
-          <a className="tiny" href={church.web.impressum} target="_blank" rel="noreferrer noopener">
-            Impressum
+        <div className="start__kacheln">
+          <a className="start__kachel" href={church.web.spende} target="_blank" rel="noreferrer noopener">
+            <b>Spenden</b>
+            <span>IBAN &amp; PayPal</span>
           </a>
-          <a className="tiny" href={church.web.datenschutz} target="_blank" rel="noreferrer noopener">
-            Datenschutz
+          <a className="start__kachel" href={church.web.newsletter} target="_blank" rel="noreferrer noopener">
+            <b>Newsletter</b>
+            <span>Infos aus der FCG</span>
           </a>
-          <Link className="tiny" to="/datenschutz">Daten in der App</Link>
-          <Link className="tiny" to="/diagnose">Diagnose</Link>
         </div>
-        <p className="tiny muted" style={{ marginTop: 10 }}>
+
+        <footer className="start__fuss">
+          <Link to="/kontakt">Kontakt</Link>
+          <Link to="/wiki">Wiki</Link>
+          <a href={church.web.impressum} target="_blank" rel="noreferrer noopener">Impressum</a>
+          <a href={church.web.datenschutz} target="_blank" rel="noreferrer noopener">Datenschutz</a>
+          <Link to="/datenschutz">Daten in der App</Link>
+          <Link to="/diagnose">Diagnose</Link>
+        </footer>
+
+        <p className="tiny muted start__hinweis">
           Prototyp mit Beispielinhalten - keine offizielle App der FCG Frankfurt.
         </p>
-      </footer>
+      </div>
     </div>
   )
 }
@@ -138,10 +133,10 @@ type Hero = {
 function heroFuer(rolle: Rolle, termin: (typeof events)[number] | undefined): Hero {
   if (rolle === 'staff') {
     return {
-      eyebrow: 'Für Staff',
+      eyebrow: 'Für Leiter',
       titel: 'Leitungsdashboard',
       text: 'Zahlen, Anmeldungen und Auswertungen · Anmeldung nötig.',
-      cta: 'Dashboard öffnen',
+      cta: 'Dashboard öffnen →',
       ziel: church.web.leitungsdashboard,
       extern: true,
     }
@@ -153,31 +148,27 @@ function heroFuer(rolle: Rolle, termin: (typeof events)[number] | undefined): He
         eyebrow: 'Diese Woche',
         titel: 'Keine Anmeldung offen',
         text: 'Im Kalender stehen die nächsten Termine der Gemeinde.',
-        cta: 'Zum Kalender',
+        cta: 'Zum Kalender →',
         ziel: '/events',
       }
     }
-    // Titel kurz halten - Zeit und Plaetze stehen in der Zeile darunter,
-    // sonst laeuft der Aufmacher ueber drei Zeilen.
     const zeitpunkt = `${relativeDay(termin.start)}, ${formatTime(termin.start)} Uhr`
     const plaetze =
-      termin.seats !== undefined
-        ? ` · ${termin.taken ?? 0} von ${termin.seats} Plätzen belegt`
-        : ''
+      termin.seats !== undefined ? ` · ${termin.taken ?? 0} von ${termin.seats} Plätzen belegt` : ''
     return {
       eyebrow: 'Diese Woche',
       titel: termin.title,
       text: `${zeitpunkt}${plaetze} · Anmeldung offen.`,
-      cta: 'Anmelden',
+      cta: 'Anmelden →',
       ziel: `/events/${termin.id}`,
     }
   }
 
   return {
     eyebrow: 'Zum ersten Mal da?',
-    titel: `Sonntag, ${church.services[0].time} und ${church.services[1].time}`,
+    titel: 'Sonntag ist offen für dich',
     text: `${church.address.street} · Kinderkirche und Übersetzung vor Ort.`,
-    cta: 'Ablauf und Anfahrt',
+    cta: 'Ablauf & Anfahrt →',
     ziel: '/neu-hier',
   }
 }
@@ -185,10 +176,10 @@ function heroFuer(rolle: Rolle, termin: (typeof events)[number] | undefined): He
 function HeroKarte({ hero }: { hero: Hero }) {
   const inhalt = (
     <>
-      <div className="start__hero-eyebrow">{hero.eyebrow}</div>
-      <h2>{hero.titel}</h2>
-      <p>{hero.text}</p>
-      <span className="start__hero-cta">{hero.cta} →</span>
+      <span className="tagbox tiny">{hero.eyebrow}</span>
+      <div className="start__hero-titel">{hero.titel}</div>
+      <p className="start__hero-text">{hero.text}</p>
+      <span className="start__hero-cta">{hero.cta}</span>
     </>
   )
 
@@ -206,19 +197,39 @@ function HeroKarte({ hero }: { hero: Hero }) {
   )
 }
 
+/**
+ * Der naechste Termin als eine Zeile.
+ *
+ * Der Entwurf setzte hier ein ChurchTools-Abzeichen. Das bleibt weg, solange
+ * die Instanz der Gemeinde nicht hinterlegt ist - ein Abzeichen, das eine
+ * Anbindung behauptet, die es nicht gibt, ist schlechter als keines. Der Knopf
+ * fuehrt in den Terminkalender der App, der die Daten wirklich hat.
+ */
+function TerminZeile({ termin }: { termin: (typeof events)[number] | undefined }) {
+  const text = termin
+    ? `${relativeDay(termin.start)} · ${formatTime(termin.start)} Uhr · ${termin.title}`
+    : 'Zurzeit steht kein Termin an.'
+
+  return (
+    <Link className="start__termin" to="/events">
+      <span style={{ minWidth: 0 }}>
+        <b>Nächster Termin</b>
+        <span className="tiny muted">{text}</span>
+      </span>
+      <span className="start__termin-knopf">Kalender</span>
+    </Link>
+  )
+}
+
 function ZeilenFeld({ zeile }: { zeile: Zeile }) {
   const inhalt = (
     <>
+      <span className="start__kuerzel" aria-hidden>{zeile.kuerzel}</span>
       <span className="start__zeile-text">
-        {zeile.kuerzel && <span className="start__kuerzel" aria-hidden>{zeile.kuerzel}</span>}
-        <span style={{ minWidth: 0 }}>
-          <b>{zeile.label}</b>
-          {zeile.hinweis && <span className="tiny muted">{zeile.hinweis}</span>}
-        </span>
+        <b>{zeile.label}</b>
+        <span className="tiny muted">{zeile.hinweis}</span>
       </span>
-      <span className="start__mark" aria-hidden>
-        {zeile.extern ? '↗' : '›'}
-      </span>
+      <span className="start__mark" aria-hidden>{zeile.extern ? '↗' : '›'}</span>
     </>
   )
 
@@ -235,4 +246,3 @@ function ZeilenFeld({ zeile }: { zeile: Zeile }) {
     </Link>
   )
 }
-

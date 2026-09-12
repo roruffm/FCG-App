@@ -17,9 +17,12 @@ import { istGeschuetzt, pruefePasswort, useRollenZugang } from '../lib/rollenzug
 export function RollenWahl({
   rolle,
   onWechsel,
+  dunkel = false,
 }: {
   rolle: Rolle
   onWechsel: (rolle: Rolle) => void
+  /** Auf dem petrolfarbenen Kopf der Startseite - dort traegt der Umschalter hellere Farben. */
+  dunkel?: boolean
 }) {
   const { istFrei, freischalten, sperren } = useRollenZugang()
   const [gefragt, setGefragt] = useState<Rolle | null>(null)
@@ -31,7 +34,7 @@ export function RollenWahl({
 
   return (
     <>
-      <div className="rollenwahl" role="group" aria-label="Sicht wählen">
+      <div className={dunkel ? 'rollenwahl rollenwahl--dunkel' : 'rollenwahl'} role="group" aria-label="Sicht wählen">
         {rollen.map((r) => {
           const zu = !istFrei(r.id)
           return (
@@ -55,7 +58,7 @@ export function RollenWahl({
       {/* Sichtbarer Weg zurueck: sonst bleibt ein fremdes Geraet offen. */}
       {istGeschuetzt(rolle) && istFrei(rolle) && (
         <button
-          className="tiny muted rollenwahl__abmelden"
+          className={dunkel ? 'tiny rollenwahl__abmelden rollenwahl__abmelden--dunkel' : 'tiny muted rollenwahl__abmelden'}
           onClick={() => {
             sperren(rolle)
             onWechsel('gast')

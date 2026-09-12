@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { church } from '../data/church'
 
 /**
@@ -8,14 +7,15 @@ import { church } from '../data/church'
  * jeweiligen Hausfarben nachgebildet. Das spart Anfragen nach aussen, laeuft
  * offline und haelt die Zeile klein - Namen stehen als Beschriftung darunter,
  * damit auch erkennbar bleibt, was wohin fuehrt.
+ *
+ * Das Wiki steht hier nicht mehr: Es ist ein Ziel der Rollenliste, kein Kanal -
+ * doppelt gefuehrt haette es nur Platz gekostet.
  */
 
 type Kanal = {
   label: string
   farbe: string
   ziel?: string
-  /** Ziel liegt in der App - dann Router-Link statt neuem Tab. */
-  intern?: boolean
   status?: string
   symbol: React.ReactNode
 }
@@ -100,20 +100,6 @@ export const kanaele: Kanal[] = [
       </svg>
     ),
   },
-  {
-    label: 'Wiki',
-    farbe: '#55686a',
-    // Das Wiki liegt in der App selbst. Sobald eine externe Adresse in den
-    // Stammdaten steht, hat sie Vorrang.
-    ziel: church.web.wiki || '/wiki',
-    intern: !church.web.wiki,
-    symbol: (
-      <svg viewBox="0 0 24 24" fill="none" stroke={weiss} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 4.5h9l5 5V19.5H5z" />
-        <path d="M14 4.5v5h5M8.5 13h7M8.5 16.5h4.5" />
-      </svg>
-    ),
-  },
 ]
 
 export function KanalSymbole() {
@@ -135,13 +121,6 @@ export function KanalSymbole() {
             <div key={kanal.label} className="kanal kanal--geplant">
               {inhalt}
             </div>
-          )
-        }
-        if (kanal.intern) {
-          return (
-            <Link key={kanal.label} className="kanal" to={kanal.ziel}>
-              {inhalt}
-            </Link>
           )
         }
         return (

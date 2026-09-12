@@ -65,20 +65,27 @@ Am besten in der Geräte-Ansicht der Browser-Entwicklerwerkzeuge (iPhone/Android
 
 ## Aufbau: Startseite nach Rollen
 
-Umgesetzt aus dem Entwurf **"Start Redesign"** (Claude Design). Gast, Mitglied
-und Staff suchen Verschiedenes - statt allen dieselbe Linkwand zu zeigen, waehlt
-man oben die Rolle:
+Umgesetzt aus dem Entwurf **"FCG Start 1b"** (Claude Design). Gast, Mitglied und
+Leader suchen Verschiedenes - statt allen dieselbe Linkwand zu zeigen, waehlt
+man oben auf dem petrolfarbenen Kopf die Rolle:
 
 | | Gast | Mitglied | Leader |
 |---|---|---|---|
-| **Aufmacher** | Gottesdienstzeiten und Anfahrt | naechster Termin mit offener Anmeldung | Leitungsdashboard |
-| **Hauptliste** | Der erste Schritt | Dein Bereich | Arbeitswege |
-| **Unter "Mehr"** | Taeglich, Kennenlernen, Folgen | Taeglich, Gemeinde, Folgen | Leitung, Gemeinde, Fuer mich |
+| **Aufmacher** | Sonntag ist offen fuer dich | naechster Termin mit offener Anmeldung | Leitungsdashboard |
+| **Liste** | Der erste Schritt | Dein Bereich | Arbeitswege |
+| **Ziele** | NH PR CG KT WI | TM MM CG GB WI | CT IN PU TM WI |
 
-Gleich bleiben fuer alle: Kopf mit Zeiten, der **Kalender** des laufenden
-Monats, die sieben **Kanaele** (Website, ChurchTools, YouTube, Instagram,
-Spotify, Facebook, Wiki) und der Fuss. Die Rollenwahl bleibt auf dem Geraet
-gespeichert - und gilt auch im Wiki, das dieselbe Dreiteilung benutzt.
+Gleich bleiben fuer alle: Kopf mit Marke und Zeiten, die Zeile **Naechster
+Termin**, die sechs **Kanaele** (Website, ChurchTools, YouTube, Instagram,
+Spotify, Facebook), die Kacheln **Spenden** und **Newsletter** und der Fuss. Die
+Rollenwahl bleibt auf dem Geraet gespeichert - und gilt auch im Wiki, das
+dieselbe Dreiteilung benutzt.
+
+Die frueheren Gruppen unter **"Mehr anzeigen"** sind entfallen: eine zweite,
+ungeordnete Linkwand unter der ersten. Genau eine Liste je Rolle, fuenf Ziele.
+Was dabei von der Startseite verschwindet, ist nicht verloren - Kurse, Taufe und
+Gemeinschaften stehen auf der Kontakt- und der Gruppenseite, alle Termine hinter
+dem Kalender-Knopf.
 
 Zwei Angaben im Aufmacher rechnet die App aus den vorhandenen Daten aus, statt
 sie fest einzutragen: der Termin fuer Mitglieder kommt aus `src/data/events.ts`

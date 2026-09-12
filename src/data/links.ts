@@ -1,12 +1,16 @@
 import { church } from './church'
 
 /**
- * Startseite nach Rollen.
+ * Startseite nach Rollen - umgesetzt aus dem Entwurf "FCG Start 1b".
  *
- * Aus dem Entwurf "Start Redesign": Statt einer Linkwand fuer alle zeigt die
- * Startseite drei Sichten - Gast, Mitglied, Staff. Jede hat ihren eigenen
- * Aufmacher, ihre eigene Hauptliste und ihre eigenen Gruppen unter "Mehr".
- * Die Kanaele bleiben fuer alle gleich.
+ * Gast, Mitglied und Leader suchen Verschiedenes. Oben waehlt man die Rolle,
+ * darunter steht genau eine Liste: Aufmacher, fuenf Ziele, fertig. Die frueheren
+ * Gruppen unter "Mehr anzeigen" sind entfallen - sie waren eine zweite,
+ * ungeordnete Linkwand unter der ersten.
+ *
+ * Was dabei von der Startseite verschwindet, ist nicht verloren: Kurse, Taufe
+ * und Gemeinschaften stehen auf der Kontakt- und der Gruppenseite, alle Termine
+ * hinter dem Kalender-Knopf.
  */
 
 export type Rolle = 'gast' | 'mitglied' | 'staff'
@@ -19,16 +23,16 @@ export const rollen: { id: Rolle; label: string; hinweis: string }[] = [
 
 export type Zeile = {
   /** Zwei bis drei Buchstaben als Marke in der Liste. */
-  kuerzel?: string
+  kuerzel: string
   label: string
-  hinweis?: string
+  hinweis: string
   ziel: string
   extern?: boolean
 }
 
 export type Gruppe = { titel: string; zeilen: Zeile[] }
 
-/** Hauptliste je Rolle - der Weg, den diese Rolle am haeufigsten geht. */
+/** Die eine Liste je Rolle - der Weg, den diese Rolle am haeufigsten geht. */
 export const jetzt: Record<Rolle, Gruppe> = {
   gast: {
     titel: 'Der erste Schritt',
@@ -44,8 +48,10 @@ export const jetzt: Record<Rolle, Gruppe> = {
     titel: 'Dein Bereich',
     zeilen: [
       { kuerzel: 'TM', label: 'Meine Teams', hinweis: 'Chat, Dokumente, Dienste', ziel: '/teams' },
-      { kuerzel: 'MM', label: 'Mitmachen', ziel: '/mitmachen' },
-      { kuerzel: 'WI', label: 'Wiki', hinweis: 'Mitgliedschaft, Taufe, Seelsorge, Mitarbeit', ziel: '/wiki' },
+      { kuerzel: 'MM', label: 'Mitmachen', hinweis: 'Teams suchen Verstärkung', ziel: '/mitmachen' },
+      { kuerzel: 'CG', label: 'Meine Connectgruppe', hinweis: 'Treffen und Kontakt', ziel: '/gruppen' },
+      { kuerzel: 'GB', label: 'Gebetsanliegen teilen', hinweis: 'Vertraulich an das Gebetsteam', ziel: '/gebet' },
+      { kuerzel: 'WI', label: 'Wiki', hinweis: 'Mitgliedschaft, Taufe, Seelsorge', ziel: '/wiki' },
     ],
   },
   staff: {
@@ -76,79 +82,4 @@ export const jetzt: Record<Rolle, Gruppe> = {
       { kuerzel: 'WI', label: 'Wiki', hinweis: 'Schutzkonzept, Datenschutz, Abläufe', ziel: '/wiki' },
     ],
   },
-}
-
-export const mehr: Record<Rolle, Gruppe[]> = {
-  gast: [
-    {
-      titel: 'Täglich',
-      zeilen: [
-            { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
-      ],
-    },
-    {
-      titel: 'Kennenlernen',
-      zeilen: [
-        { label: 'Kurse und Seminare', ziel: church.web.kurse, extern: true },
-        { label: 'Taufe', ziel: church.web.taufe, extern: true },
-        { label: 'Alle Termine', ziel: '/events' },
-        { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
-      ],
-    },
-    {
-      titel: 'Folgen und unterstützen',
-      zeilen: [
-        { label: 'Newsletter abonnieren', ziel: church.web.newsletter, extern: true },
-        { label: 'Spenden', ziel: church.web.spende, extern: true },
-      ],
-    },
-  ],
-  mitglied: [
-    {
-      titel: 'Täglich',
-      zeilen: [
-            { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
-      ],
-    },
-    {
-      titel: 'Gemeinde',
-      zeilen: [
-        { label: 'Meine Connectgruppe', ziel: '/gruppen' },
-        { label: 'Gebetsanliegen teilen', ziel: '/gebet' },
-        { label: 'Unsere Gemeinschaften', ziel: church.web.gemeinschaften, extern: true },
-        { label: 'Alle Termine und Anmeldungen', ziel: '/events' },
-        { label: 'Kurse und Seminare', ziel: church.web.kurse, extern: true },
-      ],
-    },
-    {
-      titel: 'Folgen und unterstützen',
-      zeilen: [
-        { label: 'Newsletter abonnieren', ziel: church.web.newsletter, extern: true },
-        { label: 'Spenden', ziel: church.web.spende, extern: true },
-        ],
-    },
-  ],
-  staff: [
-    {
-      titel: 'Leitung',
-      zeilen: [
-        {
-          label: 'Leitungsdashboard',
-          hinweis: 'Zahlen und Auswertungen · Anmeldung nötig',
-          ziel: church.web.leitungsdashboard,
-          extern: true,
-        },
-        { label: 'Dienstteams verwalten', ziel: church.web.churchtools, extern: true },
-        { label: 'Mitmachen: offene Gesuche', ziel: '/mitmachen' },
-      ],
-    },
-    {
-      titel: 'Gemeinde',
-      zeilen: [
-        { label: 'Alle Termine und Anmeldungen', ziel: '/events' },
-        { label: 'Connectgruppen', ziel: '/gruppen' },
-        { label: 'Unsere Gemeinschaften', ziel: church.web.gemeinschaften, extern: true },
-      ],
-    },
-  ],
 }
