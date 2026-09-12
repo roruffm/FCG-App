@@ -521,3 +521,51 @@ Das Protokoll schreibt bei jedem Seitenwechsel `root`, `hoehe`, `scrollY` und
 `fenster` mit. Damit ist die Frage, die von aussen nicht zu beantworten war,
 eindeutig belegbar: Ist nichts gerendert (`root=0`), oder ist gerendert und man
 sieht es nur nicht (`scrollY` gross, `hoehe` klein)?
+
+## Zugang beschraenken
+
+Der wichtigste Satz zuerst: **GitHub Pages laesst sich in den Tarifen Free und
+Pro nicht privat schalten.** Auch bei einem privaten Repository bleibt die
+veroeffentlichte Seite oeffentlich erreichbar - privates Pages gibt es nur in
+GitHub Enterprise Cloud. Wer den Zugang wirklich beschraenken will, muss
+entweder nicht veroeffentlichen oder woanders veroeffentlichen.
+
+### Was nicht schuetzt
+
+| Maßnahme | Warum sie nicht genuegt |
+|---|---|
+| Repository auf privat | Die Pages-Seite bleibt oeffentlich |
+| Passwortsperre in der App | Prueft im Browser, also auf dem Geraet des Gegenuebers |
+| `robots.txt` / `noindex` | Bittet Suchmaschinen um Zurueckhaltung, sperrt niemanden aus |
+| Unbekannte Adresse | Hostnamen stehen in den oeffentlichen Zertifikatsprotokollen |
+
+### Nur fuer mich, gar nicht oeffentlich
+
+Der ehrlichste Weg, kostenlos und sofort:
+
+1. Repository auf privat stellen: *Settings → General → Danger Zone → Change
+   repository visibility*.
+2. Pages abschalten: *Settings → Pages → Build and deployment → Source: None*.
+3. Lokal entwickeln: `npm run dev`. Fuer das eigene Handy im selben WLAN
+   `npm run dev -- --host`, dann die angezeigte Netzwerkadresse aufrufen.
+
+### Eigene Adresse mit echter Anmeldung
+
+Wenn die App erreichbar bleiben soll, aber nur fuer benannte Personen:
+**Cloudflare Pages** mit **Cloudflare Access** (Zero Trust). Kostenlos bis 50
+Nutzer, Anmeldung per E-Mail-Einmalcode oder Google-Konto. Entscheidend ist:
+Die Pruefung passiert **vor** der Auslieferung, nicht in der App - wer nicht
+freigegeben ist, bekommt die Seite nie zu sehen. Das ist echte Zugangskontrolle
+im Sinne von Art. 32 DSGVO, im Unterschied zur Sperre in der App.
+
+Der Build bleibt unveraendert: `npm run build`, Ausgabeordner `dist`.
+
+### Nach dem Zurueckziehen
+
+Was einmal oeffentlich war, bleibt es teilweise: Suchmaschinen-Zwischenspeicher,
+Archivdienste und etwaige Forks. Nach dem Abschalten pruefen, was noch
+auffindbar ist, und gegebenenfalls Entfernung beantragen.
+
+Weil das Repository oeffentlich war, gelten ausserdem die beiden Rollen-
+Passwoerter als verbrannt - ihre SHA-256-Werte stehen im Verlauf. Vor einem
+echten Betrieb neu setzen.

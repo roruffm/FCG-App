@@ -1,0 +1,13 @@
+# Diese App ist ein Prototyp und soll nicht in Suchmaschinen erscheinen.
+#
+# WICHTIG: Vor der offiziellen Veroeffentlichung muss diese Datei geleert oder
+# entfernt werden - sonst bleibt die fertige App fuer Google unsichtbar.
+# Dasselbe gilt fuer die noindex-Angabe in index.html.
+#
+# Und zur Klarstellung: Das hier ist keine Zugangssperre. Es bittet
+# Suchmaschinen, die Seite nicht aufzunehmen. Wer die Adresse kennt, kommt
+# weiterhin hinein. Echter Zugangsschutz braucht eine Anmeldung vor der
+# Auslieferung - siehe README, Abschnitt "Zugang beschraenken".
+
+User-agent: *
+Disallow: /
