@@ -1,3 +1,18 @@
+/**
+ * Beispielpredigten.
+ *
+ * Die Prediger sind bewusst NICHT als Personen benannt, sondern als "Pastor
+ * (Beispiel A)" und so weiter. Vorher standen hier erfundene vollstaendige
+ * Namen mit Amtsbezeichnung - und ihnen waren ausformulierte Predigten,
+ * Transkripte und Kernaussagen zugeordnet. Unter dem Namen einer real
+ * existierenden Gemeinde veroeffentlicht, sind das erfundene Aussagen
+ * benannter Amtstraeger; trifft ein Name auf eine reale Person, beruehrt es
+ * deren Persoenlichkeitsrecht.
+ *
+ * Sobald echte Predigten vorliegen, treten sie an diese Stelle - dann mit den
+ * richtigen Namen und mit Einverstaendnis der Prediger zu Veroeffentlichung,
+ * Transkription und KI-Kurzfassung.
+ */
 import type { Sermon } from './types'
 
 /**
@@ -8,7 +23,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-08-30',
     title: 'Nichts kann uns trennen',
-    speaker: 'Pastor Micha Berg',
+    speaker: 'Pastor (Beispiel A)',
     series: 'Römer 8 - Leben im Geist',
     date: '2026-08-30',
     durationMin: 38,
@@ -40,7 +55,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-08-23',
     title: 'Beten, wenn nichts passiert',
-    speaker: 'Pastorin Hanna Vogt',
+    speaker: 'Pastorin (Beispiel B)',
     series: 'Gebet konkret',
     date: '2026-08-23',
     durationMin: 32,
@@ -71,7 +86,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-08-16',
     title: 'Wer bin ich, wenn niemand zuschaut?',
-    speaker: 'Pastor Micha Berg',
+    speaker: 'Pastor (Beispiel A)',
     series: 'Identität',
     date: '2026-08-16',
     durationMin: 35,
@@ -102,7 +117,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-08-09',
     title: 'Gastfreundschaft ist Mission',
-    speaker: 'Gastprediger Samuel Okoro',
+    speaker: 'Gastprediger (Beispiel C)',
     series: 'Gemeinde für die Stadt',
     date: '2026-08-09',
     durationMin: 41,
@@ -133,7 +148,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-08-02',
     title: 'Vergeben ohne zu vergessen',
-    speaker: 'Pastorin Hanna Vogt',
+    speaker: 'Pastorin (Beispiel B)',
     series: 'Beziehungen heilen',
     date: '2026-08-02',
     durationMin: 44,
@@ -164,7 +179,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-07-26',
     title: 'Genug - Vom Umgang mit Geld',
-    speaker: 'Ältester Thomas Reuter',
+    speaker: 'Ältester (Beispiel D)',
     series: 'Alltag & Glaube',
     date: '2026-07-26',
     durationMin: 36,
@@ -194,7 +209,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-07-19',
     title: 'Der Geist als Beistand',
-    speaker: 'Pastor Micha Berg',
+    speaker: 'Pastor (Beispiel A)',
     series: 'Römer 8 - Leben im Geist',
     date: '2026-07-19',
     durationMin: 39,
@@ -224,7 +239,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-07-12',
     title: 'Sabbat für Erschöpfte',
-    speaker: 'Pastorin Hanna Vogt',
+    speaker: 'Pastorin (Beispiel B)',
     series: 'Alltag & Glaube',
     date: '2026-07-12',
     durationMin: 33,
@@ -255,7 +270,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-07-05',
     title: 'Taufe: Öffentlich Ja sagen',
-    speaker: 'Pastor Micha Berg',
+    speaker: 'Pastor (Beispiel A)',
     series: 'Nächste Schritte',
     date: '2026-07-05',
     durationMin: 28,
@@ -285,7 +300,7 @@ export const sermons: Sermon[] = [
   {
     id: 'p-2026-06-28',
     title: 'Wenn Zweifel bleiben',
-    speaker: 'Gastprediger Samuel Okoro',
+    speaker: 'Gastprediger (Beispiel C)',
     series: 'Identität',
     date: '2026-06-28',
     durationMin: 37,

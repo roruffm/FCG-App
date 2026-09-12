@@ -53,6 +53,18 @@ mit Hash-Routen (`/#/predigten/p-2026-08-30`). Die Seite läuft dadurch unverän
 `/FCG-App/`, unter einer eigenen Domain und auch direkt vom Dateisystem.
 Für eine eigene Domain genügt eine Datei `public/CNAME` mit der Domain darin.
 
+Die Schriften **Archivo** und **Karla** liegen unter `src/fonts/` im Projekt und
+werden mitgeliefert, nicht geladen. Vorher holte die App sie zur Laufzeit von
+`fonts.googleapis.com` - dabei geht die IP-Adresse jedes Besuchers an Google in
+die USA, ohne Einwilligung und ohne technische Notwendigkeit. Genau dafuer hat
+das LG Muenchen I 2022 Schadenersatz zugesprochen (Az. 3 O 17493/20). Beide
+Schriften stehen unter der SIL Open Font License 1.1; die Lizenztexte liegen
+neben den Dateien. Es sind variable Schriften, aufgeteilt nur nach Zeichensatz:
+vier Dateien, rund 101 kB.
+
+**Die App baut damit keine einzige Verbindung nach aussen auf**, solange niemand
+einen Link anklickt.
+
 Eine Ausnahme braucht doch eine Angabe: die 404-Seite. Sie muss wissen, wo die
 App liegt, um einen tiefen Pfad in eine Hash-Route umzuschreiben - das ist eine
 Eigenschaft der Veröffentlichung und nicht erratbar. Der Workflow setzt dafür
